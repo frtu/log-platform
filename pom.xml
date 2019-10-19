@@ -62,8 +62,8 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <!--===========================-->
-        <slf4j.version>1.7.25</slf4j.version>
-        <logback.version>1.2.3</logback.version>
+        <!--<slf4j.version>1.7.25</slf4j.version>-->
+        <!--<logback.version>1.2.3</logback.version>-->
         <!--===========================-->
         <!--<commons-lang3.version>3.5</commons-lang3.version>-->
         <!--<commons-io.version>2.4</commons-io.version>-->
@@ -71,9 +71,9 @@
         <!--<spring-boot.version>2.1.3.RELEASE</spring-boot.version>-->
         <!--<spring.version>5.0.12.RELEASE</spring.version>-->
         <!--===========================-->
-        <junit.version>4.12</junit.version>
-        <powermock.version>1.6.2</powermock.version>
-        <easymock.version>3.6</easymock.version>
+        <!--<junit.version>4.12</junit.version>-->
+        <!--<powermock.version>1.6.2</powermock.version>-->
+        <!--<easymock.version>3.6</easymock.version>-->
     </properties>
 
     <!--<repositories>-->
@@ -94,37 +94,6 @@
     <dependencyManagement>
         <dependencies>
             <!--===========================-->
-            <!-- Logs -->
-            <!--===========================-->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <!-- Bridge of the logs of the library you import : https://www.slf4j.org/legacy.html -->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>jcl-over-slf4j</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>jul-to-slf4j</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>log4j-over-slf4j</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
-
-            <!--===========================-->
             <!--UNCOMMENT for override-->
             <!--===========================-->
             <!-- Spring Boot and Platform -->
@@ -140,40 +109,12 @@
             <!--UNCOMMENT to remove parent-->
             <!--===========================-->
             <!-- Internal domain dependencies -->
-            <!--<dependency>-->
-            <!--<groupId>com.github.frtu.archetype</groupId>-->
-            <!--<artifactId>base-pom</artifactId>-->
-            <!--<version>1.0.0</version>-->
-            <!--<type>pom</type>-->
-            <!--<scope>import</scope>-->
-            <!--</dependency>-->
-
-            <!--===========================-->
-            <!-- TEST -->
-            <!--===========================-->
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.powermock</groupId>
-                <artifactId>powermock-module-junit4</artifactId>
-                <version>${powermock.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.powermock</groupId>
-                <artifactId>powermock-api-easymock</artifactId>
-                <version>${powermock.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.easymock</groupId>
-                <artifactId>easymock</artifactId>
-                <version>${easymock.version}</version>
-                <scope>test</scope>
+                <groupId>com.github.frtu.archetype</groupId>
+                <artifactId>base-pom</artifactId>
+                <version>1.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
