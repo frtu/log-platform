@@ -1,0 +1,39 @@
+version: '3'
+services:
+  elasticsearch:
+    image: ${ELASTICSEARCH_IMAGE}
+    environment:
+      - "discovery.type=single-node"
+    expose:
+      - "9200"
+    ports:
+      - "9200:9200"
+
+  kibana:
+    image: ${KIBANA_IMAGE}
+    links:
+      - "elasticsearch"
+    ports:
+      - "5601:5601"
+
+  fluentd:
+    build: ./fluentd
+    volumes:
+      - ./fluentd/conf:/fluentd/etc
+    links:
+      - "elasticsearch"
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+
+  web:
+    image: ${HTTPD_IMAGE}
+    ports:
+      - "80:80"
+    links:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: httpd.access
