@@ -8,6 +8,7 @@ services:
       - "9200"
     ports:
       - "9200:9200"
+    # https://docs.docker.com/config/containers/logging/fluentd/
     logging:
       driver: fluentd
       options:
@@ -25,6 +26,7 @@ services:
       - "5601:5601"
     environment:
       ELASTICSEARCH_URL: http://elasticsearch:9200
+    # https://docs.docker.com/config/containers/logging/fluentd/
     logging:
       driver: fluentd
       options:
@@ -43,6 +45,7 @@ services:
     ports:
       - "24224:24224"
       - "24224:24224/udp"
+    # https://docs.docker.com/config/containers/logging/fluentd/
     logging:
       driver: "json-file"
       options:
@@ -55,6 +58,7 @@ services:
       - "80:80"
     links:
       - fluentd
+    # https://docs.docker.com/config/containers/logging/fluentd/
     logging:
       driver: "fluentd"
       options:
