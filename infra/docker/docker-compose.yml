@@ -8,6 +8,14 @@ services:
       - "9200"
     ports:
       - "9200:9200"
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: fluentd:24224
+        fluentd-async-connect: 'true'
+        fluentd-retry-wait: '1s'
+        fluentd-max-retries: '30'
+        tag: efk.elasticsearch
 
   kibana:
     image: ${KIBANA_IMAGE}
@@ -15,6 +23,16 @@ services:
       - "elasticsearch"
     ports:
       - "5601:5601"
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: fluentd:24224
+        fluentd-async-connect: 'true'
+        fluentd-retry-wait: '1s'
+        fluentd-max-retries: '30'
+        tag: efk.kibana
 
   fluentd:
     build: ./fluentd
@@ -25,6 +43,11 @@ services:
     ports:
       - "24224:24224"
       - "24224:24224/udp"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1G"
+        max-file: "2"
 
   web:
     image: ${HTTPD_IMAGE}
