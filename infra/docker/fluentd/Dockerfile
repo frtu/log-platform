@@ -1,3 +1,4 @@
+# https://hub.docker.com/r/fluent/fluentd/
 FROM fluent/fluentd:v1.7-debian-1
 
 # Use root account to use apt
