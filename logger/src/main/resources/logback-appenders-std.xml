@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE logback>
+<included>
+    <appender name="SECURITY_ALERT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- The simple marker filter instead of writing complex configuration with EvaluatorFilter -->
+        <filter class="ch.qos.logback.more.appenders.filter.AppendersMarkerFilter">
+            <marker>SECURITY_ALERT</marker>
+        </filter>
+
+        <target>System.err</target>
+
+        <encoder>
+            <pattern>
+                <![CDATA[%date{HH:mm:ss.SSS} [%thread] %marker %-5level %logger{15}#%line %X{req.requestURI} %msg\n]]></pattern>
+        </encoder>
+    </appender>
+
+    <appender name="JSON_ENCODING" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- The encoder treat the log as JSON. -->
+        <encoder class="ch.qos.logback.more.appenders.encoder.FastJsonEncoder">
+            <pattern><![CDATA[{
+        "date": "%date{HH:mm:ss.SSS}",
+        "thread": "%thread",
+        "marker": "%marker",
+        "level": "%-5level",
+        "logger": "%logger",
+        "line": "%line",
+        "requestURI": "%X{req.requestURI}",
+        "tx.id": "%X{transaction.id}",
+        "tx.owner": "%X{transaction.owner}",
+        "message": "%msg"
+      }\n]]></pattern>
+            <!-- Remove redandant spaces and lines. -->
+            <compressSpace>true</compressSpace>
+        </encoder>
+    </appender>
+</included>

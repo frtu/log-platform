@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE logback>
+<included>
+    <!-- Fluend java -->
+    <appender name="FLUENT_SYNC"
+              class="ch.qos.logback.more.appenders.DataFluentAppender">
+
+        <!-- Tag for Fluentd. Farther information: http://docs.fluentd.org/articles/config-file -->
+        <tag>debug</tag>
+        <!-- [Optional] Label for Fluentd. Farther information: http://docs.fluentd.org/articles/config-file -->
+        <label>logback</label>
+        <!-- Host name/address and port number which Flentd placed -->
+        <remoteHost>localhost</remoteHost>
+        <port>24224</port>
+        <!-- [Optional] Additional fields(Pairs of key: value) -->
+        <additionalField>
+            <key>foo</key>
+            <value>bar</value>
+        </additionalField>
+        <additionalField>
+            <key>foo2</key>
+            <value>bar2</value>
+        </additionalField>
+        <!--  [Optional] If true, Map Marker is expanded instead of nesting in the marker name -->
+        <flattenMapMarker>false</flattenMapMarker>
+
+        <encoder>
+            <!--<pattern><![CDATA[%date{HH:mm:ss.SSS} [%thread] %-5level %logger{15}#%line %msg]]></pattern>-->
+            <pattern><![CDATA[%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} #%line tx.id=%X{transaction.id} tx.owner=%X{transaction.owner} - %msg]]></pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FLUENT" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- Max queue size of logs which is waiting to be sent (When it reach to the max size, the log will be disappeared). -->
+        <queueSize>999</queueSize>
+        <!-- Never block when the queue becomes full. -->
+        <neverBlock>true</neverBlock>
+        <!-- The default maximum queue flush time allowed during appender stop.
+             If the worker takes longer than this time it will exit, discarding any remaining items in the queue.
+             10000 millis
+         -->
+        <maxFlushTime>10000</maxFlushTime>
+        <appender-ref ref="FLUENT_SYNC"/>
+    </appender>
+</included>
