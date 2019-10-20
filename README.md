@@ -22,9 +22,10 @@ More on [logs unification](https://www.fluentd.org/blog/unified-logging-layer)
 * [Basic logging with Kubernetes guide](https://kubernetes.io/docs/concepts/cluster-administration/logging/)
 * [High availability guide](https://docs.fluentd.org/deployment/high-availability)
 
-## Configuring fluentd
+## Using EFK
 
 * [fluentd configuration docs](https://docs.fluentd.org/v1.0/articles/config-file)
+* [Enable Kibana configuration guidelines](https://docs.fluentd.org/container-deployment/docker-compose#step-4-confirm-logs-from-kibana)
 
 ## Log sources
 
