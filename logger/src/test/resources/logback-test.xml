@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <!-- https://logback.qos.ch/manual/configuration.html -->
 <!-- https://logback.qos.ch/manual/appenders.html#FileAppender -->
 <configuration>
@@ -13,11 +14,11 @@
              ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
         <encoder>
             <!--https://logback.qos.ch/manual/layouts.html#ClassicPatternLayout-->
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} ${HOSTNAME} [%thread] %-5level %logger{36} #%line tx.id=%X{transaction.id} tx.owner=%X{transaction.owner} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <root level="info">
+    <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

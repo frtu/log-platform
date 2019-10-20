@@ -14,12 +14,8 @@
         <port>24224</port>
         <!-- [Optional] Additional fields(Pairs of key: value) -->
         <additionalField>
-            <key>foo</key>
-            <value>bar</value>
-        </additionalField>
-        <additionalField>
-            <key>foo2</key>
-            <value>bar2</value>
+            <key>hostname</key>
+            <value>${HOSTNAME}</value>
         </additionalField>
         <!--  [Optional] If true, Map Marker is expanded instead of nesting in the marker name -->
         <flattenMapMarker>false</flattenMapMarker>
