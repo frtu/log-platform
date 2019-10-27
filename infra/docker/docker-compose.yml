@@ -65,3 +65,31 @@ services:
       options:
         fluentd-address: localhost:24224
         tag: httpd.access
+
+  jaeger:
+    image: ${JAEGER_IMAGE}
+    links:
+      - "elasticsearch"
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
+    environment:
+      SPAN_STORAGE_TYPE: elasticsearch
+      ES_SERVER_URLS: http://elasticsearch:9200
+      ES_TAGS_AS_FIELDS_ALL: "true"
+    healthcheck:
+      # https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-health.html
+      test: ["CMD", "curl", "--fail", "http://elasticsearch:9200/_cluster/health"]
+      interval: 30s
+      timeout: 40s
+      retries: 5
+
+  # https://logz.io/blog/jaeger-and-the-elk-stack/amp/
+  hotrod:
+    image: jaegertracing/example-hotrod:1.14
+    ports:
+      - "8080:8080"
+    command: ["all"]
+    environment:
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
