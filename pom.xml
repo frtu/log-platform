@@ -67,6 +67,8 @@
         <!--<logback.version>1.2.3</logback.version>-->
         <sndyuk.logback-more-appenders.version>1.7.0</sndyuk.logback-more-appenders.version>
         <fluentd.logger.version>0.3.4</fluentd.logger.version>
+        <jaeger-client.version>0.32.0</jaeger-client.version>
+        <guava.version>10.0.1</guava.version>
         <!--===========================-->
         <!--<commons-lang3.version>3.5</commons-lang3.version>-->
         <!--<commons-io.version>2.4</commons-io.version>-->
@@ -98,6 +100,16 @@
                 <groupId>com.sndyuk</groupId>
                 <artifactId>logback-more-appenders</artifactId>
                 <version>${sndyuk.logback-more-appenders.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jaegertracing</groupId>
+                <artifactId>jaeger-client</artifactId>
+                <version>${jaeger-client.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
             </dependency>
 
             <!--===========================-->
