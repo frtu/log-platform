@@ -4,9 +4,11 @@
 <configuration>
     <include resource="logback-core.xml" />
 
-    <logger name="com.github.frtu" level="TRACE" additivity="true">
+    <logger name="com.github.frtu.logs.example" level="TRACE" additivity="true">
         <appender-ref ref="FLUENT" />
     </logger>
+    <logger name="org.springframework.boot.autoconfigure.logging" level="INFO" additivity="true"/>
+
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
