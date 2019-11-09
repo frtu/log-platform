@@ -8,6 +8,8 @@ services:
       - "9200"
     ports:
       - "9200:9200"
+    networks:
+      - efk
     # https://docs.docker.com/config/containers/logging/fluentd/
     logging:
       driver: fluentd
@@ -24,6 +26,8 @@ services:
       - "elasticsearch"
     ports:
       - "5601:5601"
+    networks:
+      - efk
     environment:
       ELASTICSEARCH_URL: http://elasticsearch:9200
     # https://docs.docker.com/config/containers/logging/fluentd/
@@ -46,6 +50,8 @@ services:
       - "24224:24224"
       - "24224:24224/udp"
       - "9880:9880"
+    networks:
+      - efk
     # https://docs.docker.com/config/containers/logging/fluentd/
     logging:
       driver: "json-file"
@@ -57,6 +63,8 @@ services:
     image: ${HTTPD_IMAGE}
     ports:
       - "80:80"
+    networks:
+      - efk
     links:
       - fluentd
     # https://docs.docker.com/config/containers/logging/fluentd/
@@ -77,6 +85,8 @@ services:
       - "14267:14267"
       - "14268:14268"
       - "16686:16686"
+    networks:
+      - efk
     environment:
       SPAN_STORAGE_TYPE: elasticsearch
       ES_SERVER_URLS: http://elasticsearch:9200
@@ -88,12 +98,7 @@ services:
       timeout: 40s
       retries: 5
 
-  # https://logz.io/blog/jaeger-and-the-elk-stack/amp/
-  hotrod:
-    image: jaegertracing/example-hotrod:1.14
-    ports:
-      - "8080:8080"
-    command: ["all"]
-    environment:
-      - JAEGER_AGENT_HOST=jaeger
-      - JAEGER_AGENT_PORT=6831
+networks:
+  efk:
+    # use the bridge driver, but enable IPv6
+    driver: bridge

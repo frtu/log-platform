@@ -4,22 +4,36 @@ services:
     image: ${SERVICE_A}
     ports:
       - 8081:8080
+    networks:
+      - frtu_efk
     environment:
-      JAEGER_ENDPOINT: http://localhost:14268/api/traces
+      SPRING_PROFILES_ACTIVE: prod
+      JAEGER_ENDPOINT: ${JAEGER_ENDPOINT}
+      FLUENTD_HOST: ${FLUENTD_HOST}
+      FLUENTD_PORT: ${FLUENTD_PORT}
     logging:
       driver: "fluentd"
       options:
-        fluentd-address: localhost:24224
+        fluentd-address: ${FLUENTD_HOST}:${FLUENTD_PORT}
         tag: service-a
 
   service-b:
     image: ${SERVICE_B}
     ports:
       - 8082:8080
+    networks:
+      - frtu_efk
     environment:
-      JAEGER_ENDPOINT: http://localhost:14268/api/traces
+      SPRING_PROFILES_ACTIVE: prod
+      JAEGER_ENDPOINT: ${JAEGER_ENDPOINT}
+      FLUENTD_HOST: ${FLUENTD_HOST}
+      FLUENTD_PORT: ${FLUENTD_PORT}
     logging:
       driver: "fluentd"
       options:
-        fluentd-address: localhost:24224
+        fluentd-address: ${FLUENTD_HOST}:${FLUENTD_PORT}
         tag: service-b
+
+networks:
+  frtu_efk:
+    external: true
