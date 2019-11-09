@@ -8,6 +8,26 @@ Full EFK platform for logs and monitoring. EFK stands for :
 
 More on [logs unification](https://www.fluentd.org/blog/unified-logging-layer)
 
+## Log enrichment 
+### Running context localization
+
+Allow to tag every logs sent to EFK with following information :
+
+Physical & Logical DC :
+
+* REGION : (Default = SINGLE)
+* ZONE : (Default = SINGLE)
+
+Instance, Cluster & Version
+
+* MACHINE_ID : Docker container ID (Default = UNKNOWN)
+* SERVICE_NAME : (Default = UNKNOWN)
+* VERSION_TAG : (Default = UNKNOWN)
+
+### Distributed tracing
+
+* Using OpenTracing & Jaeger
+
 ## Infrastructure
 
 [Details for development & production env](https://docs.fluentd.org/container-deployment/docker-logging-driver#development-environments)
