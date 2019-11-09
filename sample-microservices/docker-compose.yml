@@ -11,6 +11,10 @@ services:
       JAEGER_ENDPOINT: ${JAEGER_ENDPOINT}
       FLUENTD_HOST: ${FLUENTD_HOST}
       FLUENTD_PORT: ${FLUENTD_PORT}
+      REGION: ${REGION}
+      ZONE: ${ZONE}
+      SERVICE_NAME: service-a
+      VERSION_TAG: ${SERVICE_A}
     logging:
       driver: "fluentd"
       options:
@@ -28,6 +32,10 @@ services:
       JAEGER_ENDPOINT: ${JAEGER_ENDPOINT}
       FLUENTD_HOST: ${FLUENTD_HOST}
       FLUENTD_PORT: ${FLUENTD_PORT}
+      REGION: ${REGION}
+      ZONE: ${ZONE}
+      SERVICE_NAME: service-b
+      VERSION_TAG: ${SERVICE_B}
     logging:
       driver: "fluentd"
       options:

@@ -1,21 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE logback>
 <included>
-    <!-- Fluend java -->
-    <appender name="FLUENT_SYNC"
-              class="ch.qos.logback.more.appenders.DataFluentAppender">
+    <property name="FLUENTD_HOST" value="${FLUENTD_HOST:-${DOCKER_HOST:-localhost}}"/>
+    <property name="FLUENTD_PORT" value="${FLUENTD_PORT:-24224}"/>
 
+    <property name="REGION" value="${REGION:-SINGLE}"/>
+    <property name="ZONE" value="${ZONE:-SINGLE}"/>
+    <property name="SERVICE_NAME" value="${SERVICE_NAME:-UNKNOWN}"/>
+    <property name="MACHINE_ID" value="${MACHINE_ID:-UNKNOWN}"/>
+    <property name="VERSION_TAG" value="${VERSION_TAG:-UNKNOWN}"/>
+
+    <!-- Fluend java -->
+    <appender name="FLUENT_SYNC" class="ch.qos.logback.more.appenders.DataFluentAppender">
         <!-- Tag for Fluentd. Farther information: http://docs.fluentd.org/articles/config-file -->
         <tag>debug</tag>
         <!-- [Optional] Label for Fluentd. Farther information: http://docs.fluentd.org/articles/config-file -->
         <label>logback</label>
         <!-- Host name/address and port number which Flentd placed -->
-        <remoteHost>localhost</remoteHost>
-        <port>24224</port>
+        <remoteHost>${FLUENTD_HOST}</remoteHost>
+        <port>${FLUENTD_PORT}</port>
         <!-- [Optional] Additional fields(Pairs of key: value) -->
         <additionalField>
-            <key>hostname</key>
+            <key>REGION</key>
+            <value>${REGION}</value>
+        </additionalField>
+        <additionalField>
+            <key>ZONE</key>
+            <value>${ZONE}</value>
+        </additionalField>
+        <additionalField>
+            <key>SERVICE_NAME</key>
+            <value>${SERVICE_NAME}</value>
+        </additionalField>
+        <additionalField>
+            <key>MACHINE_ID</key>
             <value>${HOSTNAME}</value>
+        </additionalField>
+        <additionalField>
+            <key>VERSION_TAG</key>
+            <value>${VERSION_TAG}</value>
         </additionalField>
         <!--  [Optional] If true, Map Marker is expanded instead of nesting in the marker name -->
         <flattenMapMarker>false</flattenMapMarker>
