@@ -1,3 +1,4 @@
+# https://docs.docker.com/compose/compose-file/
 version: '3'
 services:
   service-a:
@@ -5,7 +6,8 @@ services:
     ports:
       - 8081:8080
     networks:
-      - frtu_efk
+      - local_zone
+      - efk
     environment:
       SPRING_PROFILES_ACTIVE: prod
       JAEGER_ENDPOINT: ${JAEGER_ENDPOINT}
@@ -18,7 +20,7 @@ services:
     logging:
       driver: "fluentd"
       options:
-        fluentd-address: ${FLUENTD_HOST}:${FLUENTD_PORT}
+        fluentd-address: localhost:${FLUENTD_PORT}
         tag: service-a
 
   service-b:
@@ -26,7 +28,8 @@ services:
     ports:
       - 8082:8080
     networks:
-      - frtu_efk
+      - local_zone
+      - efk
     environment:
       SPRING_PROFILES_ACTIVE: prod
       JAEGER_ENDPOINT: ${JAEGER_ENDPOINT}
@@ -39,9 +42,14 @@ services:
     logging:
       driver: "fluentd"
       options:
-        fluentd-address: ${FLUENTD_HOST}:${FLUENTD_PORT}
+        fluentd-address: localhost:${FLUENTD_PORT}
         tag: service-b
 
+# https://docs.docker.com/compose/networking/
 networks:
-  frtu_efk:
-    external: true
+  local_zone:
+    driver: bridge
+  # https://docs.docker.com/compose/networking/#use-a-pre-existing-network
+  efk:
+    external:
+      name: frtu_efk

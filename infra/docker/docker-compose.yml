@@ -98,7 +98,10 @@ services:
       timeout: 40s
       retries: 5
 
+# https://docs.docker.com/compose/networking/
 networks:
   efk:
-    # use the bridge driver, but enable IPv6
     driver: bridge
+    # To enable IPv6 uncomment below lines
+#    driver_opts:
+#        com.docker.network.enable_ipv6: "true"
