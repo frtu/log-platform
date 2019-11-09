@@ -65,9 +65,10 @@
         <!--===========================-->
         <!--<slf4j.version>1.7.25</slf4j.version>-->
         <!--<logback.version>1.2.3</logback.version>-->
-        <sndyuk.logback-more-appenders.version>1.7.0</sndyuk.logback-more-appenders.version>
+        <sndyuk.logback-more-appenders.version>1.7.1</sndyuk.logback-more-appenders.version>
         <fluentd.logger.version>0.3.4</fluentd.logger.version>
-        <jaeger-client.version>0.32.0</jaeger-client.version>
+        <opentracing-api.version>0.31.0</opentracing-api.version>
+        <jaeger-client.version>0.34.0</jaeger-client.version>
         <guava.version>10.0.1</guava.version>
         <!--===========================-->
         <!--<commons-lang3.version>3.5</commons-lang3.version>-->
@@ -100,6 +101,12 @@
                 <groupId>com.sndyuk</groupId>
                 <artifactId>logback-more-appenders</artifactId>
                 <version>${sndyuk.logback-more-appenders.version}</version>
+            </dependency>
+            <!-- Depending on opentracing allow to decouple from Jaeger -->
+            <dependency>
+                <groupId>io.opentracing</groupId>
+                <artifactId>opentracing-api</artifactId>
+                <version>${opentracing-api.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.jaegertracing</groupId>
