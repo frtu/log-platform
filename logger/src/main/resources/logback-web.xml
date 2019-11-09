@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<included>
+    <include resource="logback-core.xml"/>
+
+    <!--===========================-->
+    <!--Web and App Container-->
+    <!--===========================-->
+    <!--Spring init latency-->
+    <!--<logger name="org.springframework.web.context" level="INFO" additivity="true"/>-->
+    <!--Web server protocol events-->
+    <!--<logger name="org.apache.coyote" level="INFO" additivity="true"/>-->
+    <!--App server starting INFO and server.xml, session, filters, lifecycle DEBUG-->
+    <!--<logger name="org.apache.catalina" level="INFO" additivity="true"/>-->
+    <!--===========================-->
+    <!--SERVICE - RECOMMEND ALWAYS ON-->
+    <!--===========================-->
+    <!--Tomcat port information and startup complete-->
+    <logger name="org.springframework.boot.web.embedded.tomcat" level="INFO" additivity="true"/>
+    <!--distributed tracing INFO-->
+    <logger name="io.jaegertracing" level="INFO" additivity="true"/>
+    <!--===========================-->
+
+    <!--===========================-->
+    <!--Spring Init-->
+    <!--===========================-->
+    <!--Scanned properties-->
+    <!--<logger name="org.springframework.boot.context.config" level="DEBUG" additivity="true"/>-->
+    <!--Scanned annotations-->
+    <!--<logger name="org.springframework.context.annotation" level="DEBUG" additivity="true"/>-->
+    <!--Bean instanciation-->
+    <!--<logger name="org.springframework.beans.factory.support" level="DEBUG" additivity="true"/>-->
+    <!--===========================-->
+    <!--Spring Web-->
+    <!--===========================-->
+    <!--URLs-->
+    <!--<logger name="org.springframework.boot.web.servlet" level="DEBUG" additivity="true"/>-->
+    <!--<logger name="org.springframework.web.servlet" level="DEBUG" additivity="true"/>-->
+    <!--Exception mapper and Reponse Body-->
+    <!--<logger name="org.springframework.web.servlet.mvc.method.annotation" level="DEBUG" additivity="true"/>-->
+</included>

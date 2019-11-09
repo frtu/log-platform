@@ -2,14 +2,15 @@
 <!-- https://logback.qos.ch/manual/configuration.html -->
 <!-- https://logback.qos.ch/manual/appenders.html#FileAppender -->
 <configuration>
-    <include resource="logback-core.xml" />
+    <include resource="logback-web.xml"/>
 
-    <logger name="com.github.frtu.logs.example" level="TRACE" additivity="true">
-        <appender-ref ref="FLUENT" />
+    <!--Current application-->
+    <logger name="com.github.frtu" level="TRACE" additivity="true">
+        <appender-ref ref="FLUENT"/>
     </logger>
-    <logger name="org.springframework.boot.autoconfigure.logging" level="INFO" additivity="true"/>
 
-    <root level="INFO">
-        <appender-ref ref="STDOUT"/>
-    </root>
+    <!--ONLY NEEDED WHEN YOU NEED BELOW WARN-->
+    <!--<root level="INFO">-->
+    <!--<appender-ref ref="STDOUT"/>-->
+    <!--</root>-->
 </configuration>
