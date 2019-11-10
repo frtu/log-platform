@@ -1,17 +1,35 @@
 package com.github.frtu.logs.tracing.jaeger;
 
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.github.frtu.logs.tracing.jaeger.JaegerConfiguration.SYSTEM_PROPERTY_SERVICE_NAME;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {JaegerConfiguration.class})
 public class JaegerConfigurationTest {
+
+    @Autowired
+    Tracer tracer;
+
+    @Autowired
+    JaegerConfiguration jaegerConfiguration;
+
+    @Test
+    public void getTraceId() {
+        final Span start = tracer.buildSpan("test-span").start();
+        final String traceId = jaegerConfiguration.getTraceId(start);
+        assertNotNull(traceId);
+    }
+
     @Test
     public void getApplicationName() {
         final String serviceName = "service-a";

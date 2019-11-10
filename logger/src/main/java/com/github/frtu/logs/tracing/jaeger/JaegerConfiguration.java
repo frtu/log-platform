@@ -1,6 +1,9 @@
 package com.github.frtu.logs.tracing.jaeger;
 
+import com.github.frtu.logs.tracing.TraceUtil;
+import io.jaegertracing.internal.JaegerSpan;
 import io.jaegertracing.internal.JaegerTracer;
+import io.opentracing.Span;
 import io.opentracing.Tracer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +17,7 @@ import static io.jaegertracing.Configuration.ReporterConfiguration;
 import static io.jaegertracing.Configuration.SamplerConfiguration;
 
 @Configuration
-public class JaegerConfiguration {
+public class JaegerConfiguration implements TraceUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(JaegerConfiguration.class);
 
     public static final String SYSTEM_PROPERTY_SERVICE_NAME = "SERVICE_NAME";
@@ -29,6 +32,15 @@ public class JaegerConfiguration {
 
     @Value("#{environment.JAEGER_AGENT_PORT ?: 'UNKNOWN'}")
     private String jaegerAgentPort;
+
+    @Override
+    public String getTraceId(final Span span) {
+        String traceId = null;
+        if (span != null && span instanceof JaegerSpan) {
+            traceId = ((JaegerSpan) span).context().getTraceId();
+        }
+        return traceId;
+    }
 
     @PostConstruct
     public void logs() {
