@@ -66,6 +66,9 @@ Also add Jaeger Configuration for :
 * [VERSION_TAG](https://github.com/frtu/log-platform/blob/master/sample-microservices/.env#L9-L10)
 
 
+Go to folder **/sample-microservices/** and ```docker-compose up```
+
+
 ## Infrastructure
 
 [Details for development & production env](https://docs.fluentd.org/container-deployment/docker-logging-driver#development-environments)
