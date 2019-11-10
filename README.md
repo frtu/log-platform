@@ -37,6 +37,12 @@ Using OpenTracing & Jaeger
 * Specific Keys (logs) : TXN-123567, PERSIST-67890, ..
 * Business Data (logs) : username, ..
 
+Should have an API to
+
+* addTraceId(final io.opentracing.Span span) : enrich log with Trace ID using a [span](https://opentracing.io/docs/overview/spans/)
+* addKey(String keyName, PrimitiveOrObject value)
+* addData(String fieldName, PrimitiveOrObject value)
+
 
 ## Context passing
 
