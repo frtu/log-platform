@@ -59,25 +59,11 @@ services:
         max-size: "1G"
         max-file: "2"
 
-  web:
-    image: ${HTTPD_IMAGE}
-    ports:
-      - "80:80"
-    networks:
-      - efk
-    links:
-      - fluentd
-    # https://docs.docker.com/config/containers/logging/fluentd/
-    logging:
-      driver: "fluentd"
-      options:
-        fluentd-address: localhost:24224
-        tag: httpd.access
-
   jaeger:
     image: ${JAEGER_IMAGE}
     links:
       - "elasticsearch"
+    # https://www.jaegertracing.io/docs/1.14/deployment/
     ports:
       - "5778:5778"
       - "6831:6831/udp"

@@ -31,7 +31,7 @@ Allow to tag every logs sent to EFK with following information :
 
 ### Distributed tracing
 
-Using OpenTracing & Jaeger
+Using [OpenTracing](https://opentracing.io/) & [Jaeger](https://www.jaegertracing.io/)
 
 * Trace ID : 558907019132e7f8, ..
 * Specific Keys (logs) : TXN-123567, PERSIST-67890, ..
