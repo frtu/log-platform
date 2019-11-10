@@ -8,25 +8,52 @@ Full EFK platform for logs and monitoring. EFK stands for :
 
 More on [logs unification](https://www.fluentd.org/blog/unified-logging-layer)
 
-## Log enrichment 
-### Running context localization
+## Structured logs
+
+Logs used to be a long chain of words and events, **requiring a human** to read and interpret. 
+
+With growing volume of logs, we need to give a structure to logs to allow **machine involvement** in crunching and organizing data easy to identify & aggregate.
+
+By definition, each event data model **depends on business** (what you try to achieve), but here are a set of **technical fields** that are required for every logs to have a context & foster deeper analysis.
+
+ 
+### Execution context location
 
 Allow to tag every logs sent to EFK with following information :
 
-Physical & Logical DC :
-
-* REGION : (Default = SINGLE)
-* ZONE : (Default = SINGLE)
-
-Instance, Cluster & Version
-
-* MACHINE_ID : Docker container ID (Default = UNKNOWN)
-* SERVICE_NAME : (Default = UNKNOWN)
-* VERSION_TAG : (Default = UNKNOWN)
+| Field name   | Definition                               | Example                        | Default value |
+|--------------|------------------------------------------|--------------------------------|---------------|
+| REGION       | Physical location                        | US\_East\_A, CN\_SHA, ..       | SINGLE        |
+| ZONE         | Logical location                         | ZONE\_A, ZONE\_25, ..          | SINGLE        |
+| MACHINE_ID   | Specific virtualized ID (like Docker ID) | 239411039fee, 8b9a6863c720, .. | UNKNOWN       |
+| SERVICE_NAME | Business component name                  | UserGatewayService, ..         | UNKNOWN       |
+| VERSION_TAG  | Specific version or tag                  | service-a:0.0.1-SNAPSHOT       | UNKNOWN       |
 
 ### Distributed tracing
 
-* Using OpenTracing & Jaeger
+Using OpenTracing & Jaeger
+
+* Trace ID : 558907019132e7f8, ..
+* Specific Keys (logs) : TXN-123567, PERSIST-67890, ..
+* Business Data (logs) : username, ..
+
+
+## Context passing
+
+### Dev local
+
+When starting an standalone Main class, also add the following :
+
+```
+-DREGION=FR -DZONE=A -DSERVICE_NAME=service-a -DMACHINE_ID=982d2ff1686a -DVERSION_TAG=service-a:0.0.1-SNAPSHOT -DJAEGER_ENDPOINT=http://localhost:14268/api/traces
+```
+
+### Inside container & docker-compose
+
+* [REGION](https://github.com/frtu/log-platform/blob/master/sample-microservices/.env#L7)
+* [ZONE](https://github.com/frtu/log-platform/blob/master/sample-microservices/.env#L8)
+* [VERSION_TAG](https://github.com/frtu/log-platform/blob/master/sample-microservices/.env#L9-L10)
+
 
 ## Infrastructure
 
