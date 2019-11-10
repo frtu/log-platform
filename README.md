@@ -48,11 +48,16 @@ Should have an API to
 
 ### Dev local
 
-When starting an standalone Main class, also add the following :
+When starting an standalone Main class, also add the following to VM options :
 
 ```
--DREGION=FR -DZONE=A -DSERVICE_NAME=service-a -DMACHINE_ID=982d2ff1686a -DVERSION_TAG=service-a:0.0.1-SNAPSHOT -DJAEGER_ENDPOINT=http://localhost:14268/api/traces
+-DREGION=FR -DZONE=A -DSERVICE_NAME=service-a -DMACHINE_ID=982d2ff1686a -DVERSION_TAG=service-a:0.0.1-SNAPSHOT
 ```
+
+Also add Jaeger Configuration for :
+
+* HTTP : ```-DJAEGER_ENDPOINT=http://localhost:14268/api/traces```
+* Agent : ```-DJAEGER_AGENT_HOST=localhost -DJAEGER_AGENT_PORT=6831```
 
 ### Inside container & docker-compose
 

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
+
 import static io.jaegertracing.Configuration.ReporterConfiguration;
 import static io.jaegertracing.Configuration.SamplerConfiguration;
 
@@ -15,8 +17,42 @@ import static io.jaegertracing.Configuration.SamplerConfiguration;
 public class JaegerConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(JaegerConfiguration.class);
 
-    @Value("${application.name:UNKNOWN}")
+    public static final String SYSTEM_PROPERTY_SERVICE_NAME = "SERVICE_NAME";
+    @Value("${application.name:#{environment." + SYSTEM_PROPERTY_SERVICE_NAME + " ?: 'UNKNOWN'}}")
     private String applicationName;
+
+    @Value("#{environment.JAEGER_ENDPOINT ?: 'UNKNOWN'}")
+    private String jaegerEndpoint;
+
+    @Value("#{environment.JAEGER_AGENT_HOST ?: 'UNKNOWN'}")
+    private String jaegerAgentHost;
+
+    @Value("#{environment.JAEGER_AGENT_PORT ?: 'UNKNOWN'}")
+    private String jaegerAgentPort;
+
+    @PostConstruct
+    public void logs() {
+        LOGGER.info("applicationName:{}", applicationName);
+        LOGGER.info("jaegerEndpoint:{}", jaegerEndpoint);
+        LOGGER.info("jaegerAgentHost:{}", jaegerAgentHost);
+        LOGGER.info("jaegerAgentPort:{}", jaegerAgentPort);
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    String getJaegerEndpoint() {
+        return jaegerEndpoint;
+    }
+
+    String getJaegerAgentHost() {
+        return jaegerAgentHost;
+    }
+
+    String getJaegerAgentPort() {
+        return jaegerAgentPort;
+    }
 
     @Bean
     public Tracer tracer() {
@@ -27,7 +63,8 @@ public class JaegerConfiguration {
         LOGGER.info("Creating Tracer using applicationName={}", applicationName);
         SamplerConfiguration samplerConfig = SamplerConfiguration.fromEnv().withType("const").withParam(1);
         ReporterConfiguration reporterConfig = ReporterConfiguration.fromEnv().withLogSpans(true);
-        io.jaegertracing.Configuration config = new io.jaegertracing.Configuration(applicationName).withSampler(samplerConfig).withReporter(reporterConfig);
+        io.jaegertracing.Configuration config = new io.jaegertracing.Configuration(applicationName)
+                .withSampler(samplerConfig).withReporter(reporterConfig);
         return config.getTracer();
     }
 }
