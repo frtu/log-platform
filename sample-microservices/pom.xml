@@ -9,7 +9,7 @@
 
 	<groupId>com.github.frtu.logs.example</groupId>
 	<artifactId>sample-microservices</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Sample microservices apps</name>
@@ -71,8 +71,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-  <scm>
-    <tag>v1.0.0</tag>
-  </scm>
 </project>
