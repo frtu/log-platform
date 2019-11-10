@@ -23,27 +23,37 @@ Allow to tag every logs sent to EFK with following information :
 
 | Field name   | Definition                               | Example                        | Default value |
 |--------------|------------------------------------------|--------------------------------|---------------|
-| REGION       | Physical location                        | US\_East\_A, CN\_SHA, ..       | SINGLE        |
-| ZONE         | Logical location                         | ZONE\_A, ZONE\_25, ..          | SINGLE        |
-| MACHINE_ID   | Specific virtualized ID (like Docker ID) | 239411039fee, 8b9a6863c720, .. | UNKNOWN       |
-| SERVICE_NAME | Business component name                  | UserGatewayService, ..         | UNKNOWN       |
-| VERSION_TAG  | Specific version or tag                  | service-a:0.0.1-SNAPSHOT       | UNKNOWN       |
+| [REGION](https://github.com/frtu/log-platform/blob/master/logger/src/main/resources/logback-appenders-fluentd.xml#L23-L26)       | Physical location                        | US\_East\_A, CN\_SHA, ..       | SINGLE        |
+| [ZONE](https://github.com/frtu/log-platform/blob/master/logger/src/main/resources/logback-appenders-fluentd.xml#L27-L30)         | Logical location                         | ZONE\_A, ZONE\_25, ..          | SINGLE        |
+| [MACHINE_ID](https://github.com/frtu/log-platform/blob/master/logger/src/main/resources/logback-appenders-fluentd.xml#L35-L38)   | Specific virtualized ID (like Docker ID) | 239411039fee, 8b9a6863c720, .. | UNKNOWN       |
+| [SERVICE_NAME](https://github.com/frtu/log-platform/blob/master/logger/src/main/resources/logback-appenders-fluentd.xml#L31-L34) | Business component name                  | UserGatewayService, ..         | UNKNOWN       |
+| [VERSION_TAG](https://github.com/frtu/log-platform/blob/master/logger/src/main/resources/logback-appenders-fluentd.xml#L39-L42)  | Specific version or tag                  | service-a:0.0.1-SNAPSHOT       | UNKNOWN       |
 
 ### Distributed tracing
 
 Using [OpenTracing](https://opentracing.io/) & [Jaeger](https://www.jaegertracing.io/)
 
+Import using :
+
+```XML
+<dependency>
+    <groupId>com.github.frtu.logs</groupId>
+    <artifactId>logger</artifactId>
+    <version>${frtu-logger.version}</version>
+</dependency>
+```
+
+Sample [adoption Change List](https://github.com/frtu/log-platform/commit/3a11086d0121716ec13cd6499a6dfc55c39289cf)
+
+| Field name   | Definition                               | Example                        | Default value |
+|--------------|------------------------------------------|--------------------------------|---------------|
+| [TRACE_ID](https://github.com/frtu/log-platform/blob/master/logger/src/main/resources/logback-appenders-fluentd.xml#L43-L46)       | Unique ID per Request                        | 558907019132e7f8, ..       | [NULL]        |
+
+
 * Trace ID : 558907019132e7f8, ..
 * Specific Keys (logs) : TXN-123567, PERSIST-67890, ..
 * Business Data (logs) : username, ..
-
-Should have an API to
-
-* [addTraceId(final io.opentracing.Span span)](https://github.com/frtu/log-platform/blob/master/logger/src/main/java/com/github/frtu/logs/tracing/LogEnricher.java#L16) : enrich log with Trace ID using a [span](https://opentracing.io/docs/overview/spans/)
-* [addKey(String keyName, PrimitiveOrObject value)](https://github.com/frtu/log-platform/blob/master/logger/src/main/java/com/github/frtu/logs/tracing/LogEnricher.java#L28-L44) : enrich log with a specific key
-* [addData(String fieldName, PrimitiveOrObject value)](https://github.com/frtu/log-platform/blob/master/logger/src/main/java/com/github/frtu/logs/tracing/LogEnricher.java#L56-L72) : enrich log with some data
-
-
+* 
 ## Context passing
 
 ### Dev local
