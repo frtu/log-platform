@@ -39,9 +39,9 @@ Using OpenTracing & Jaeger
 
 Should have an API to
 
-* addTraceId(final io.opentracing.Span span) : enrich log with Trace ID using a [span](https://opentracing.io/docs/overview/spans/)
-* addKey(String keyName, PrimitiveOrObject value)
-* addData(String fieldName, PrimitiveOrObject value)
+* [addTraceId(final io.opentracing.Span span)](https://github.com/frtu/log-platform/blob/master/logger/src/main/java/com/github/frtu/logs/tracing/LogEnricher.java#L16) : enrich log with Trace ID using a [span](https://opentracing.io/docs/overview/spans/)
+* [addKey(String keyName, PrimitiveOrObject value)](https://github.com/frtu/log-platform/blob/master/logger/src/main/java/com/github/frtu/logs/tracing/LogEnricher.java#L28-L44) : enrich log with a specific key
+* [addData(String fieldName, PrimitiveOrObject value)](https://github.com/frtu/log-platform/blob/master/logger/src/main/java/com/github/frtu/logs/tracing/LogEnricher.java#L56-L72) : enrich log with some data
 
 
 ## Context passing
