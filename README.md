@@ -83,7 +83,7 @@ try (Scope scope = tracer.buildSpan("say-hello2").startActive(true)) {
 ```
 
 
-* See [sample-microservices/service-a](https://github.com/frtu/log-platform/tree/master/sample-microservices/service-a)
+* See [sample-microservices/service-a](https://github.com/frtu/log-platform/tree/master/sample-microservices/service-a) or [ChangeList](https://github.com/frtu/log-platform/commit/57ee4d99b3a219cc662c710726353a239e02b035)
 * Or more at [opentracing.io - span](https://opentracing.io/docs/overview/spans/)
 
 ###### b) @ExecutionSpan AOP
@@ -129,7 +129,7 @@ You can optionally add a Spring property to get a full classname trace :
 trace.full.classname=true
 ```
 
-See [sample-microservices/service-b](https://github.com/frtu/log-platform/tree/master/sample-microservices/service-b)
+See [sample-microservices/service-b](https://github.com/frtu/log-platform/tree/master/sample-microservices/service-b) or [ChangeList](https://github.com/frtu/log-platform/commit/c9e47df45922073a95b24193291bd662064ae381)
 
 
 ## Context passing
