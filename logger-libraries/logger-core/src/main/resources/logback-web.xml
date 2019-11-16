@@ -29,6 +29,8 @@
     <!--<logger name="org.springframework.context.annotation" level="DEBUG" additivity="true"/>-->
     <!--Bean instanciation-->
     <!--<logger name="org.springframework.beans.factory.support" level="DEBUG" additivity="true"/>-->
+    <!--Spring logback-->
+    <!--<logger name="org.springframework.boot.autoconfigure.logging" level="INFO" additivity="true"/>-->
     <!--===========================-->
     <!--Spring Web-->
     <!--===========================-->
@@ -37,4 +39,14 @@
     <!--<logger name="org.springframework.web.servlet" level="DEBUG" additivity="true"/>-->
     <!--Exception mapper and Reponse Body-->
     <!--<logger name="org.springframework.web.servlet.mvc.method.annotation" level="DEBUG" additivity="true"/>-->
+    <!--<logger name="org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor" level="DEBUG" additivity="true"/>-->
+    <!--===========================-->
+    <!--Spring Others-->
+    <!--===========================-->
+    <!--Actuate-->
+    <!--<logger name="org.springframework.boot.actuate.metrics.web.servlet" level="DEBUG" additivity="true"/>-->
+    <!--<logger name="org.springframework.boot.actuate.endpoint.web" level="DEBUG" additivity="true"/>-->
+
+    <!--Validator and JPA-->
+    <!--<logger name="org.hibernate.validator.internal.engine" level="DEBUG" additivity="true"/>-->
 </included>

@@ -56,7 +56,7 @@ Import using :
 
 Check the latest version (clickable) :
 
-[<img src="https://img.shields.io/maven-central/v/com.github.frtu.logs/logger-core.svg?label=latest%20release%20:%20logger-core"/>](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22logger-core%22+g%3A%22 com.github.frtu.logs%22)
+[<img src="https://img.shields.io/maven-central/v/com.github.frtu.logs/logger-core.svg?label=latest%20release%20:%20logger-core"/>](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22logger-core%22+g%3A%22com.github.frtu.logs%22)
 
 ###### a) Core Tracer API
 
