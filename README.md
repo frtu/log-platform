@@ -66,7 +66,7 @@ If you only need Jaeger Tracer, just add :
 @ComponentScan(basePackages = {"com.github.frtu.logs.tracing.core", "..."})
 ```
 
-You can create a single Span structure :
+USAGE : You can create a single Span structure :
 
 ```
 Span span = tracer.buildSpan("say-hello1").start();
@@ -114,6 +114,19 @@ OR spring-boot AOP :
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-aop</artifactId>
 </dependency>
+```
+
+USAGE : Just annotate with @ExecutionSpan all the methods you need to create a [DAG](https://en.wikipedia.org/wiki/Directed_acyclic_graph) :
+
+```
+@ExecutionSpan
+public String method() {}
+```
+
+You can optionally add a Spring property to get a full classname trace :
+
+```
+trace.full.classname=true
 ```
 
 See [sample-microservices/service-b](https://github.com/frtu/log-platform/tree/master/sample-microservices/service-b)

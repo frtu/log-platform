@@ -1,5 +1,6 @@
 package com.github.frtu.logs.example.demo;
 
+import com.github.frtu.logs.tracing.annotation.ExecutionSpan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ public class ResourceController {
     @Autowired
     PrinterUtil printerUtil;
 
+    @ExecutionSpan
     @RequestMapping("/")
     @ResponseBody
     String home(@RequestParam(value = "service", defaultValue = "ServiceB", required = false) String name) {
