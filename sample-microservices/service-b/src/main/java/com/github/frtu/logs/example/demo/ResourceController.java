@@ -1,11 +1,5 @@
 package com.github.frtu.logs.example.demo;
 
-import com.google.common.collect.ImmutableMap;
-import io.opentracing.Scope;
-import io.opentracing.Span;
-import io.opentracing.Tracer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,43 +12,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class ResourceController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceController.class);
-
     @Autowired
-    private Tracer tracer;
+    PrinterUtil printerUtil;
 
     @RequestMapping("/")
     @ResponseBody
     String home(@RequestParam(value = "service", defaultValue = "ServiceB", required = false) String name) {
-        Span span = tracer.buildSpan("say-hello1").start();
-        LOGGER.info("service={}", name);
-        span.finish();
-
-        try (Scope scope = tracer.buildSpan("say-hello2").startActive(true)) {
-            scope.span().log(ImmutableMap.of("event", "string-format", "value", name));
-            scope.span().setTag("hello-to", name);
-
-            String formatString = formatString(name);
-            printHello(formatString);
-
-            return formatString;
-        }
-    }
-
-    private String formatString(String helloTo) {
-        try (Scope scope = tracer.buildSpan("formatString").startActive(true)) {
-            String helloStr = String.format("Hello, %s!", helloTo);
-            printHello(helloStr);
-
-            scope.span().log(ImmutableMap.of("event", "string-format", "value", helloStr));
-            return helloStr;
-        }
-    }
-
-    private void printHello(String helloStr) {
-        try (Scope scope = tracer.buildSpan("printHello").startActive(true)) {
-            LOGGER.info(helloStr);
-            scope.span().log(ImmutableMap.of("event", "println"));
-        }
+        String formatString = printerUtil.formatString(name);
+        printerUtil.printHello(formatString);
+        return formatString;
     }
 }

@@ -66,7 +66,7 @@ If you only need Jaeger Tracer, just add :
 @ComponentScan(basePackages = {"com.github.frtu.logs.tracing.core", "..."})
 ```
 
-See [sample-microservices/service-b](https://github.com/frtu/log-platform/tree/master/sample-microservices/service-b)
+See [sample-microservices/service-a](https://github.com/frtu/log-platform/tree/master/sample-microservices/service-a)
 
 ###### b) @ExecutionSpan AOP
 
@@ -98,7 +98,7 @@ OR spring-boot AOP :
 </dependency>
 ```
 
-See [sample-microservices/service-a](https://github.com/frtu/log-platform/tree/master/sample-microservices/service-a)
+See [sample-microservices/service-b](https://github.com/frtu/log-platform/tree/master/sample-microservices/service-b)
 
 
 ## Context passing

@@ -1,7 +1,7 @@
 package com.github.frtu.logs.example.demo;
 
-import com.github.frtu.logs.tracing.annotation.ExecutionSpan;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,15 +13,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class ResourceController {
-    @Autowired
-    PrinterUtil printerUtil;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceController.class);
 
-    @ExecutionSpan
     @RequestMapping("/")
     @ResponseBody
     String home(@RequestParam(value = "service", defaultValue = "ServiceA", required = false) String name) {
-        String formatString = printerUtil.formatString(name);
-        printerUtil.printHello(formatString);
-        return formatString;
+            String formatString = formatString(name);
+            printHello(formatString);
+
+            return formatString;
+    }
+
+    private String formatString(String helloTo) {
+            String helloStr = String.format("Hello, %s!", helloTo);
+            printHello(helloStr);
+
+            return helloStr;
+    }
+
+    private void printHello(String helloStr) {
+            LOGGER.info(helloStr);
     }
 }
