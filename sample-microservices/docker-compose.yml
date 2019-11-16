@@ -17,11 +17,11 @@ services:
       ZONE: ${ZONE}
       SERVICE_NAME: service-a
       VERSION_TAG: ${SERVICE_A}
-    logging:
-      driver: "fluentd"
-      options:
-        fluentd-address: localhost:${FLUENTD_PORT}
-        tag: service-a
+#    logging:
+#      driver: "fluentd"
+#      options:
+#        fluentd-address: localhost:${FLUENTD_PORT}
+#        tag: service-a
 
   service-b:
     image: ${SERVICE_B}
@@ -39,11 +39,11 @@ services:
       ZONE: ${ZONE}
       SERVICE_NAME: service-b
       VERSION_TAG: ${SERVICE_B}
-    logging:
-      driver: "fluentd"
-      options:
-        fluentd-address: localhost:${FLUENTD_PORT}
-        tag: service-b
+#    logging:
+#      driver: "fluentd"
+#      options:
+#        fluentd-address: localhost:${FLUENTD_PORT}
+#        tag: service-b
 
 # https://docs.docker.com/compose/networking/
 networks:
