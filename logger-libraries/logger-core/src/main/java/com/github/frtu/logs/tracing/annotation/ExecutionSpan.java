@@ -14,4 +14,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface ExecutionSpan {
+    /**
+     * Enrich the span with Tags using annotation {@link Tag}
+     *
+     * @return Array of Tag(K,V)
+     * @since 0.9.1
+     */
+    Tag[] value() default {};
 }
