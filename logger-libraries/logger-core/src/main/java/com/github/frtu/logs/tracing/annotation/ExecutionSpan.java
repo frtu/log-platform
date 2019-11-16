@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Add a new {@link io.opentracing.Span} into current {@link io.opentracing.Tracer}.
  *
- * @return
+ * @author fred
  * @since 0.9.0
  */
 @Retention(RetentionPolicy.RUNTIME)

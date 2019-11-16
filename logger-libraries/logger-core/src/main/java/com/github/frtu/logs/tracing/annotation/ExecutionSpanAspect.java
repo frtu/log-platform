@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 /**
  * Aspect that create a {@link io.opentracing.Span} around the annotated method using {@link ExecutionSpan}.
  *
- * @return
+ * @author fred
  * @since 0.9.0
  */
 @Aspect
