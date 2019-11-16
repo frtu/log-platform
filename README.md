@@ -66,7 +66,25 @@ If you only need Jaeger Tracer, just add :
 @ComponentScan(basePackages = {"com.github.frtu.logs.tracing.core", "..."})
 ```
 
-See [sample-microservices/service-a](https://github.com/frtu/log-platform/tree/master/sample-microservices/service-a)
+You can create a single Span structure :
+
+```
+Span span = tracer.buildSpan("say-hello1").start();
+LOGGER.info("hello1");
+span.finish();
+```
+
+OR a node from a graph using Scope :
+
+```
+try (Scope scope = tracer.buildSpan("say-hello2").startActive(true)) {
+	LOGGER.info("hello2");
+}
+```
+
+
+* See [sample-microservices/service-a](https://github.com/frtu/log-platform/tree/master/sample-microservices/service-a)
+* Or more at [opentracing.io - span](https://opentracing.io/docs/overview/spans/)
 
 ###### b) @ExecutionSpan AOP
 
