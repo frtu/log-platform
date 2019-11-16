@@ -12,7 +12,7 @@ public class ExecutionSpanConfiguration {
 
     @ExecutionSpan({@Tag(tagName = "tag1", tagValue = "value1"),
             @Tag(tagName = "tag2", tagValue = "value2")})
-    public void spanWithTags(String param1) {
+    public void spanWithTags() {
     }
 
     @ExecutionSpan(@Tag(tagName = "tag1", tagValue = "value1"))
