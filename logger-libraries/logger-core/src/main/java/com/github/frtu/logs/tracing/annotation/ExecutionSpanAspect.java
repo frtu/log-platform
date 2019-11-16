@@ -1,6 +1,6 @@
-package com.github.frtu.logs.tracing.aspect;
+package com.github.frtu.logs.tracing.annotation;
 
-import com.github.frtu.logs.tracing.TraceUtil;
+import com.github.frtu.logs.tracing.core.TraceUtil;
 import io.opentracing.Scope;
 import io.opentracing.Tracer;
 import org.aspectj.lang.ProceedingJoinPoint;

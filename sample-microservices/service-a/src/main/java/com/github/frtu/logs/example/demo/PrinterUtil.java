@@ -1,6 +1,6 @@
 package com.github.frtu.logs.example.demo;
 
-import com.github.frtu.logs.tracing.aspect.ExecutionSpan;
+import com.github.frtu.logs.tracing.annotation.ExecutionSpan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

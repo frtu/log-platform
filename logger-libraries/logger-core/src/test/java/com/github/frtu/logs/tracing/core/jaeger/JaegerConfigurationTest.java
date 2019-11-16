@@ -1,4 +1,4 @@
-package com.github.frtu.logs.tracing.jaeger;
+package com.github.frtu.logs.tracing.core.jaeger;
 
 import io.opentracing.Span;
 import io.opentracing.Tracer;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static com.github.frtu.logs.tracing.jaeger.JaegerConfiguration.SYSTEM_PROPERTY_SERVICE_NAME;
+import static com.github.frtu.logs.tracing.core.jaeger.JaegerConfiguration.SYSTEM_PROPERTY_SERVICE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 

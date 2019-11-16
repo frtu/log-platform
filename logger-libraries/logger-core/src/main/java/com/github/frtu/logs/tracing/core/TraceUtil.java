@@ -1,4 +1,4 @@
-package com.github.frtu.logs.tracing;
+package com.github.frtu.logs.tracing.core;
 
 import io.opentracing.Span;
 

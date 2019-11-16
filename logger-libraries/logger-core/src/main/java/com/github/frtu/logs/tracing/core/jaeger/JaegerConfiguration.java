@@ -1,6 +1,6 @@
-package com.github.frtu.logs.tracing.jaeger;
+package com.github.frtu.logs.tracing.core.jaeger;
 
-import com.github.frtu.logs.tracing.TraceUtil;
+import com.github.frtu.logs.tracing.core.TraceUtil;
 import io.jaegertracing.internal.JaegerSpan;
 import io.jaegertracing.internal.JaegerTracer;
 import io.opentracing.Span;

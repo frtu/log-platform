@@ -33,18 +33,6 @@ Allow to tag every logs sent to EFK with following information :
 
 Using [OpenTracing](https://opentracing.io/) & [Jaeger](https://www.jaegertracing.io/)
 
-Import using :
-
-```XML
-<dependency>
-    <groupId>com.github.frtu.logs</groupId>
-    <artifactId>logger</artifactId>
-    <version>${frtu-logger.version}</version>
-</dependency>
-```
-
-Sample [adoption Change List](https://github.com/frtu/log-platform/commit/3a11086d0121716ec13cd6499a6dfc55c39289cf)
-
 | Field name   | Definition                               | Example                        | Default value |
 |--------------|------------------------------------------|--------------------------------|---------------|
 | [TRACE_ID](https://github.com/frtu/log-platform/blob/master/logger/src/main/resources/logback-appenders-fluentd.xml#L43-L46)       | Unique ID per Request                        | 558907019132e7f8, ..       | [NULL]        |
@@ -53,7 +41,66 @@ Sample [adoption Change List](https://github.com/frtu/log-platform/commit/3a1108
 * Trace ID : 558907019132e7f8, ..
 * Specific Keys (logs) : TXN-123567, PERSIST-67890, ..
 * Business Data (logs) : username, ..
-* 
+
+##### Adoption
+
+Import using :
+
+```XML
+<dependency>
+    <groupId>com.github.frtu.logs</groupId>
+    <artifactId>logger-core</artifactId>
+    <version>${frtu-logger.version}</version>
+</dependency>
+```
+
+Check the latest version (clickable) :
+
+[<img src="https://img.shields.io/maven-central/v/com.github.frtu.logs/logger-core.svg?label=latest%20release%20:%20logger-core"/>](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22logger-core%22+g%3A%22 com.github.frtu.logs%22)
+
+###### a) Core Tracer API
+
+If you only need Jaeger Tracer, just add :
+
+```
+@ComponentScan(basePackages = {"com.github.frtu.logs.tracing.core", "..."})
+```
+
+See [sample-microservices/service-b](https://github.com/frtu/log-platform/tree/master/sample-microservices/service-b)
+
+###### b) @ExecutionSpan AOP
+
+If you want to use @ExecutionSpan to mark a method to create Span, add :
+
+```
+@ComponentScan(basePackages = {"com.github.frtu.logs.tracing", "..."})
+```
+
+And add Spring AOP :
+
+```XML
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-aop</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjweaver</artifactId>
+</dependency>
+```
+
+OR spring-boot AOP :
+
+```XML
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-aop</artifactId>
+</dependency>
+```
+
+See [sample-microservices/service-a](https://github.com/frtu/log-platform/tree/master/sample-microservices/service-a)
+
+
 ## Context passing
 
 ### Dev local
