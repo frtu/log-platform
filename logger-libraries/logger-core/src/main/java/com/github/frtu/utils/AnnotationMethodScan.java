@@ -9,8 +9,8 @@ import java.util.Objects;
 /**
  * Result of an annotation method scan {@link AnnotationMethodScanner#scan(Method)}.
  *
- * @param <MethodAnno>
- * @param <ParamAnno>
+ * @param <MethodAnno> Annotation class used on method
+ * @param <ParamAnno> Annotation class used on method parameter
  * @author fred
  * @since 0.9.1
  */
@@ -59,6 +59,7 @@ public class AnnotationMethodScan<MethodAnno extends Class<? extends Annotation>
     /**
      * Array of annotations from each fields.
      *
+     * @param <ParamAnno> Annotation class used on method parameter
      * @return Empty array when no annotation found
      */
     public <ParamAnno extends Annotation> ParamAnno[] getParamAnnotations() {

@@ -14,8 +14,8 @@ import java.util.Map;
 /**
  * Scan a {@link Class} for {@link Annotation} and return result in an inner {@link Multimap}.
  *
- * @param <MethodAnno>
- * @param <ParamAnno>
+ * @param <MethodAnno> Annotation class used on method
+ * @param <ParamAnno>  Annotation class used on method parameter
  * @author fred
  * @since 0.9.1
  */
@@ -31,8 +31,8 @@ public class AnnotationMethodScanner<MethodAnno extends Class<? extends Annotati
      *
      * @param methodAnnotationClass Annotation class at method level.
      * @param paramAnnotationClass  Annotation class at parameter level.
-     * @param <M>
-     * @param <P>
+     * @param <M>                   Annotation class used on method
+     * @param <P>                   Annotation class used on method parameter
      * @return Instance of {@link AnnotationMethodScanner}
      */
     public static <M extends Class<? extends Annotation>, P extends Class<? extends Annotation>>
@@ -44,8 +44,8 @@ public class AnnotationMethodScanner<MethodAnno extends Class<? extends Annotati
     /**
      * Use {@link #of(Class, Class)} instead.
      *
-     * @param methodAnnotationClass
-     * @param paramAnnotationClass
+     * @param methodAnnotationClass Annotation class used on method
+     * @param paramAnnotationClass Annotation class used on method parameter
      */
     private AnnotationMethodScanner(Class<? extends Annotation> methodAnnotationClass, Class<? extends Annotation> paramAnnotationClass) {
         this.methodAnnotationClass = methodAnnotationClass;
@@ -56,7 +56,7 @@ public class AnnotationMethodScanner<MethodAnno extends Class<? extends Annotati
      * Scan a {@link Method} for annotation class 'MethodAnno' and extract nested annotations
      * and for annotations on {@link Parameter} of annotation class 'ParamAnno'.
      *
-     * @param method
+     * @param method Instance of the method to scan
      * @return An object containing all the found annotations on this method.
      */
     public AnnotationMethodScan scan(Method method) {
@@ -81,6 +81,8 @@ public class AnnotationMethodScanner<MethodAnno extends Class<? extends Annotati
      * Scan all {@link Method} of this {@link Class} for annotation class 'MethodAnno' extract nested annotations
      * and annotations on {@link Parameter} of annotation class 'ParamAnno'.
      *
+     * @param <M>         Annotation class used on method
+     * @param <P>         Annotation class used on method parameter
      * @param targetClass Class to scan for annotation 'MethodAnno'
      * @return An object containing all the found annotation on this method.
      */
@@ -112,8 +114,8 @@ public class AnnotationMethodScanner<MethodAnno extends Class<? extends Annotati
     }
 
     /**
-     * @param method
-     * @param paramAnnotationClass
+     * @param method               Instance of the method to scan
+     * @param paramAnnotationClass Annotation class that marks a parameter
      * @return Array of annotation parameter if paramAnnotationClass used. Else return empty array if nothing found.
      */
     static Annotation[] getAnnotationFromParams(Method method, Class<? extends Annotation> paramAnnotationClass) {

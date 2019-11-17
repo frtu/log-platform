@@ -18,9 +18,7 @@ import java.util.Map;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ToLog {
     /**
-     * Name for the log
-     *
-     * @return
+     * @return Name for this log
      */
     String value();
 }
