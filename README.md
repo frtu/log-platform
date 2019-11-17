@@ -42,7 +42,7 @@ Using [OpenTracing](https://opentracing.io/) & [Jaeger](https://www.jaegertracin
 * Specific Keys (logs) : TXN-123567, PERSIST-67890, ..
 * Business Data (logs) : username, ..
 
-##### Adoption
+## Adoption
 
 Import using :
 
@@ -58,7 +58,9 @@ Check the latest version (clickable) :
 
 [<img src="https://img.shields.io/maven-central/v/com.github.frtu.logs/logger-core.svg?label=latest%20release%20:%20logger-core"/>](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22logger-core%22+g%3A%22com.github.frtu.logs%22)
 
-###### a) Core Tracer API
+### a) Core Tracer API
+
+#### Enablement
 
 If you only need Jaeger Tracer, just add :
 
@@ -66,7 +68,8 @@ If you only need Jaeger Tracer, just add :
 @ComponentScan(basePackages = {"com.github.frtu.logs.tracing.core", "..."})
 ```
 
-USAGE : You can create a single Span structure :
+#### Usage
+You can create a single Span structure :
 
 ```
 Span span = tracer.buildSpan("say-hello1").start();
@@ -86,7 +89,9 @@ try (Scope scope = tracer.buildSpan("say-hello2").startActive(true)) {
 * See [sample-microservices/service-a](https://github.com/frtu/log-platform/tree/master/sample-microservices/service-a) or [ChangeList](https://github.com/frtu/log-platform/commit/57ee4d99b3a219cc662c710726353a239e02b035)
 * Or more at [opentracing.io - span](https://opentracing.io/docs/overview/spans/)
 
-###### b) @ExecutionSpan AOP
+### b) @ExecutionSpan AOP
+
+#### Enablement
 
 If you want to use @ExecutionSpan to mark a method to create Span, add :
 
@@ -116,7 +121,9 @@ OR spring-boot AOP :
 </dependency>
 ```
 
-USAGE : Just annotate with @ExecutionSpan all the methods you need to create a [DAG](https://en.wikipedia.org/wiki/Directed_acyclic_graph) :
+#### Basic usage
+
+Just annotate with @ExecutionSpan all the methods you need to create a [DAG](https://en.wikipedia.org/wiki/Directed_acyclic_graph) :
 
 ```
 @ExecutionSpan
@@ -131,6 +138,24 @@ trace.full.classname=true
 
 See [sample-microservices/service-b](https://github.com/frtu/log-platform/tree/master/sample-microservices/service-b) or [ChangeList](https://github.com/frtu/log-platform/commit/c9e47df45922073a95b24193291bd662064ae381)
 
+#### Tag & Log enrichment
+
+To add Tag use :
+
+```
+@ExecutionSpan({
+        @Tag(tagName = "key1", tagValue = "value1"),
+        @Tag(tagName = "key2", tagValue = "value2")
+})
+public void method() {}
+```
+
+To add Log use :
+
+```
+@ExecutionSpan
+public String method(@ToLog("paramName") String param) {}
+```
 
 ## Context passing
 
