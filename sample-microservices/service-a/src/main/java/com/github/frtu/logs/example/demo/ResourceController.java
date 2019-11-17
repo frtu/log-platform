@@ -1,5 +1,6 @@
 package com.github.frtu.logs.example.demo;
 
+import com.github.frtu.logs.tracing.core.TraceHelper;
 import com.google.common.collect.ImmutableMap;
 import io.opentracing.Scope;
 import io.opentracing.Span;
@@ -23,6 +24,9 @@ public class ResourceController {
     @Autowired
     private Tracer tracer;
 
+    @Autowired
+    private TraceHelper traceHelper;
+
     @RequestMapping("/")
     @ResponseBody
     String home(@RequestParam(value = "service", defaultValue = "ServiceA", required = false) String name) {
@@ -35,6 +39,7 @@ public class ResourceController {
             scope.span().setTag("hello-to", name);
 
             String formatString = formatString(name);
+            traceHelper.addLog("log1", "value1");
             printHello(formatString);
 
             return formatString;
@@ -42,7 +47,9 @@ public class ResourceController {
     }
 
     private String formatString(String helloTo) {
+        traceHelper.addLog("log2", "value2");
         try (Scope scope = tracer.buildSpan("formatString").startActive(true)) {
+            traceHelper.addLog("log3", "value3");
             String helloStr = String.format("Hello, %s!", helloTo);
             printHello(helloStr);
 
@@ -53,6 +60,7 @@ public class ResourceController {
 
     private void printHello(String helloStr) {
         try (Scope scope = tracer.buildSpan("printHello").startActive(true)) {
+            traceHelper.addLog("log4", "value4");
             LOGGER.info(helloStr);
             scope.span().log(ImmutableMap.of("event", "println"));
         }

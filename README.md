@@ -62,7 +62,7 @@ Check the latest version (clickable) :
 
 #### Enablement
 
-If you only need Jaeger Tracer, just add :
+If you only need Jaeger io.opentracing.Tracer, just add :
 
 ```
 @ComponentScan(basePackages = {"com.github.frtu.logs.tracing.core", "..."})
@@ -155,6 +155,19 @@ To add Log use :
 ```
 @ExecutionSpan
 public String method(@ToLog("paramName") String param) {}
+```
+
+### Manually add Span.log
+
+Use spring @Autowired to get instance of com.github.frtu.logs.tracing.core.TraceHelper :
+
+```
+@Autowired
+private TraceHelper traceHelper;
+
+void method() {
+	traceHelper.addLog("log1", "value1");
+}
 ```
 
 ## Context passing
