@@ -8,6 +8,11 @@ Full EFK platform for logs and monitoring. EFK stands for :
 
 More on [logs unification](https://www.fluentd.org/blog/unified-logging-layer)
 
+On tracing using :
+
+* [OpenTracing for CNCF](https://opentracing.io/)
+* [Jaeger implementation](https://www.jaegertracing.io/docs/1.15/)
+
 ## Structured logs
 
 Logs used to be a long chain of words and events, **requiring a human** to read and interpret. 
@@ -30,8 +35,6 @@ Allow to tag every logs sent to EFK with following information :
 | [VERSION_TAG](https://github.com/frtu/log-platform/blob/master/logger/src/main/resources/logback-appenders-fluentd.xml#L39-L42)  | Specific version or tag                  | service-a:0.0.1-SNAPSHOT       | UNKNOWN       |
 
 ### Distributed tracing
-
-Using [OpenTracing](https://opentracing.io/) & [Jaeger](https://www.jaegertracing.io/)
 
 | Field name   | Definition                               | Example                        | Default value |
 |--------------|------------------------------------------|--------------------------------|---------------|
@@ -65,7 +68,7 @@ Check the latest version (clickable) :
 Import logback configuration from [templates folder](https://github.com/frtu/log-platform/tree/master/logger-libraries/logger-core/src/main/resources/templates) for :
 
 * Standalone application : [logback.xml](https://github.com/frtu/log-platform/blob/master/logger-libraries/logger-core/src/main/resources/templates/logback.xml)
-* Spring-Boot application (including [profiles](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logback-extensions)) : [logback-spring.xml](https://github.com/frtu/log-platform/blob/master/logger-libraries/logger-core/src/main/resources/templates/logback-spring.xml)
+* Spring-Boot application (including [profiles](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#profile-specific-configuration)) : [logback-spring.xml](https://github.com/frtu/log-platform/blob/master/logger-libraries/logger-core/src/main/resources/templates/logback-spring.xml)
 
 
 For troubleshooting, add the import to flush fluentd config into log :
