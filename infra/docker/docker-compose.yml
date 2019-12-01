@@ -38,6 +38,8 @@ services:
       - "9880:9880"
     networks:
       - logging
+    environment:
+      ES_PORT_9200_TCP_ADDR: elasticsearch.logging
     logging:
       driver: "json-file"
       options:
