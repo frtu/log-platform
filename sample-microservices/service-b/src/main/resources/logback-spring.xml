@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="logback-web.xml"/>
+
+    <!--Local start up-->
+    <springProfile name="default">
+        <!--Current application-->
+        <logger name="com.github.frtu" level="TRACE" additivity="true"/>
+
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+    <!--Use for Production-->
+    <springProfile name="prod">
+        <!--ONLY current application logs goes to FLUENT appender-->
+        <logger name="com.github.frtu" level="INFO" additivity="true">
+            <appender-ref ref="FLUENT"/>
+        </logger>
+        <root level="WARN">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+    <!--Use this version when Spring doesn't start because of Bean inits -->
+    <springProfile name="debug">
+        <!--Scanned properties-->
+        <logger name="org.springframework.boot.context.config" level="DEBUG" additivity="true"/>
+        <!--Scanned annotations-->
+        <logger name="org.springframework.context.annotation" level="DEBUG" additivity="true"/>
+        <!--Bean instanciation-->
+        <logger name="org.springframework.beans.factory.support" level="DEBUG" additivity="true"/>
+        <!--Spring Boot scan-->
+        <logger name="org.springframework.boot.autoconfigure.logging" level="DEBUG" additivity="true"/>
+
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+</configuration>
