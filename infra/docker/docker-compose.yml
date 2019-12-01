@@ -1,6 +1,6 @@
 version: '3'
 services:
-  elasticsearch:
+  elasticsearch.logging:
     image: ${ELASTICSEARCH_IMAGE}
     environment:
       - "discovery.type=single-node"
@@ -9,60 +9,45 @@ services:
     ports:
       - "9200:9200"
     networks:
-      - efk
-    # https://docs.docker.com/config/containers/logging/fluentd/
-    logging:
-      driver: fluentd
-      options:
-        fluentd-address: fluentd:24224
-        fluentd-async-connect: 'true'
-        fluentd-retry-wait: '1s'
-        fluentd-max-retries: '30'
-        tag: efk.elasticsearch
+      - logging
 
-  kibana:
+  kibana.logging:
     image: ${KIBANA_IMAGE}
     links:
-      - "elasticsearch"
+      - elasticsearch.logging
     ports:
       - "5601:5601"
     networks:
-      - efk
+      - logging
     environment:
-      ELASTICSEARCH_URL: http://elasticsearch:9200
-    # https://docs.docker.com/config/containers/logging/fluentd/
-    logging:
-      driver: fluentd
-      options:
-        fluentd-address: fluentd:24224
-        fluentd-async-connect: 'true'
-        fluentd-retry-wait: '1s'
-        fluentd-max-retries: '30'
-        tag: efk.kibana
+      # https://www.elastic.co/guide/en/kibana/current/docker.html
+      ELASTICSEARCH_HOSTS: http://elasticsearch.logging:9200
 
-  fluentd:
-    build: ./fluentd
+  fluentd.logging:
+    image: ${FLUENTD_IMAGE}
     volumes:
-      - ./fluentd/conf:/fluentd/etc
+      - ./fluentd/conf:/etc/fluent
+#    build: ./fluentd
+#    volumes:
+#      - ./fluentd/conf:/fluentd/etc
     links:
-      - "elasticsearch"
+      - elasticsearch.logging
     ports:
       - "24224:24224"
       - "24224:24224/udp"
       - "9880:9880"
     networks:
-      - efk
-    # https://docs.docker.com/config/containers/logging/fluentd/
+      - logging
     logging:
       driver: "json-file"
       options:
         max-size: "1G"
         max-file: "2"
 
-  jaeger:
+  jaeger.logging:
     image: ${JAEGER_IMAGE}
     links:
-      - "elasticsearch"
+      - elasticsearch.logging
     # https://www.jaegertracing.io/docs/1.14/deployment/
     # https://www.jaegertracing.io/docs/1.14/monitoring/
     ports:
@@ -73,21 +58,21 @@ services:
       - "14268:14268"
       - "16686:16686"
     networks:
-      - efk
+      - logging
     environment:
       SPAN_STORAGE_TYPE: elasticsearch
-      ES_SERVER_URLS: http://elasticsearch:9200
+      ES_SERVER_URLS: http://elasticsearch.logging:9200
       ES_TAGS_AS_FIELDS_ALL: "true"
     healthcheck:
       # https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-health.html
-      test: ["CMD", "curl", "--fail", "http://elasticsearch:9200/_cluster/health"]
+      test: ["CMD", "curl", "--fail", "http://elasticsearch.logging:9200/_cluster/health"]
       interval: 30s
       timeout: 40s
       retries: 5
 
 # https://docs.docker.com/compose/networking/
 networks:
-  efk:
+  logging:
     driver: bridge
     # To enable IPv6 uncomment below lines
 #    driver_opts:
