@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--For Web Application-->
 <included>
     <include resource="logback-core.xml"/>
 
@@ -11,14 +12,17 @@
     <!--<logger name="org.apache.coyote" level="INFO" additivity="true"/>-->
     <!--App server starting INFO and server.xml, session, filters, lifecycle DEBUG-->
     <!--<logger name="org.apache.catalina" level="INFO" additivity="true"/>-->
-    <!--===========================-->
+    <!--=============================-->
     <!--SERVICE - RECOMMEND ALWAYS ON-->
-    <!--===========================-->
+    <!--=============================-->
     <!--Tomcat port information and startup complete-->
-    <logger name="org.springframework.boot.web.embedded.tomcat" level="INFO" additivity="true"/>
-    <!--distributed tracing INFO-->
-    <logger name="io.jaegertracing" level="INFO" additivity="true"/>
-    <!--===========================-->
+    <logger name="org.springframework.boot.web.embedded.tomcat" level="WARN" additivity="true"/>
+    <!--=============================-->
+    <!--SERVICE - RECOMMEND ALWAYS OFF-->
+    <!--=============================-->
+    <logger name="org.apache.coyote.http11.Http11NioProtocol" level="WARN" additivity="true"/>
+    <logger name="org.apache.catalina.core.StandardService" level="WARN" additivity="true"/>
+    <!--=============================-->
 
     <!--===========================-->
     <!--Spring Init-->
@@ -29,7 +33,7 @@
     <!--<logger name="org.springframework.context.annotation" level="DEBUG" additivity="true"/>-->
     <!--Bean instanciation-->
     <!--<logger name="org.springframework.beans.factory.support" level="DEBUG" additivity="true"/>-->
-    <!--Spring logback-->
+    <!--Spring Boot scan-->
     <!--<logger name="org.springframework.boot.autoconfigure.logging" level="INFO" additivity="true"/>-->
     <!--===========================-->
     <!--Spring Web-->

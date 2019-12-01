@@ -5,7 +5,7 @@
     <include resource="logback-web.xml"/>
 
     <!--Current application-->
-    <logger name="com.github.frtu" level="TRACE" additivity="true">
+    <logger name="${groupId}" level="TRACE" additivity="true">
         <appender-ref ref="FLUENT"/>
     </logger>
 
