@@ -28,11 +28,11 @@ public class FluentdConfiguration {
 
     @PostConstruct
     public void logs() {
-        LOGGER.info("fluentdHost:{}", fluentdHost);
-        LOGGER.info("fluentdPort:{}", fluentdPort);
+        LOGGER.info("fluentdHost:'{}', fluentdPort:'{}'", fluentdHost, fluentdPort);
         final boolean isHealthCheckActivated = fluentdHealthCheckPort != null;
         if (isHealthCheckActivated) {
-            LOGGER.info("Activate fluentd HealthCheck HTTP using port:{}", fluentdHealthCheckPort);
+            LOGGER.debug("Activate fluentd HealthCheck HTTP using port:{}", fluentdHealthCheckPort);
+            // TBD create empty <appender> if healthcheck cannot be found.
         }
     }
 }

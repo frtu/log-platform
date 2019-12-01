@@ -45,9 +45,7 @@ public class JaegerConfiguration implements TraceUtil {
     @PostConstruct
     public void logs() {
         LOGGER.info("applicationName:{}", applicationName);
-        LOGGER.info("jaegerEndpoint:{}", jaegerEndpoint);
-        LOGGER.info("jaegerAgentHost:{}", jaegerAgentHost);
-        LOGGER.info("jaegerAgentPort:{}", jaegerAgentPort);
+        LOGGER.info("jaegerEndpoint:'{}', jaegerAgentHost:'{}', jaegerAgentPort:'{}'", jaegerEndpoint, jaegerAgentHost, jaegerAgentPort);
     }
 
     public String getApplicationName() {
