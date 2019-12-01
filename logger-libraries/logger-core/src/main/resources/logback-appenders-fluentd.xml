@@ -40,15 +40,15 @@
             <key>VERSION_TAG</key>
             <value>${VERSION_TAG}</value>
         </additionalField>
-        <additionalField>
-            <key>TRACE_ID</key>
-            <value>%X{trace.id}</value>
-        </additionalField>
+        <!--<additionalField>-->
+        <!--<key>TRACE_ID</key>-->
+        <!--<value>%X{trace.id}</value>-->
+        <!--</additionalField>-->
         <!--  [Optional] If true, Map Marker is expanded instead of nesting in the marker name -->
         <flattenMapMarker>false</flattenMapMarker>
 
         <encoder>
-            <pattern><![CDATA[%date{HH:mm:ss.SSS} [%thread] %X{trace.id} %-5level %logger{36} #%line - %msg]]></pattern>
+            <pattern><![CDATA[%date{HH:mm:ss.SSS} [%thread] %X{TRACE_ID} %-5level %logger{36} #%line - %msg]]></pattern>
         </encoder>
     </appender>
 

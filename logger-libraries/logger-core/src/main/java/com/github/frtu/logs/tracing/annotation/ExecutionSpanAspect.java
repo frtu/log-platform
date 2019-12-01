@@ -30,7 +30,7 @@ import java.lang.annotation.Annotation;
 public class ExecutionSpanAspect {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionSpanAspect.class);
 
-    public static final String MDC_KEY_TRACE_ID = "trace.id";
+    public static final String MDC_KEY_TRACE_ID = "TRACE_ID";
 
     @Value("${trace.full.classname:#{environment.TRACE_FULL_CLASSNAME ?: false}}")
     boolean isFullClassName;
