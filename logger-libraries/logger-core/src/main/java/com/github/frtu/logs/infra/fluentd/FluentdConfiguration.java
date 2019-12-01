@@ -17,15 +17,22 @@ import javax.annotation.PostConstruct;
 public class FluentdConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(FluentdConfiguration.class);
 
-    @Value("#{environment.FLUENTD_HOST ?: 'UNKNOWN'}")
+    @Value("#{environment.FLUENTD_HOST ?: 'localhost'}")
     private String fluentdHost;
 
-    @Value("#{environment.FLUENTD_PORT ?: 'UNKNOWN'}")
+    @Value("#{environment.FLUENTD_PORT ?: '24224'}")
     private String fluentdPort;
+
+    @Value("#{environment.FLUENTD_HEALTH_CHECK_PORT ?: null}")
+    private String fluentdHealthCheckPort;
 
     @PostConstruct
     public void logs() {
         LOGGER.info("fluentdHost:{}", fluentdHost);
         LOGGER.info("fluentdPort:{}", fluentdPort);
+        final boolean isHealthCheckActivated = fluentdHealthCheckPort != null;
+        if (isHealthCheckActivated) {
+            LOGGER.info("Activate fluentd HealthCheck HTTP using port:{}", fluentdHealthCheckPort);
+        }
     }
 }
