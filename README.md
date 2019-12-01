@@ -58,6 +58,27 @@ Check the latest version (clickable) :
 
 [<img src="https://img.shields.io/maven-central/v/com.github.frtu.logs/logger-core.svg?label=latest%20release%20:%20logger-core"/>](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22logger-core%22+g%3A%22com.github.frtu.logs%22)
 
+### Log forwarder
+
+#### Enablement
+
+Import logback configuration from [templates folder](https://github.com/frtu/log-platform/tree/master/logger-libraries/logger-core/src/main/resources/templates) for :
+
+* Standalone application : [logback.xml](https://github.com/frtu/log-platform/blob/master/logger-libraries/logger-core/src/main/resources/templates/logback.xml)
+* Spring-Boot application (including [profiles](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-logback-extensions)) : [logback-spring.xml](https://github.com/frtu/log-platform/blob/master/logger-libraries/logger-core/src/main/resources/templates/logback-spring.xml)
+
+
+For troubleshooting, add the import to flush fluentd config into log :
+
+```
+@ComponentScan(basePackages = {"com.github.frtu.logs.infra.fluentd", "..."})
+```
+
+#### Usage
+
+Just log with logback, activate FLUENT appender on Staging or Production.
+
+
 ### a) Core Tracer API
 
 #### Enablement
