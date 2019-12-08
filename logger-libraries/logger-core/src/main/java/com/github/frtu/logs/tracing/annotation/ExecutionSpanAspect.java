@@ -5,8 +5,10 @@ import com.github.frtu.utils.AnnotationMethodScan;
 import com.github.frtu.utils.AnnotationMethodScanner;
 import com.google.common.collect.ImmutableMap;
 import io.opentracing.Scope;
+import io.opentracing.Span;
 import io.opentracing.Tracer;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * Aspect that create a {@link io.opentracing.Span} around the annotated method using {@link ExecutionSpan}.
@@ -45,32 +48,55 @@ public class ExecutionSpanAspect {
 
     @Around("@annotation(ExecutionSpan)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        final Signature joinPointSignature = joinPoint.getSignature();
+        String signatureName = getName(joinPointSignature.getDeclaringType(), joinPointSignature.getName());
 
-        final AnnotationMethodScan annotationMethodScan = scanner.scan(signature.getMethod());
-        final Tag[] tagsArray = (Tag[]) annotationMethodScan.getAnnotationValueArray();
-        final Annotation[] scanParamAnnotations = annotationMethodScan.getParamAnnotations();
-
-        String signatureName = getName(signature.getDeclaringType(), signature.getName());
         try (Scope scope = tracer.buildSpan(signatureName).startActive(true)) {
-            for (Tag tag : tagsArray) {
-                final String tagName = tag.tagName();
-                final String tagValue = tag.tagValue();
-                LOGGER.debug("Add tags name={} and value={}", tagName, tagValue);
-                scope.span().setTag(tagName, tagValue);
+            final Span span = scope.span();
+            if (joinPointSignature instanceof MethodSignature) {
+                final Method method = ((MethodSignature) joinPointSignature).getMethod();
+                final Object[] args = joinPoint.getArgs();
+
+                enrichSpanWithTagsAndLogs(span, method, args);
             }
-            for (int i = 0; i < scanParamAnnotations.length; i++) {
-                final String logName = ((ToLog)scanParamAnnotations[i]).value();
-                final Object logValue = joinPoint.getArgs()[i];
-                LOGGER.debug("Add logs name={} and value={}", logName, logValue);
-                scope.span().log(ImmutableMap.of(logName, logValue));
-            }
-            final String traceId = traceUtil.getTraceId(scope.span());
+            final String traceId = traceUtil.getTraceId(span);
             MDC.put(MDC_KEY_TRACE_ID, traceId);
 
             LOGGER.debug("Creating span around signature={} and traceId={}", signatureName, traceId);
             return joinPoint.proceed();
         }
+    }
+
+    public Span enrichSpanWithTagsAndLogs(Span span, Method method, Object[] args) {
+        final AnnotationMethodScan annotationMethodScan = scanner.scan(method);
+        final Tag[] tagsArray = (Tag[]) annotationMethodScan.getAnnotationValueArray();
+        final Annotation[] scanParamAnnotations = annotationMethodScan.getParamAnnotations();
+
+        for (Tag tag : tagsArray) {
+            final String tagName = tag.tagName();
+            final String tagValue = tag.tagValue();
+            LOGGER.debug("Add tags name={} and value={}", tagName, tagValue);
+            span.setTag(tagName, tagValue);
+        }
+        if (args != null) {
+            if (args.length == scanParamAnnotations.length) {
+                for (int i = 0; i < scanParamAnnotations.length; i++) {
+                    final ToLog scanParamAnnotation = (ToLog) scanParamAnnotations[i];
+                    // Skip not annotated parameters
+                    if (scanParamAnnotation != null) {
+                        final String logName = scanParamAnnotation.value();
+                        final Object logValue = args[i];
+                        LOGGER.debug("Add logs name={} and value={}", logName, logValue);
+                        span.log(ImmutableMap.of(logName, logValue));
+                    }
+                }
+            } else {
+                LOGGER.debug("scanParamAnnotations size:{} not equal args size:{}", scanParamAnnotations.length, args.length);
+            }
+        } else {
+            LOGGER.debug("args is NULL");
+        }
+        return span;
     }
 
     String getName(Class declaringType, String methodName) {

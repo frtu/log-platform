@@ -58,6 +58,8 @@ public class AnnotationMethodScan<MethodAnno extends Class<? extends Annotation>
 
     /**
      * Array of annotations from each fields.
+     * <p>
+     * ATTENTION : ParamAnno[i] can be null if parameter index i doesn't have annotation.
      *
      * @param <ParamAnno> Annotation class used on method parameter
      * @return Empty array when no annotation found
