@@ -21,12 +21,13 @@
 						<id>default</id>
 						<goals>
 							<goal>build</goal>
+							<goal>push</goal>
 						</goals>
 					</execution>
 				</executions>
 				<configuration>
-					<repository>${image.name}</repository>
-					<tag>${project.version}</tag>
+					<repository>${docker.registry}/${image.name}</repository>
+					<tag>${docker.tag}</tag>
 					<buildArgs>
 						<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
 					</buildArgs>
