@@ -67,7 +67,17 @@ public class ExecutionSpanAspect {
         }
     }
 
-    public Span enrichSpanWithTagsAndLogs(Span span, Method method, Object[] args) {
+    /**
+     * Enrich span using annotation {@link Tag} or {@link ToLog} from {@link Method}.
+     * For {@link ToLog} also use method runtime argument.
+     *
+     * @param span the current span
+     * @param method the run method
+     * @param args its arguments
+     * @return
+     * @since 0.9.3
+     */
+    public void enrichSpanWithTagsAndLogs(Span span, Method method, Object[] args) {
         final AnnotationMethodScan annotationMethodScan = scanner.scan(method);
         final Tag[] tagsArray = (Tag[]) annotationMethodScan.getAnnotationValueArray();
         final Annotation[] scanParamAnnotations = annotationMethodScan.getParamAnnotations();
@@ -96,7 +106,6 @@ public class ExecutionSpanAspect {
         } else {
             LOGGER.debug("args is NULL");
         }
-        return span;
     }
 
     String getName(Class declaringType, String methodName) {
