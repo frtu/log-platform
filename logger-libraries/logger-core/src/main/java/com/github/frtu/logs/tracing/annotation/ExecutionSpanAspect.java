@@ -74,7 +74,6 @@ public class ExecutionSpanAspect {
      * @param span the current span
      * @param method the run method
      * @param args its arguments
-     * @return
      * @since 0.9.3
      */
     public void enrichSpanWithTagsAndLogs(Span span, Method method, Object[] args) {
