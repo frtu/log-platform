@@ -78,33 +78,39 @@ public class ExecutionSpanAspect {
      */
     public void enrichSpanWithTagsAndLogs(Span span, Method method, Object[] args) {
         final AnnotationMethodScan annotationMethodScan = scanner.scan(method);
-        final Tag[] tagsArray = (Tag[]) annotationMethodScan.getAnnotationValueArray();
-        final Annotation[] scanParamAnnotations = annotationMethodScan.getParamAnnotations();
+        if (isAnnotationFound(annotationMethodScan)) {
+            final Tag[] tagsArray = (Tag[]) annotationMethodScan.getAnnotationValueArray();
+            final Annotation[] scanParamAnnotations = annotationMethodScan.getParamAnnotations();
 
-        for (Tag tag : tagsArray) {
-            final String tagName = tag.tagName();
-            final String tagValue = tag.tagValue();
-            LOGGER.debug("Add tags name={} and value={}", tagName, tagValue);
-            span.setTag(tagName, tagValue);
-        }
-        if (args != null) {
-            if (args.length == scanParamAnnotations.length) {
-                for (int i = 0; i < scanParamAnnotations.length; i++) {
-                    final ToLog scanParamAnnotation = (ToLog) scanParamAnnotations[i];
-                    // Skip not annotated parameters
-                    if (scanParamAnnotation != null) {
-                        final String logName = scanParamAnnotation.value();
-                        final Object logValue = args[i];
-                        LOGGER.debug("Add logs name={} and value={}", logName, logValue);
-                        span.log(ImmutableMap.of(logName, logValue));
+            for (Tag tag : tagsArray) {
+                final String tagName = tag.tagName();
+                final String tagValue = tag.tagValue();
+                LOGGER.debug("Add tags name={} and value={}", tagName, tagValue);
+                span.setTag(tagName, tagValue);
+            }
+            if (args != null) {
+                if (args.length == scanParamAnnotations.length) {
+                    for (int i = 0; i < scanParamAnnotations.length; i++) {
+                        final ToLog scanParamAnnotation = (ToLog) scanParamAnnotations[i];
+                        // Skip not annotated parameters
+                        if (scanParamAnnotation != null) {
+                            final String logName = scanParamAnnotation.value();
+                            final Object logValue = args[i];
+                            LOGGER.debug("Add logs name={} and value={}", logName, logValue);
+                            span.log(ImmutableMap.of(logName, logValue));
+                        }
                     }
+                } else {
+                    LOGGER.debug("scanParamAnnotations size:{} not equal args size:{}", scanParamAnnotations.length, args.length);
                 }
             } else {
-                LOGGER.debug("scanParamAnnotations size:{} not equal args size:{}", scanParamAnnotations.length, args.length);
+                LOGGER.debug("args is NULL");
             }
-        } else {
-            LOGGER.debug("args is NULL");
         }
+    }
+
+    public boolean isAnnotationFound(AnnotationMethodScan annotationMethodScan) {
+        return !AnnotationMethodScan.EMPTY.equals(annotationMethodScan);
     }
 
     String getName(Class declaringType, String methodName) {

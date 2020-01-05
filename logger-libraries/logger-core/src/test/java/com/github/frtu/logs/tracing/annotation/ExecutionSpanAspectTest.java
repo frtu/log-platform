@@ -10,10 +10,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ExecutionSpanConfiguration.class})
@@ -33,5 +34,27 @@ public class ExecutionSpanAspectTest {
         executionSpanAspect.isFullClassName = true;
         final String name = executionSpanAspect.getName(String.class, "method");
         assertEquals("java.lang.String.method", name);
+    }
+
+    @Test
+    public void isAnnotationFoundPositive() throws NoSuchMethodException {
+        final Method spanMethod = ExecutionSpanConfiguration.class.getMethod("simpleSpan", String.class, String.class);
+
+        final AnnotationMethodScanner<Class<ExecutionSpan>, Class<ToLog>> scanner = AnnotationMethodScanner.of(ExecutionSpan.class, ToLog.class);
+        final AnnotationMethodScan annotationMethodScan = scanner.scan(spanMethod);
+
+        assertTrue("Annotation should exist in " + spanMethod.getName()
+                , executionSpanAspect.isAnnotationFound(annotationMethodScan));
+    }
+
+    @Test
+    public void isAnnotationFoundNegative() throws NoSuchMethodException {
+        final Method spanMethod = ExecutionSpanConfiguration.class.getMethod("noAnnotation");
+
+        final AnnotationMethodScanner<Class<ExecutionSpan>, Class<ToLog>> scanner = AnnotationMethodScanner.of(ExecutionSpan.class, ToLog.class);
+        final AnnotationMethodScan annotationMethodScan = scanner.scan(spanMethod);
+
+        assertFalse("Annotation doesn't exist in " + spanMethod.getName()
+                , executionSpanAspect.isAnnotationFound(annotationMethodScan));
     }
 }
