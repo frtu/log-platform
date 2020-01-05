@@ -22,4 +22,7 @@ public class ExecutionSpanConfiguration {
     @ExecutionSpan
     public void spanForLog(String param1, @ToLog("param2") String param2) {
     }
+
+    public void noAnnotation() {
+    }
 }
