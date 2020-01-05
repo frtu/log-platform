@@ -9,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 /**
- * Helper to add {@link Span#log(Map)} into the current {@link Span}.
+ * Helper to add {@link Span#log(java.util.Map)} into the current {@link Span}.
  *
  * @author fred
  * @since 0.9.1
@@ -21,6 +19,7 @@ import java.util.Map;
 @Component
 public class TraceHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(TraceHelper.class);
+    public static final String LOG_KEY_ERROR_MSG = "error";
 
     @Autowired
     Tracer tracer;
@@ -28,5 +27,21 @@ public class TraceHelper {
     public void addLog(String key, String value) {
         LOGGER.debug("Adding to current span: {}={}", key, value);
         tracer.activeSpan().log(ImmutableMap.of(key, value));
+    }
+
+    public void flagError(String errorMsg) {
+        flagError(tracer.activeSpan(), errorMsg);
+    }
+
+    public void flagError(final Span activeSpan, final String errorMsg) {
+        LOGGER.error("Adding ERROR to current span. Error message: {}", errorMsg, new Exception(errorMsg));
+        if (activeSpan != null) {
+            activeSpan.setTag("error", true);
+            if (errorMsg != null) {
+                activeSpan.log(ImmutableMap.of(LOG_KEY_ERROR_MSG, errorMsg));
+            }
+        } else {
+            LOGGER.error("Span MUST NOT be null ! Loosing span info !!");
+        }
     }
 }

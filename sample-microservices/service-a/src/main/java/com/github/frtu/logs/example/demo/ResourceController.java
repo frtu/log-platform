@@ -63,6 +63,7 @@ public class ResourceController {
             traceHelper.addLog("log4", "value4");
             LOGGER.info(helloStr);
             scope.span().log(ImmutableMap.of("event", "println"));
+            traceHelper.flagError("error msg!!");
         }
     }
 }
