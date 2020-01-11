@@ -85,7 +85,7 @@ public class ExecutionSpanAspect {
             for (Tag tag : tagsArray) {
                 final String tagName = tag.tagName();
                 final String tagValue = tag.tagValue();
-                LOGGER.debug("Add tags name={} and value={}", tagName, tagValue);
+                LOGGER.trace("Add tags name={} and value={}", tagName, tagValue);
                 span.setTag(tagName, tagValue);
             }
             if (args != null) {
@@ -96,15 +96,15 @@ public class ExecutionSpanAspect {
                         if (scanParamAnnotation != null) {
                             final String logName = scanParamAnnotation.value();
                             final Object logValue = args[i];
-                            LOGGER.debug("Add logs name={} and value={}", logName, logValue);
+                            LOGGER.info("Add logs name={} and value={}", logName, logValue);
                             span.log(ImmutableMap.of(logName, logValue));
                         }
                     }
                 } else {
-                    LOGGER.debug("scanParamAnnotations size:{} not equal args size:{}", scanParamAnnotations.length, args.length);
+                    LOGGER.warn("scanParamAnnotations size:{} not equal args size:{}", scanParamAnnotations.length, args.length);
                 }
             } else {
-                LOGGER.debug("args is NULL");
+                LOGGER.trace("args is NULL");
             }
         }
     }

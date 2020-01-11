@@ -37,7 +37,7 @@ public class AnnotationMethodScanner<MethodAnno extends Class<? extends Annotati
      */
     public static <M extends Class<? extends Annotation>, P extends Class<? extends Annotation>>
     AnnotationMethodScanner<M, P> of(M methodAnnotationClass, P paramAnnotationClass) {
-        LOGGER.debug("Create an AnnotationMethodScanner for MethodAnno='{}' and ParamAnno='{}'", methodAnnotationClass, paramAnnotationClass);
+        LOGGER.trace("Create an AnnotationMethodScanner for MethodAnno='{}' and ParamAnno='{}'", methodAnnotationClass, paramAnnotationClass);
         return new AnnotationMethodScanner<>(methodAnnotationClass, paramAnnotationClass);
     }
 
@@ -68,7 +68,7 @@ public class AnnotationMethodScanner<MethodAnno extends Class<? extends Annotati
     }
 
     public static AnnotationMethodScan scan(Method method, Annotation methodAnnotation, Class<? extends Annotation> paramAnnotationClass) {
-        LOGGER.debug("Scan method for MethodAnno='{}' and ParamAnno='{}'", method, methodAnnotation, paramAnnotationClass);
+        LOGGER.trace("Scan method for MethodAnno='{}' and ParamAnno='{}'", method, methodAnnotation, paramAnnotationClass);
         if (methodAnnotation == null) {
             return AnnotationMethodScan.EMPTY;
         }

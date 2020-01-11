@@ -35,7 +35,7 @@ public class TraceHelper {
     Tracer tracer;
 
     public void addLog(String key, String value) {
-        LOGGER.debug("Adding to current span: {}={}", key, value);
+        LOGGER.info("Adding to current span: {}={}", key, value);
         tracer.activeSpan().log(ImmutableMap.of(key, value));
     }
 
