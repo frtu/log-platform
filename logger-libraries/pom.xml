@@ -14,5 +14,6 @@
 
     <modules>
         <module>logger-core</module>
+        <module>logger-security</module>
     </modules>
 </project>

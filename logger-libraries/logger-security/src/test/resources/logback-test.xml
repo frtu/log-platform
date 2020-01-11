@@ -1,0 +1,52 @@
+<!-- https://logback.qos.ch/manual/configuration.html -->
+<!-- https://logback.qos.ch/manual/appenders.html#FileAppender -->
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <!--https://logback.qos.ch/manual/layouts.html#ClassicPatternLayout-->
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="STDOUT_MASK" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="com.github.frtu.logs.security.mask.PatternMaskingLayout">
+                <maskPattern>\"(pw|pwd|password)\"\s*:\s*\"(.*?)\"</maskPattern> <!-- Password pattern -->
+                <maskPattern>\"(ssn|socialSecurityNumber)\"\s*:\s*\"(.*?)\"</maskPattern> <!-- SSN JSON pattern -->
+                <maskPattern>\"address\"\s*:\s*\"(.*?)\"</maskPattern> <!-- address JSON pattern -->
+                <maskPattern>(\d+\.\d+\.\d+\.\d+)</maskPattern> <!-- simple IPv4 pattern -->
+                <maskPattern>(\w+@\w+\.\w+)</maskPattern> <!-- simple email pattern -->
+                <maskPattern>Cookie:\s*(.*?)\s</maskPattern> <!-- Cookie header pattern -->
+                <pattern>%-5p [%d{ISO8601,UTC}] ${HOSTNAME} [%thread] %c: %m%n%rootException</pattern>
+            </layout>
+        </encoder>
+    </appender>
+
+    <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>target/rollingfile.log</file>
+        <append>true</append>
+        <!-- set immediateFlush to false for much higher logging throughput -->
+        <immediateFlush>true</immediateFlush>
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>rollingfile.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.github.frtu" level="debug"/>
+
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT_MASK"/>
+        <!--<appender-ref ref="STDOUT"/>-->
+        <!--<appender-ref ref="RollingFile"/>-->
+    </root>
+</configuration>
+
+
