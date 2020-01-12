@@ -34,6 +34,16 @@ public class TraceHelper {
     @Autowired
     Tracer tracer;
 
+    /**
+     * Allow to get {@link Tracer} when you already have {@link TraceHelper}
+     *
+     * @return the current Tracer
+     * @since 0.9.5
+     */
+    public Tracer getTracer() {
+        return tracer;
+    }
+
     public void addLog(String key, String value) {
         LOGGER.info("Adding to current span: {}={}", key, value);
         tracer.activeSpan().log(ImmutableMap.of(key, value));
