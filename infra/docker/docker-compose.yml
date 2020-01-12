@@ -79,6 +79,52 @@ services:
       timeout: 40s
       retries: 5
 
+  prometheus:
+    image: ${PROMETHEUS_IMAGE}
+    hostname: prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+#      - ~/data/prometheus:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    ports:
+      - 9090:9090
+    networks:
+      - logging
+  node-exporter:
+    image: ${NODE_EXPORTER_IMAGE}
+    ports:
+      - 9100:9100
+    networks:
+      - logging
+#  alertmanager:
+#    image: ${ALERTMANAGER_IMAGE}
+#    restart: unless-stopped
+#    volumes:
+#      - ./alertmanager:/etc/alertmanager
+#    command:
+#      - '--config.file=/etc/alertmanager/config.yml'
+#      - '--storage.path=/alertmanager'
+#    expose:
+#      - 9093
+#    networks:
+#      - logging
+  grafana:
+    image: ${GRAFANA_IMAGE}
+    hostname: grafana
+    depends_on:
+      - prometheus
+#    environment:
+#      - 'GF_SECURITY_ADMIN_PASSWORD=YourPassword'
+#    volumes:
+#      - ./grafana.ini:/etc/grafana/grafana.ini
+#      - ~/data/grafana:/var/lib/grafana
+    ports:
+      - 3000:3000
+    networks:
+      - logging
+
 # https://docs.docker.com/compose/networking/
 networks:
   logging:

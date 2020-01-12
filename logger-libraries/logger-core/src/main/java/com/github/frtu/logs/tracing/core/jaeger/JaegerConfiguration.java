@@ -1,5 +1,6 @@
 package com.github.frtu.logs.tracing.core.jaeger;
 
+import com.github.frtu.logs.ApplicationMetadata;
 import com.github.frtu.logs.tracing.core.TraceUtil;
 import io.jaegertracing.internal.JaegerSpan;
 import io.jaegertracing.internal.JaegerTracer;
@@ -8,6 +9,7 @@ import io.opentracing.Span;
 import io.opentracing.Tracer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,10 +23,6 @@ import static io.jaegertracing.Configuration.SamplerConfiguration;
 public class JaegerConfiguration implements TraceUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(JaegerConfiguration.class);
 
-    public static final String SYSTEM_PROPERTY_SERVICE_NAME = "SERVICE_NAME";
-    @Value("${application.name:#{environment." + SYSTEM_PROPERTY_SERVICE_NAME + " ?: 'UNKNOWN'}}")
-    private String applicationName;
-
     @Value("#{environment.SAMPLING ?: false}")
     private boolean samplingTrace = false;
 
@@ -37,6 +35,9 @@ public class JaegerConfiguration implements TraceUtil {
     @Value("#{environment.JAEGER_AGENT_PORT ?: 'UNKNOWN'}")
     private String jaegerAgentPort;
 
+    @Autowired
+    private ApplicationMetadata applicationMetadata;
+
     @Override
     public String getTraceId(final Span span) {
         String traceId = null;
@@ -48,12 +49,7 @@ public class JaegerConfiguration implements TraceUtil {
 
     @PostConstruct
     public void logs() {
-        LOGGER.info("applicationName:{}", applicationName);
         LOGGER.info("jaegerEndpoint:'{}', jaegerAgentHost:'{}', jaegerAgentPort:'{}'", jaegerEndpoint, jaegerAgentHost, jaegerAgentPort);
-    }
-
-    public String getApplicationName() {
-        return applicationName;
     }
 
     String getJaegerEndpoint() {
@@ -70,7 +66,7 @@ public class JaegerConfiguration implements TraceUtil {
 
     @Bean
     public Tracer tracer() {
-        return initTracer(applicationName, samplingTrace);
+        return initTracer(applicationMetadata.getApplicationName(), samplingTrace);
     }
 
     public static JaegerTracer initTracer(String applicationName, boolean samplingTrace) {

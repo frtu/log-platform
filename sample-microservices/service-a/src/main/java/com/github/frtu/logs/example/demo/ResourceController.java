@@ -2,6 +2,7 @@ package com.github.frtu.logs.example.demo;
 
 import com.github.frtu.logs.tracing.core.TraceHelper;
 import com.google.common.collect.ImmutableMap;
+import io.micrometer.core.annotation.Timed;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
@@ -22,14 +23,14 @@ public class ResourceController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceController.class);
 
     @Autowired
-    private Tracer tracer;
-
-    @Autowired
     private TraceHelper traceHelper;
 
     @RequestMapping("/")
     @ResponseBody
+    @Timed("home")
     String home(@RequestParam(value = "service", defaultValue = "ServiceA", required = false) String name) {
+        Tracer tracer = traceHelper.getTracer();
+
         Span span = tracer.buildSpan("say-hello1").start();
         LOGGER.info("service={}", name);
         span.finish();
@@ -48,7 +49,7 @@ public class ResourceController {
 
     private String formatString(String helloTo) {
         traceHelper.addLog("log2", "value2");
-        try (Scope scope = tracer.buildSpan("formatString").startActive(true)) {
+        try (Scope scope = traceHelper.getTracer().buildSpan("formatString").startActive(true)) {
             traceHelper.addLog("log3", "value3");
             String helloStr = String.format("Hello, %s!", helloTo);
             printHello(helloStr);
@@ -59,7 +60,7 @@ public class ResourceController {
     }
 
     private void printHello(String helloStr) {
-        try (Scope scope = tracer.buildSpan("printHello").startActive(true)) {
+        try (Scope scope = traceHelper.getTracer().buildSpan("printHello").startActive(true)) {
             traceHelper.addLog("log4", "value4");
             LOGGER.info(helloStr);
             scope.span().log(ImmutableMap.of("event", "println"));

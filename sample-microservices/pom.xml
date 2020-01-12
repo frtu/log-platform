@@ -38,6 +38,11 @@
             <artifactId>logger-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+		<dependency>
+			<groupId>com.github.frtu.logs</groupId>
+			<artifactId>logger-metrics</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
         <!-- Spring boot -->
 		<dependency>
