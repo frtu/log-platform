@@ -68,9 +68,10 @@
         <fluentd.logger.version>0.3.4</fluentd.logger.version>
         <!-- ATTENTION Later version of OpenTracing change some Scope Interface-->
         <opentracing.version>0.31.0</opentracing.version>
-        <jaeger-client.version>0.34.0</jaeger-client.version>
-        <guava.version>28.1-jre</guava.version>
+        <jaeger.version>0.34.0</jaeger.version>
+        <micrometer.version>1.3.2</micrometer.version>
         <!--===========================-->
+        <guava.version>28.1-jre</guava.version>
         <!--<commons-lang3.version>3.5</commons-lang3.version>-->
         <!--<commons-io.version>2.4</commons-io.version>-->
         <!--https://search.maven.org/search?q=g:org.springframework.boot%20a:spring-boot-dependencies-->
@@ -92,6 +93,14 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Common libs -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <!-- Logging -->
             <dependency>
                 <groupId>org.fluentd</groupId>
                 <artifactId>fluent-logger</artifactId>
@@ -102,6 +111,8 @@
                 <artifactId>logback-more-appenders</artifactId>
                 <version>${sndyuk.logback-more-appenders.version}</version>
             </dependency>
+
+            <!-- Distributed Tracing -->
             <!-- Depending on opentracing allow to decouple from Jaeger -->
             <dependency>
                 <groupId>io.opentracing</groupId>
@@ -113,12 +124,25 @@
             <dependency>
                 <groupId>io.jaegertracing</groupId>
                 <artifactId>jaeger-client</artifactId>
-                <version>${jaeger-client.version}</version>
+                <version>${jaeger.version}</version>
+            </dependency>
+
+            <!-- Metrics -->
+            <dependency>
+                <groupId>io.jaegertracing</groupId>
+                <artifactId>jaeger-micrometer</artifactId>
+                <version>${jaeger.version}</version>
+            </dependency>
+            <!--http://micrometer.io/-->
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-core</artifactId>
+                <version>${micrometer.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-registry-prometheus</artifactId>
+                <version>${micrometer.version}</version>
             </dependency>
 
             <!--===========================-->

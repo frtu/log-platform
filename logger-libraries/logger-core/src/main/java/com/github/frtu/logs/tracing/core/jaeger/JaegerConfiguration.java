@@ -3,6 +3,7 @@ package com.github.frtu.logs.tracing.core.jaeger;
 import com.github.frtu.logs.tracing.core.TraceUtil;
 import io.jaegertracing.internal.JaegerSpan;
 import io.jaegertracing.internal.JaegerTracer;
+import io.jaegertracing.micrometer.MicrometerMetricsFactory;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import org.slf4j.Logger;
@@ -23,6 +24,9 @@ public class JaegerConfiguration implements TraceUtil {
     public static final String SYSTEM_PROPERTY_SERVICE_NAME = "SERVICE_NAME";
     @Value("${application.name:#{environment." + SYSTEM_PROPERTY_SERVICE_NAME + " ?: 'UNKNOWN'}}")
     private String applicationName;
+
+    @Value("#{environment.SAMPLING ?: false}")
+    private boolean samplingTrace = false;
 
     @Value("#{environment.JAEGER_ENDPOINT ?: 'UNKNOWN'}")
     private String jaegerEndpoint;
@@ -66,15 +70,27 @@ public class JaegerConfiguration implements TraceUtil {
 
     @Bean
     public Tracer tracer() {
-        return initTracer(applicationName);
+        return initTracer(applicationName, samplingTrace);
     }
 
-    public static JaegerTracer initTracer(String applicationName) {
-        LOGGER.info("Creating Tracer using applicationName={}", applicationName);
-        SamplerConfiguration samplerConfig = SamplerConfiguration.fromEnv().withType("const").withParam(1);
+    public static JaegerTracer initTracer(String applicationName, boolean samplingTrace) {
+        LOGGER.info("Creating Tracer using applicationName={} samplingTrace={}", applicationName, samplingTrace);
+
+        // https://www.jaegertracing.io/docs/1.15/sampling/
+        SamplerConfiguration samplerConfig = SamplerConfiguration.fromEnv();
+        if (!samplingTrace) {
+            samplerConfig.withType("const").withParam(1);
+        }
         ReporterConfiguration reporterConfig = ReporterConfiguration.fromEnv().withLogSpans(true);
+
         io.jaegertracing.Configuration config = new io.jaegertracing.Configuration(applicationName)
                 .withSampler(samplerConfig).withReporter(reporterConfig);
-        return config.getTracer();
+
+        // https://github.com/jaegertracing/jaeger-client-java/tree/master/jaeger-micrometer
+        final MicrometerMetricsFactory metricsFactory = new MicrometerMetricsFactory();
+        final JaegerTracer tracer = config.getTracerBuilder()
+                .withMetricsFactory(metricsFactory)
+                .build();
+        return tracer;
     }
 }

@@ -15,6 +15,7 @@
     </properties>
 
     <dependencies>
+        <!-- Common libs -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -23,7 +24,8 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
-        <!-- Logs -->
+        
+        <!-- Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -32,7 +34,8 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>
-        <!-- Depending on opentracing allow to decouple from Jaeger -->
+
+        <!-- Distributed Tracing -->
         <dependency>
             <groupId>io.opentracing</groupId>
             <artifactId>opentracing-api</artifactId>
@@ -51,6 +54,14 @@
             <groupId>io.jaegertracing</groupId>
             <artifactId>jaeger-client</artifactId>
         </dependency>
+
+        <!-- Metric instrumentation with micrometer -->
+        <dependency>
+            <groupId>io.jaegertracing</groupId>
+            <artifactId>jaeger-micrometer</artifactId>
+        </dependency>
+
+        <!-- NEEDED IF including package com.github.frtu.logs.tracing.annotation -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
