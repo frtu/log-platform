@@ -2,21 +2,28 @@ version: '3'
 services:
   elasticsearch.logging:
     image: ${ELASTICSEARCH_IMAGE}
+    restart: always
     environment:
-      - "discovery.type=single-node"
+      - 'node.name=LOGGING'
+      - 'discovery.type=single-node'
+#      - 'bootstrap.memory_lock=true'
+#      - 'ES_JAVA_OPTS=-Xms256m -Xmx256m'
     expose:
-      - "9200"
+      - 9200
     ports:
-      - "9200:9200"
+      - 9200:9200
     networks:
       - logging
+#    volumes:
+#      - ~/data/elasticsearch:/usr/share/elasticsearch/data
 
   kibana.logging:
     image: ${KIBANA_IMAGE}
     links:
       - elasticsearch.logging
+    restart: always
     ports:
-      - "5601:5601"
+      - 5601:5601
     networks:
       - logging
     environment:
@@ -33,9 +40,9 @@ services:
     links:
       - elasticsearch.logging
     ports:
-      - "24224:24224"
-      - "24224:24224/udp"
-      - "9880:9880"
+      - 24224:24224
+      - 24224:24224/udp
+      - 9880:9880
     networks:
       - logging
     environment:
@@ -53,12 +60,12 @@ services:
     # https://www.jaegertracing.io/docs/1.14/deployment/
     # https://www.jaegertracing.io/docs/1.14/monitoring/
     ports:
-      - "5778:5778"
-      - "6831:6831/udp"
-      - "14250:14250"
-      - "14267:14267"
-      - "14268:14268"
-      - "16686:16686"
+      - 5778:5778
+      - 6831:6831/udp
+      - 14250:14250
+      - 14267:14267
+      - 14268:14268
+      - 16686:16686
     networks:
       - logging
     environment:
