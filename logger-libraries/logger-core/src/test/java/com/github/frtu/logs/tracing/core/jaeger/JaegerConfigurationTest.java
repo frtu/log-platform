@@ -1,6 +1,6 @@
 package com.github.frtu.logs.tracing.core.jaeger;
 
-import com.github.frtu.logs.ApplicationMetadata;
+import com.github.frtu.logs.config.ConfigTracingOnly;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import org.junit.Test;
@@ -10,21 +10,25 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {JaegerConfiguration.class, ApplicationMetadata.class})
+@ContextConfiguration(classes = {ConfigTracingOnly.class})
 public class JaegerConfigurationTest {
-
-    @Autowired
-    Tracer tracer;
 
     @Autowired
     JaegerConfiguration jaegerConfiguration;
 
     @Test
+    public void getTracer() {
+        final Tracer tracer = jaegerConfiguration.getTracer();
+        assertNotNull("jaegerConfiguration may not be initialize correctly! A tracer MUST exist!", tracer);
+    }
+
+    @Test
     public void getTraceId() {
-        final Span start = tracer.buildSpan("test-span").start();
+        final Span start = jaegerConfiguration.getTracer().buildSpan("test-span").start();
         final String traceId = jaegerConfiguration.getTraceId(start);
         assertNotNull(traceId);
     }
@@ -38,7 +42,7 @@ public class JaegerConfigurationTest {
         System.setProperty("JAEGER_AGENT_HOST", agentHost);
         System.setProperty("JAEGER_AGENT_PORT", agentPort);
 
-        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(JaegerConfiguration.class, ApplicationMetadata.class);
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(ConfigTracingOnly.class);
         ctx.registerShutdownHook();
 
         final JaegerConfiguration jaegerConfiguration = ctx.getBean(JaegerConfiguration.class);
