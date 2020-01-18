@@ -1,6 +1,6 @@
 package com.github.frtu.logs.tracing.core.jaeger;
 
-import com.github.frtu.logs.ApplicationMetadata;
+import com.github.frtu.logs.core.ApplicationMetadata;
 import com.github.frtu.logs.tracing.core.TraceUtil;
 import io.jaegertracing.internal.JaegerSpan;
 import io.jaegertracing.internal.JaegerTracer;
@@ -38,6 +38,8 @@ public class JaegerConfiguration implements TraceUtil {
     @Autowired
     private ApplicationMetadata applicationMetadata;
 
+    Tracer tracer;
+
     @Override
     public String getTraceId(final Span span) {
         String traceId = null;
@@ -50,6 +52,14 @@ public class JaegerConfiguration implements TraceUtil {
     @PostConstruct
     public void logs() {
         LOGGER.info("jaegerEndpoint:'{}', jaegerAgentHost:'{}', jaegerAgentPort:'{}'", jaegerEndpoint, jaegerAgentHost, jaegerAgentPort);
+        this.tracer = initTracer(applicationMetadata.getApplicationName(), samplingTrace);
+        checkTracerInitialized();
+    }
+
+    private void checkTracerInitialized() {
+        if (this.tracer == null) {
+            throw new IllegalStateException("You need to initialize this component with Spring.");
+        }
     }
 
     String getJaegerEndpoint() {
@@ -65,8 +75,9 @@ public class JaegerConfiguration implements TraceUtil {
     }
 
     @Bean
-    public Tracer tracer() {
-        return initTracer(applicationMetadata.getApplicationName(), samplingTrace);
+    @Override
+    public Tracer getTracer() {
+        return this.tracer;
     }
 
     public static JaegerTracer initTracer(String applicationName, boolean samplingTrace) {
