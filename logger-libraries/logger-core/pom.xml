@@ -15,6 +15,14 @@
     </properties>
 
     <dependencies>
+        <!--===========================-->
+        <!-- Internal domain dependencies -->
+        <!--===========================-->
+        <dependency>
+            <groupId>com.github.frtu.governance</groupId>
+            <artifactId>library-spring-reflection</artifactId>
+        </dependency>
+
         <!-- Common libs -->
         <dependency>
             <groupId>com.google.guava</groupId>

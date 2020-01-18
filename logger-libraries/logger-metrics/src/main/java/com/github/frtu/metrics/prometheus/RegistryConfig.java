@@ -1,6 +1,6 @@
 package com.github.frtu.metrics.prometheus;
 
-import com.github.frtu.logs.ApplicationMetadata;
+import com.github.frtu.logs.core.ApplicationMetadata;
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;

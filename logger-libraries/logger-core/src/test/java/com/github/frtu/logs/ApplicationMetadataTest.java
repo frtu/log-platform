@@ -1,9 +1,10 @@
 package com.github.frtu.logs;
 
+import com.github.frtu.logs.core.ApplicationMetadata;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import static com.github.frtu.logs.ApplicationMetadata.SYSTEM_PROPERTY_SERVICE_NAME;
+import static com.github.frtu.logs.core.ApplicationMetadata.SYSTEM_PROPERTY_SERVICE_NAME;
 import static org.junit.Assert.*;
 
 public class ApplicationMetadataTest {

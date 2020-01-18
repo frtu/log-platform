@@ -81,6 +81,8 @@
         <!--<junit.version>4.12</junit.version>-->
         <!--<powermock.version>1.6.2</powermock.version>-->
         <!--<easymock.version>3.6</easymock.version>-->
+        <!--===========================-->
+        <governance-libraries.version>1.0.1</governance-libraries.version>
     </properties>
 
     <repositories>
@@ -93,6 +95,15 @@
 
     <dependencyManagement>
         <dependencies>
+            <!--===========================-->
+            <!-- Internal domain dependencies -->
+            <!--===========================-->
+            <dependency>
+                <groupId>com.github.frtu.governance</groupId>
+                <artifactId>library-spring-reflection</artifactId>
+                <version>${governance-libraries.version}</version>
+            </dependency>
+
             <!-- Common libs -->
             <dependency>
                 <groupId>com.google.guava</groupId>

@@ -1,8 +1,8 @@
 package com.github.frtu.logs.tracing.annotation;
 
 import com.github.frtu.logs.tracing.core.TraceUtil;
-import com.github.frtu.utils.AnnotationMethodScan;
-import com.github.frtu.utils.AnnotationMethodScanner;
+import com.github.frtu.spring.annotation.AnnotationMethodScan;
+import com.github.frtu.spring.annotation.AnnotationMethodScanner;
 import com.google.common.collect.ImmutableMap;
 import io.opentracing.Scope;
 import io.opentracing.Span;
@@ -71,9 +71,9 @@ public class ExecutionSpanAspect {
      * Enrich span using annotation {@link Tag} or {@link ToLog} from {@link Method}.
      * For {@link ToLog} also use method runtime argument.
      *
-     * @param span the current span
+     * @param span   the current span
      * @param method the run method
-     * @param args its arguments
+     * @param args   its arguments
      * @since 0.9.3
      */
     public void enrichSpanWithTagsAndLogs(Span span, Method method, Object[] args) {
