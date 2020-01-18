@@ -1,8 +1,11 @@
 package com.github.frtu.logs.tracing.annotation;
 
-import com.github.frtu.utils.AnnotationMethodScan;
-import com.github.frtu.utils.AnnotationMethodScanner;
+import com.github.frtu.logs.config.ConfigTracingAOP;
+import com.github.frtu.spring.annotation.AnnotationMethodScan;
+import com.github.frtu.spring.annotation.AnnotationMethodScanner;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
+import io.opentracing.Span;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +17,11 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ExecutionSpanConfiguration.class})
+@ContextConfiguration(classes = {ConfigTracingAOP.class})
 public class ExecutionSpanAspectTest {
     @Autowired
     ExecutionSpanAspect executionSpanAspect;
@@ -56,5 +60,30 @@ public class ExecutionSpanAspectTest {
 
         assertFalse("Annotation doesn't exist in " + spanMethod.getName()
                 , executionSpanAspect.isAnnotationFound(annotationMethodScan));
+    }
+
+    @Test
+    public void enrichSpanWithTags() throws NoSuchMethodException {
+        final Span span = createMock(Span.class);
+        expect(span.setTag("tag1", "value1")).andReturn(span);
+        expect(span.setTag("tag2", "value2")).andReturn(span);
+        replay(span);
+
+        final Method spanMethod = ExecutionSpanConfiguration.class.getMethod("spanWithTags");
+        executionSpanAspect.enrichSpanWithTagsAndLogs(span, spanMethod, new Object[0]);
+
+        verify(span);
+    }
+
+    @Test
+    public void enrichSpanWithLogs() throws NoSuchMethodException {
+        final Span span = createMock(Span.class);
+        expect(span.log(ImmutableMap.of("param2", "b"))).andReturn(span);
+        replay(span);
+
+        final Method spanMethod = ExecutionSpanConfiguration.class.getMethod("spanForLog", String.class, String.class);
+        executionSpanAspect.enrichSpanWithTagsAndLogs(span, spanMethod, new String[]{"a", "b"});
+
+        verify(span);
     }
 }

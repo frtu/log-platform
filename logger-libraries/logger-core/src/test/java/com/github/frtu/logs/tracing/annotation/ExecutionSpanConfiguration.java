@@ -1,10 +1,5 @@
 package com.github.frtu.logs.tracing.annotation;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-
-@Configuration
-@ComponentScan(basePackages = {"com.github.frtu.logs.tracing"})
 public class ExecutionSpanConfiguration {
     @ExecutionSpan
     public void simpleSpan(String param1, String param2) {
