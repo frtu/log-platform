@@ -170,6 +170,11 @@
 
             <dependency>
                 <groupId>io.opentracing.contrib</groupId>
+                <artifactId>opentracing-metrics-spring-autoconfigure</artifactId>
+                <version>${opentracing-metrics.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.opentracing.contrib</groupId>
                 <artifactId>opentracing-metrics-prometheus</artifactId>
                 <version>${opentracing-metrics.version}</version>
             </dependency>

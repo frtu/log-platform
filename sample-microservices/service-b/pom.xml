@@ -11,6 +11,19 @@
 	<artifactId>service-b</artifactId>
 
 	<dependencies>
+        <!--===========================-->
+        <!-- Internal domain dependencies -->
+        <!--===========================-->
+        <dependency>
+            <groupId>com.github.frtu.logs</groupId>
+            <artifactId>logger-metrics</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentracing.contrib</groupId>
+            <artifactId>opentracing-metrics-spring-autoconfigure</artifactId>
+        </dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
