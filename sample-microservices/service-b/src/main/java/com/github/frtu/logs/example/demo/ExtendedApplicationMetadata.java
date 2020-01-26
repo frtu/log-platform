@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 public class ExtendedApplicationMetadata implements ApplicationMetadata {
     @Override
     public String getApplicationName() {
-        return "ExtendedApplicationMetadata";
+        return "service-b-extended";
     }
 }
