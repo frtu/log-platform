@@ -13,6 +13,8 @@ On tracing using :
 * [OpenTracing for CNCF](https://opentracing.io/)
 * [Jaeger implementation](https://www.jaegertracing.io/docs/1.15/)
 
+Note : [OpenTelemetry](https://medium.com/jaegertracing/jaeger-and-opentelemetry-1846f701d9f2) will be replacing OpenTracing, nevertheless it is **not ready and stable as of now**. Expect also implementation to be fully stable before migrating to the latest version of Jaeger.
+
 ## Structured logs
 
 Logs used to be a long chain of words and events, **requiring a human** to read and interpret. 
@@ -259,4 +261,8 @@ fluentd provide a [dedicated java logger](https://docs.fluentd.org/language-bind
 
 * [sndyuk logback-more-appenders](http://sndyuk.github.io/logback-more-appenders/)
 
+## See also
+
+* Get familiar with the concepts with [Observability 3 ways: Logging, Metrics & Tracing](https://www.dotconferences.com/2017/04/adrian-cole-observability-3-ways-logging-metrics-tracing) by Adrian Cole
+* [opentelemetry-beyond-getting-started](https://medium.com/opentelemetry/opentelemetry-beyond-getting-started-5ac43cd0fe26)
 
