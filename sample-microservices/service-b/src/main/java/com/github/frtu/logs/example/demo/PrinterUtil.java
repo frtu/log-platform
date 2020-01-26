@@ -4,6 +4,7 @@ import com.github.frtu.logs.tracing.annotation.ExecutionSpan;
 import com.github.frtu.logs.tracing.annotation.Tag;
 import com.github.frtu.logs.tracing.annotation.ToLog;
 import com.github.frtu.logs.tracing.core.TraceHelper;
+import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class PrinterUtil {
             @Tag(tagName = "key1", tagValue = "value1"),
             @Tag(tagName = "key2", tagValue = "value2")
     })
+    @Timed
     public void printHello(String helloStr) {
         traceHelper.addLog("print-hello", helloStr);
         LOGGER.info(helloStr);
