@@ -4,7 +4,6 @@ import com.github.frtu.logs.config.ConfigTracingAOP;
 import com.github.frtu.spring.annotation.AnnotationMethodScan;
 import com.github.frtu.spring.annotation.AnnotationMethodScanner;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Multimap;
 import io.opentracing.Span;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Map;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
@@ -28,15 +24,13 @@ public class ExecutionSpanAspectTest {
 
     @Test
     public void getSimpleName() {
-        executionSpanAspect.isFullClassName = false;
-        final String name = executionSpanAspect.getName(String.class, "method");
+        final String name = executionSpanAspect.getName(String.class, "method", false);
         assertEquals("String.method", name);
     }
 
     @Test
     public void getFullName() {
-        executionSpanAspect.isFullClassName = true;
-        final String name = executionSpanAspect.getName(String.class, "method");
+        final String name = executionSpanAspect.getName(String.class, "method", true);
         assertEquals("java.lang.String.method", name);
     }
 

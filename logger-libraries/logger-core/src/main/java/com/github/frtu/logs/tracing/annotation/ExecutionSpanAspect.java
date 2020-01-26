@@ -49,7 +49,7 @@ public class ExecutionSpanAspect {
     @Around("@annotation(ExecutionSpan)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         final Signature joinPointSignature = joinPoint.getSignature();
-        String signatureName = getName(joinPointSignature.getDeclaringType(), joinPointSignature.getName());
+        String signatureName = getName(joinPointSignature, isFullClassName);
 
         try (Scope scope = tracer.buildSpan(signatureName).startActive(true)) {
             final Span span = scope.span();
@@ -113,7 +113,11 @@ public class ExecutionSpanAspect {
         return !AnnotationMethodScan.EMPTY.equals(annotationMethodScan);
     }
 
-    String getName(Class declaringType, String methodName) {
+    public static String getName(Signature joinPointSignature, boolean isFullClassName) {
+        return getName(joinPointSignature.getDeclaringType(), joinPointSignature.getName(), isFullClassName);
+    }
+
+    public static String getName(Class declaringType, String methodName, boolean isFullClassName) {
         final StringBuilder stringBuilder = new StringBuilder();
         if (isFullClassName) {
             stringBuilder.append(declaringType.getCanonicalName());
