@@ -13,6 +13,10 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Micrometer registry configuration
+ *
+ * @see <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html#production-ready-metrics">Sprint-boot Metrics</a>
+ * @see <a href="https://spring.io/blog/2018/03/16/micrometer-spring-boot-2-s-new-application-metrics-collector">MeterRegistry</a>
+ * @since 0.9.5
  */
 @Configuration
 public class MeterRegistryConfig {

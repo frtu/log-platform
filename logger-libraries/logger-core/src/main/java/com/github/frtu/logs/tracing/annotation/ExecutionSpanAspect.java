@@ -113,10 +113,27 @@ public class ExecutionSpanAspect {
         return !AnnotationMethodScan.EMPTY.equals(annotationMethodScan);
     }
 
+    /**
+     * Get span name based on joinPointSignature
+     *
+     * @param joinPointSignature
+     * @param isFullClassName
+     * @return
+     * @since 0.9.5
+     */
     public static String getName(Signature joinPointSignature, boolean isFullClassName) {
         return getName(joinPointSignature.getDeclaringType(), joinPointSignature.getName(), isFullClassName);
     }
 
+    /**
+     * Get span name based on declaringType and methodName
+     *
+     * @param declaringType
+     * @param methodName
+     * @param isFullClassName
+     * @return
+     * @since 0.9.5
+     */
     public static String getName(Class declaringType, String methodName, boolean isFullClassName) {
         final StringBuilder stringBuilder = new StringBuilder();
         if (isFullClassName) {
