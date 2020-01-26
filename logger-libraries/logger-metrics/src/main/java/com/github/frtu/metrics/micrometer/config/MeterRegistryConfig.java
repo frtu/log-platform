@@ -4,6 +4,8 @@ import com.github.frtu.logs.config.condition.AopConditionalOnClass;
 import com.github.frtu.logs.core.ApplicationMetadata;
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.MeterRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
@@ -14,9 +16,12 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class MeterRegistryConfig {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MeterRegistryConfig.class);
+
     @Bean
     MeterRegistryCustomizer<MeterRegistry> metricsCommonTags(ApplicationMetadata applicationMetadata) {
         final String applicationName = applicationMetadata.getApplicationName();
+        LOGGER.debug("Adding app.name='{}' to MeterRegistry", applicationName);
         return registry -> registry.config().commonTags("app.name", applicationName);
     }
 
@@ -29,6 +34,7 @@ public class MeterRegistryConfig {
     @Bean
     @Conditional(AopConditionalOnClass.class)
     TimedAspect timedAspect(MeterRegistry registry) {
+        LOGGER.info("Activate @Annotation io.micrometer.core.annotation.Timed using TimedAspect");
         return new TimedAspect(registry);
     }
 }
