@@ -1,22 +1,21 @@
-package com.github.frtu.logs;
+package com.github.frtu.logs.core;
 
-import com.github.frtu.logs.core.ApplicationMetadata;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import static com.github.frtu.logs.core.ApplicationMetadata.SYSTEM_PROPERTY_SERVICE_NAME;
+import static com.github.frtu.logs.core.BaseApplicationMetadata.SYSTEM_PROPERTY_SERVICE_NAME;
 import static org.junit.Assert.*;
 
-public class ApplicationMetadataTest {
+public class BaseApplicationMetadataTest {
     @Test
     public void getApplicationName() {
         final String serviceName = "service-a";
         System.setProperty(SYSTEM_PROPERTY_SERVICE_NAME, serviceName);
 
-        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(ApplicationMetadata.class);
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(BaseApplicationMetadata.class);
         ctx.registerShutdownHook();
 
-        final ApplicationMetadata applicationMetadata = ctx.getBean(ApplicationMetadata.class);
+        final BaseApplicationMetadata applicationMetadata = ctx.getBean(BaseApplicationMetadata.class);
 
         assertEquals(serviceName, applicationMetadata.getApplicationName());
         System.clearProperty(SYSTEM_PROPERTY_SERVICE_NAME);
