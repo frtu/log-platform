@@ -1,7 +1,7 @@
 package com.github.frtu.metrics.micrometer.config;
 
-import com.github.frtu.logs.config.condition.AopConditionalOnClass;
 import com.github.frtu.logs.core.ApplicationMetadata;
+import com.github.frtu.spring.conditional.commons.AopConditionalOnClass;
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;

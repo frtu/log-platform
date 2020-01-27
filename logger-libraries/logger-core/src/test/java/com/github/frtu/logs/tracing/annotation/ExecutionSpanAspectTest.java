@@ -41,8 +41,8 @@ public class ExecutionSpanAspectTest {
         final AnnotationMethodScanner<Class<ExecutionSpan>, Class<ToLog>> scanner = AnnotationMethodScanner.of(ExecutionSpan.class, ToLog.class);
         final AnnotationMethodScan annotationMethodScan = scanner.scan(spanMethod);
 
-        assertTrue("Annotation should exist in " + spanMethod.getName()
-                , executionSpanAspect.isAnnotationFound(annotationMethodScan));
+        assertFalse("Annotation should exist in " + spanMethod.getName()
+                , annotationMethodScan.isEmpty());
     }
 
     @Test
@@ -52,8 +52,8 @@ public class ExecutionSpanAspectTest {
         final AnnotationMethodScanner<Class<ExecutionSpan>, Class<ToLog>> scanner = AnnotationMethodScanner.of(ExecutionSpan.class, ToLog.class);
         final AnnotationMethodScan annotationMethodScan = scanner.scan(spanMethod);
 
-        assertFalse("Annotation doesn't exist in " + spanMethod.getName()
-                , executionSpanAspect.isAnnotationFound(annotationMethodScan));
+        assertTrue("Annotation doesn't exist in " + spanMethod.getName()
+                , annotationMethodScan.isEmpty());
     }
 
     @Test

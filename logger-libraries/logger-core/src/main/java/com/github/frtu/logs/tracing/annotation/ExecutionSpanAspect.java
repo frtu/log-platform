@@ -78,7 +78,7 @@ public class ExecutionSpanAspect {
      */
     public void enrichSpanWithTagsAndLogs(Span span, Method method, Object[] args) {
         final AnnotationMethodScan annotationMethodScan = scanner.scan(method);
-        if (isAnnotationFound(annotationMethodScan)) {
+        if (!annotationMethodScan.isEmpty()) {
             final Tag[] tagsArray = (Tag[]) annotationMethodScan.getAnnotationValueArray();
             final Annotation[] scanParamAnnotations = annotationMethodScan.getParamAnnotations();
 
@@ -107,10 +107,6 @@ public class ExecutionSpanAspect {
                 LOGGER.trace("args is NULL");
             }
         }
-    }
-
-    public boolean isAnnotationFound(AnnotationMethodScan annotationMethodScan) {
-        return !AnnotationMethodScan.EMPTY.equals(annotationMethodScan);
     }
 
     /**
