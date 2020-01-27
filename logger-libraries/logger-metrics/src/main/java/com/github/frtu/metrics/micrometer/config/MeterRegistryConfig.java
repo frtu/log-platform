@@ -1,6 +1,7 @@
 package com.github.frtu.metrics.micrometer.config;
 
 import com.github.frtu.logs.core.ApplicationMetadata;
+import com.github.frtu.metrics.micrometer.aop.TimerSpanAspect;
 import com.github.frtu.spring.conditional.commons.AopConditionalOnClass;
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -40,5 +41,12 @@ public class MeterRegistryConfig {
     TimedAspect timedAspect(MeterRegistry registry) {
         LOGGER.info("Activate @Annotation io.micrometer.core.annotation.Timed using TimedAspect");
         return new TimedAspect(registry);
+    }
+
+    @Bean
+    @Conditional(AopConditionalOnClass.class)
+    TimerSpanAspect timerSpanAspect(MeterRegistry registry) {
+        LOGGER.info("Activate @Annotation com.github.frtu.logs.tracing.annotation.ExecutionSpan using TimerSpanAspect");
+        return new TimerSpanAspect(registry);
     }
 }

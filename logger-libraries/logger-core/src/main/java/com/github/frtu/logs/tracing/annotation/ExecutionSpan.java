@@ -21,4 +21,20 @@ public @interface ExecutionSpan {
      * @since 0.9.1
      */
     Tag[] value() default {};
+
+    /**
+     * Explicit name for this {@link io.opentracing.Span}
+     *
+     * @return name for this span
+     * @since 0.9.6
+     */
+    String name() default "";
+
+    /**
+     * Description for this {@link io.opentracing.Span}
+     *
+     * @return description for this span
+     * @since 0.9.6
+     */
+    String description() default "";
 }
