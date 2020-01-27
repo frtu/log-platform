@@ -10,7 +10,7 @@
 
     <groupId>com.github.frtu.logs</groupId>
     <artifactId>logger-master-pom</artifactId>
-    <version>0.9.6</version>
+    <version>0.9.7-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>log platform java library Master pom</name>
@@ -26,7 +26,7 @@
         <connection>scm:git:git@github.com:frtu/log-platform.git</connection>
         <developerConnection>scm:git:git@github.com:frtu/log-platform.git</developerConnection>
         <url>https://github.com/frtu/log-platform/tree/master</url>
-        <tag>v0.9.6</tag>
+        <tag>HEAD</tag>
     </scm>
     <developers>
         <developer>
