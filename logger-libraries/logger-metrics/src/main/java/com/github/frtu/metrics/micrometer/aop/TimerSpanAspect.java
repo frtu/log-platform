@@ -2,6 +2,7 @@ package com.github.frtu.metrics.micrometer.aop;
 
 import com.github.frtu.logs.tracing.annotation.ExecutionSpan;
 import com.github.frtu.logs.tracing.annotation.ExecutionSpanAspect;
+import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.*;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -18,6 +19,11 @@ import java.util.function.Function;
 
 import static io.micrometer.core.aop.TimedAspect.EXCEPTION_TAG;
 
+/**
+ * Same as {@link TimedAspect} but allow to run metrics based on {@link ExecutionSpan}.
+ *
+ * @since 0.9.6
+ */
 @Aspect
 public class TimerSpanAspect {
     private static final Logger LOGGER = LoggerFactory.getLogger(TimerSpanAspect.class);

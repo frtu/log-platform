@@ -31,7 +31,7 @@ public class MeterRegistryConfig {
     }
 
     /**
-     * Creating AOP aspect watching for io.micrometer.core.annotation.Timed
+     * Creating AOP aspect watching for {@link io.micrometer.core.annotation.Timed}
      *
      * @param registry {@link MeterRegistry}
      * @return TimedAspect
@@ -43,6 +43,13 @@ public class MeterRegistryConfig {
         return new TimedAspect(registry);
     }
 
+    /**
+     * Creating AOP aspect watching for {@link com.github.frtu.logs.tracing.annotation.ExecutionSpan}
+     *
+     * @param registry {@link MeterRegistry}
+     * @return TimerSpanAspect
+     * @since 0.9.6
+     */
     @Bean
     @Conditional(AopConditionalOnClass.class)
     TimerSpanAspect timerSpanAspect(MeterRegistry registry) {
