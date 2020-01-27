@@ -6,6 +6,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+/**
+ * Enable {@link FluentdConfiguration} and {@link DefaultApplicationMetadataFactory}.
+ *
+ * @author Frédéric TU
+ * @since 0.9.5
+ */
 @Configuration
 @Import(DefaultApplicationMetadataFactory.class)
 @ComponentScan(basePackageClasses = {FluentdConfiguration.class})

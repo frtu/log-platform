@@ -116,9 +116,9 @@ public class ExecutionSpanAspect {
     /**
      * Get span name based on joinPointSignature
      *
-     * @param joinPointSignature
-     * @param isFullClassName
-     * @return
+     * @param joinPointSignature AOP method {@link Signature}
+     * @param isFullClassName    if should return class canonical name or short name
+     * @return String signature name
      * @since 0.9.5
      */
     public static String getName(Signature joinPointSignature, boolean isFullClassName) {
@@ -128,10 +128,10 @@ public class ExecutionSpanAspect {
     /**
      * Get span name based on declaringType and methodName
      *
-     * @param declaringType
-     * @param methodName
-     * @param isFullClassName
-     * @return
+     * @param declaringType   Classname
+     * @param methodName      method name
+     * @param isFullClassName if should return class canonical name or short name
+     * @return String signature name
      * @since 0.9.5
      */
     public static String getName(Class declaringType, String methodName, boolean isFullClassName) {
