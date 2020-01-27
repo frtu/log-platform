@@ -9,7 +9,7 @@
 
 	<groupId>com.github.frtu.logs.example</groupId>
 	<artifactId>sample-microservices</artifactId>
-    <version>0.9.5-SNAPSHOT</version>
+    <version>${appversion}</version>
 	<packaging>pom</packaging>
 
 	<name>Sample microservices apps</name>
@@ -21,6 +21,7 @@
 	</modules>
 
 	<properties>
+		<appversion>0.9.6-SNAPSHOT</appversion>
 		<java.version>1.8</java.version>
 		<dockerfile-maven-version>1.4.13</dockerfile-maven-version>
 
