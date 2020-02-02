@@ -7,6 +7,7 @@ import io.jaegertracing.internal.JaegerTracer;
 import io.jaegertracing.micrometer.MicrometerMetricsFactory;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,9 @@ public class JaegerConfiguration implements TraceUtil {
         LOGGER.info("jaegerEndpoint:'{}', jaegerAgentHost:'{}', jaegerAgentPort:'{}'", jaegerEndpoint, jaegerAgentHost, jaegerAgentPort);
         this.tracer = initTracer(applicationMetadata.getApplicationName(), samplingTrace);
         checkTracerInitialized();
+        if (!GlobalTracer.isRegistered()) {
+            GlobalTracer.register(this.tracer);
+        }
     }
 
     private void checkTracerInitialized() {
