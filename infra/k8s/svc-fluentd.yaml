@@ -1,0 +1,77 @@
+#### Custom configuration for Fluentd
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: fluentd
+  namespace: logging
+data:
+  fluent.conf: |-
+    <source>
+      @type forward
+      port 24224
+      bind 0.0.0.0
+    </source>
+    <source>
+      @type http
+      port 9880
+    </source>
+    <match *.**>
+      @type copy
+      <store>
+        @type elasticsearch
+        host elasticsearch.logging
+        port 9200
+        logstash_format true
+        logstash_prefix fluentd
+        logstash_dateformat %Y%m%d
+        include_tag_key true
+        type_name access_log
+        tag_key @log_name
+        flush_interval 1s
+      </store>
+      <store>
+        @type stdout
+      </store>
+    </match>
+---
+#### Fluentd Kubernetes Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fluentd
+  namespace: logging
+  labels:
+    app: fluentd
+spec:
+  selector:
+    matchLabels:
+      app: fluentd
+  template:
+    metadata:
+      labels:
+        app: fluentd
+    spec:
+      containers:
+      - name: fluentd
+        image: fluentd:latest
+        volumeMounts:
+        - name: config-volume
+          mountPath: /fluentd/etc
+      volumes:
+      - name: config-volume
+        configMap:
+          name: fluentd
+---
+#### Fluentd Kubernetes Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: fluentd
+  namespace: logging
+spec:
+  ports:
+  - port: 24224
+    protocol: TCP
+  selector:
+    app: fluentd
+  type: ClusterIP
