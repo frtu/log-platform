@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <springProperty scope="context" name="REGION" source="log.region"/>
-    <springProperty scope="context" name="ZONE" source="log.zone"/>
+    <springProperty scope="context" name="REGION" source="logging.region"/>
+    <springProperty scope="context" name="ZONE" source="logging.zone"/>
 
     <property name="REGION" value="${REGION:-SINGLE}"/>
     <property name="ZONE" value="${ZONE:-SINGLE}"/>
