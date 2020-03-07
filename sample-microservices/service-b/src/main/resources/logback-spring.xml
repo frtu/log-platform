@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <springProperty scope="context" name="SERVICE_NAME" source="application.name"/>
     <springProperty scope="context" name="REGION" source="logging.region"/>
     <springProperty scope="context" name="ZONE" source="logging.zone"/>
-
     <springProperty scope="context" name="FLUENTD_TAG" source="fluentd.tag"/>
     <springProperty scope="context" name="FLUENTD_LABEL" source="fluentd.label"/>
+    <springProperty scope="context" name="LOG_PATH" source="logging.path"/>
 
     <include resource="logback-web.xml"/>
 
@@ -15,6 +16,7 @@
 
         <root level="INFO">
             <appender-ref ref="STDOUT"/>
+            <appender-ref ref="FILE_APPENDER"/>
         </root>
     </springProfile>
 

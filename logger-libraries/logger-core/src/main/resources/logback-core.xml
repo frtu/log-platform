@@ -4,8 +4,8 @@
     <property name="ENCODER_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %X{TRACE_ID} %-5level %logger{36} #%line - %msg"/>
 
     <include resource="logback-appender-console.xml"/>
+    <include resource="logback-appender-file.xml"/>
     <include resource="logback-appenders-fluentd.xml"/>
-    <include resource="logback-appenders-std.xml"/>
 
     <!--=================================================-->
     <!--Log and Trace configuration - RECOMMEND ALWAYS ON-->

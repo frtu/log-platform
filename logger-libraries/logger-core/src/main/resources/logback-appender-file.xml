@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE logback>
+<included>
+    <property name="FILE_ENCODER_PATTERN" value="${ENCODER_PATTERN}%n"/>
+
+    <property name="FILE_NAME" value="${SERVICE_NAME:-application}"/>
+    <property name="LOG_FILE_LOCATION" value="${LOG_FILE_LOCATION:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/${FILE_NAME}.log}"/>
+
+    <property name="LOG_FILE_MAX_SIZE" value="${LOG_FILE_MAX_SIZE:-5MB}"/>
+    <property name="LOG_FILE_MAX_HISTORY" value="${LOG_FILE_MAX_HISTORY:-15}"/>
+    <property name="LOG_FILE_MAX_TOTAL_SIZE" value="${LOG_FILE_MAX_SIZE:-100MB}"/>
+
+    <!-- Send messages to a rolling file -->
+    <appender name="FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>${FILE_ENCODER_PATTERN}</pattern>
+        </encoder>
+        <file>${LOG_FILE_LOCATION}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover. Make sure the path matches the one in the file element or else the rollover logs are placed in the working directory. -->
+            <fileNamePattern>${LOG_FILE_LOCATION}_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${LOG_FILE_MAX_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- keep 15 days' worth of history -->
+            <maxHistory>${LOG_FILE_MAX_HISTORY}</maxHistory>
+            <totalSizeCap>${LOG_FILE_MAX_TOTAL_SIZE}</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+</included>

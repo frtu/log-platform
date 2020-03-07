@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE logback>
 <included>
-    <property name="LOG_PATH" value="${logging.path:-/var/logs}"/>
-    <property name="SERVICE_NAME" value="${SERVICE_NAME:-UNKNOWN}"/>
-    <property name="ENCODER_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %X{TRACE_ID} %-5level %logger{36} #%line - %msg"/>
-
-    <!-- Send messages to a rolling file -->
-    <appender name="FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- daily rollover. Make sure the path matches the one in the file element or else the rollover logs are placed in the working directory. -->
-            <fileNamePattern>${LOG_PATH}/${SERVICE_NAME}_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>5MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-            <!-- keep 30 days' worth of history -->
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-        <encoder>
-            <charset>UTF-8</charset>
-            <pattern>${ENCODER_PATTERN}</pattern>
-        </encoder>
-    </appender>
-
     <appender name="SECURITY_ALERT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- The simple marker filter instead of writing complex configuration with EvaluatorFilter -->
         <filter class="ch.qos.logback.more.appenders.filter.AppendersMarkerFilter">
