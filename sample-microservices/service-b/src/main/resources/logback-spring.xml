@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <springProperty scope="context" name="REGION" source="log.region"/>
+    <springProperty scope="context" name="ZONE" source="log.zone"/>
+
+    <property name="REGION" value="${REGION:-SINGLE}"/>
+    <property name="ZONE" value="${ZONE:-SINGLE}"/>
+
     <include resource="logback-web.xml"/>
 
     <!--Local start up-->
