@@ -3,8 +3,8 @@
     <springProperty scope="context" name="REGION" source="logging.region"/>
     <springProperty scope="context" name="ZONE" source="logging.zone"/>
 
-    <property name="REGION" value="${REGION:-SINGLE}"/>
-    <property name="ZONE" value="${ZONE:-SINGLE}"/>
+    <springProperty scope="context" name="FLUENTD_TAG" source="fluentd.tag"/>
+    <springProperty scope="context" name="FLUENTD_LABEL" source="fluentd.label"/>
 
     <include resource="logback-web.xml"/>
 

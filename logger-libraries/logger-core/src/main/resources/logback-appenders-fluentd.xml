@@ -4,6 +4,9 @@
     <property name="FLUENTD_HOST" value="${FLUENTD_HOST:-${DOCKER_HOST:-localhost}}"/>
     <property name="FLUENTD_PORT" value="${FLUENTD_PORT:-24224}"/>
 
+    <property name="FLUENTD_TAG" value="${FLUENTD_TAG:-debug}"/>
+    <property name="FLUENTD_LABEL" value="${FLUENTD_LABEL:-logback}"/>
+
     <property name="REGION" value="${REGION:-SINGLE}"/>
     <property name="ZONE" value="${ZONE:-SINGLE}"/>
     <property name="SERVICE_NAME" value="${SERVICE_NAME:-UNKNOWN}"/>
@@ -13,9 +16,9 @@
     <!-- Fluend java -->
     <appender name="FLUENT_SYNC" class="ch.qos.logback.more.appenders.DataFluentAppender">
         <!-- Tag for Fluentd. Farther information: http://docs.fluentd.org/articles/config-file -->
-        <tag>debug</tag>
+        <tag>${FLUENTD_TAG}</tag>
         <!-- [Optional] Label for Fluentd. Farther information: http://docs.fluentd.org/articles/config-file -->
-        <label>logback</label>
+        <label>${FLUENTD_LABEL}</label>
         <!-- Host name/address and port number which Flentd placed -->
         <remoteHost>${FLUENTD_HOST}</remoteHost>
         <port>${FLUENTD_PORT}</port>
@@ -48,7 +51,7 @@
         <flattenMapMarker>false</flattenMapMarker>
 
         <encoder>
-            <pattern><![CDATA[%date{HH:mm:ss.SSS} [%thread] %X{TRACE_ID} %-5level %logger{36} #%line - %msg]]></pattern>
+            <pattern>${ENCODER_PATTERN}</pattern>
         </encoder>
     </appender>
 
