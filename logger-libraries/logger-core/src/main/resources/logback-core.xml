@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--For Java Application-->
 <included>
+    <property name="ENCODER_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %X{TRACE_ID} %-5level %logger{36} #%line - %msg"/>
+
+    <include resource="logback-appender-console.xml"/>
     <include resource="logback-appenders-fluentd.xml"/>
     <include resource="logback-appenders-std.xml"/>
 
@@ -14,14 +17,6 @@
     <logger name="io.jaegertracing" level="INFO" additivity="true"/>
     <!--=================================================-->
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
-        <encoder>
-            <!--https://logback.qos.ch/manual/layouts.html#ClassicPatternLayout-->
-            <pattern><![CDATA[%date{HH:mm:ss.SSS} [%thread] %X{trace.id} %-5level %logger{36} #%line - %msg%n]]>
-            </pattern>
-        </encoder>
-    </appender>
     <root level="WARN">
         <appender-ref ref="STDOUT"/>
     </root>
