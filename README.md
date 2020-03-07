@@ -63,6 +63,57 @@ Check the latest version (clickable) :
 
 [<img src="https://img.shields.io/maven-central/v/com.github.frtu.logs/logger-core.svg?label=latest%20release%20:%20logger-core"/>](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22logger-core%22+g%3A%22com.github.frtu.logs%22)
 
+### Configure logback
+
+* Choose any template from ```logger-core/src/main/resources/templates/```
+* Copy into your ```src/main/resources/``` folder
+
+#### fluentd in logback-spring.xml
+
+When using logback-spring.xml, you can override any logback ENV with Spring properties using :
+
+```xml
+<springProperty scope="context" name="SERVICE_NAME" source="application.name"/>
+```
+
+In your property file, just configure fluentd 
+
+* tag.label
+* region
+* zone
+* etc.
+
+```properties
+fluentd.tag=tag
+fluentd.label=label
+logging.region=localhost
+logging.zone=zone
+logging.path=target/
+```
+
+#### file appender in logback-spring.xml
+
+For Production & avoid message loss, it is recommended to use log file + fluentd tail (instead of streaming log) to allow local buffering.
+
+Define log file location with system env :
+
+* ```$LOG_PATH/$SERVICE_NAME.log```
+* or ```LOG_FILE_LOCATION```
+
+In your application properties or yaml :
+
+```properties
+logging.path=target/
+```
+
+Also configure RollingFileAppender using :
+
+```xml
+<property name="LOG_FILE_MAX_SIZE" value="${LOG_FILE_MAX_SIZE:-5MB}"/>
+<property name="LOG_FILE_MAX_HISTORY" value="${LOG_FILE_MAX_HISTORY:-15}"/>
+<property name="LOG_FILE_MAX_TOTAL_SIZE" value="${LOG_FILE_MAX_SIZE:-100MB}"/>
+```
+
 ### Log forwarder
 
 #### Enablement
