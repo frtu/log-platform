@@ -101,7 +101,7 @@ public class ExecutionSpanAspect {
                         }
                     }
                 } else {
-                    LOGGER.warn("scanParamAnnotations size:{} not equal args size:{}", scanParamAnnotations.length, args.length);
+                    LOGGER.warn("scanParamAnnotations name:{} size:{} not equal args size:{}", method.getName(), scanParamAnnotations.length, args.length);
                 }
             } else {
                 LOGGER.trace("args is NULL");
