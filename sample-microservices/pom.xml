@@ -21,7 +21,7 @@
 	</modules>
 
 	<properties>
-		<appversion>1.0.1-SNAPSHOT</appversion>
+		<appversion>1.0.2-SNAPSHOT</appversion>
 		<java.version>1.8</java.version>
 		<dockerfile-maven-version>1.4.13</dockerfile-maven-version>
 
