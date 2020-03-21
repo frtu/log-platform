@@ -31,4 +31,5 @@ COPY conf/$FLUENTD_CONF /fluentd/etc/fluent.conf
 USER fluent
 EXPOSE 24220 24224
 
+# https://docs.fluentd.org/deployment/plugin-management#p-option
 CMD fluentd -c /fluentd/etc/fluent.conf -p /fluentd/plugins $FLUENTD_OPT
