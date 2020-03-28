@@ -11,7 +11,7 @@ public class ExecutionSpanConfiguration {
     }
 
     @ExecutionSpan(@Tag(tagName = "tag1", tagValue = "value1"))
-    public void spanWithTags(String param1, String param2) {
+    public void spanWithTags(@ToTag("param-tag") String param1, String param2) {
     }
 
     @ExecutionSpan

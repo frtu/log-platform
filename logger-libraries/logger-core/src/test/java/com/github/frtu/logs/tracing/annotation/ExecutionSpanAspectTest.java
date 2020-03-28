@@ -64,7 +64,20 @@ public class ExecutionSpanAspectTest {
         replay(span);
 
         final Method spanMethod = ExecutionSpanConfiguration.class.getMethod("spanWithTags");
-        executionSpanAspect.enrichSpanWithTagsAndLogs(span, spanMethod, new Object[0]);
+        executionSpanAspect.enrichSpanWithTags(span, spanMethod, new Object[0]);
+
+        verify(span);
+    }
+
+    @Test
+    public void enrichSpanWithParameterTag() throws NoSuchMethodException {
+        final Span span = createMock(Span.class);
+        expect(span.setTag("tag1", "value1")).andReturn(span);
+        expect(span.setTag("param-tag", "a")).andReturn(span);
+        replay(span);
+
+        final Method spanMethod = ExecutionSpanConfiguration.class.getMethod("spanWithTags", String.class, String.class);
+        executionSpanAspect.enrichSpanWithTags(span, spanMethod, new String[]{"a", "b"});
 
         verify(span);
     }
@@ -76,7 +89,7 @@ public class ExecutionSpanAspectTest {
         replay(span);
 
         final Method spanMethod = ExecutionSpanConfiguration.class.getMethod("spanForLog", String.class, String.class);
-        executionSpanAspect.enrichSpanWithTagsAndLogs(span, spanMethod, new String[]{"a", "b"});
+        executionSpanAspect.enrichSpanWithLogs(span, spanMethod, new String[]{"a", "b"});
 
         verify(span);
     }

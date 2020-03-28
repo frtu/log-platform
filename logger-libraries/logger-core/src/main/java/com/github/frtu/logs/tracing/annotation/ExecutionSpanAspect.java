@@ -9,6 +9,7 @@ import io.opentracing.Scope;
 import io.opentracing.Span;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
+import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -43,7 +44,8 @@ public class ExecutionSpanAspect {
     @Autowired
     private TraceUtil traceUtil;
 
-    private final AnnotationMethodScanner<Class<ExecutionSpan>, Class<ToLog>> scanner = AnnotationMethodScanner.of(ExecutionSpan.class, ToLog.class);
+    private final AnnotationMethodScanner<Class<ExecutionSpan>, Class<ToLog>> scannerToLog = AnnotationMethodScanner.of(ExecutionSpan.class, ToLog.class);
+    private final AnnotationMethodScanner<Class<ExecutionSpan>, Class<ToTag>> scannerToTag = AnnotationMethodScanner.of(ExecutionSpan.class, ToTag.class);
 
     @Around("@annotation(ExecutionSpan)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -52,13 +54,14 @@ public class ExecutionSpanAspect {
 
         try (Scope scope = traceHelper.getTracer().buildSpan(signatureName).startActive(true)) {
             final String traceId = traceUtil.getTraceId(scope.span());
-            LOGGER.debug("Creating span around signature={} and traceId={}", signatureName, traceId);
             try (var ignored = MDC.putCloseable(MDC_KEY_TRACE_ID, traceId)) {
+                LOGGER.debug("Creating span around signature={} and traceId={}", signatureName, traceId);
                 if (joinPointSignature instanceof MethodSignature) {
                     final Method method = ((MethodSignature) joinPointSignature).getMethod();
                     final Object[] args = joinPoint.getArgs();
 
-                    enrichSpanWithTagsAndLogs(scope.span(), method, args);
+                    enrichSpanWithLogs(scope.span(), method, args);
+                    enrichSpanWithTags(scope.span(), method, args);
                 }
 
                 try {
@@ -73,7 +76,7 @@ public class ExecutionSpanAspect {
     }
 
     /**
-     * Enrich span using annotation {@link Tag} or {@link ToLog} from {@link Method}.
+     * Enrich span using annotation {@link ToLog} from {@link Method}.
      * For {@link ToLog} also use method runtime argument.
      *
      * @param span   the current span
@@ -81,8 +84,40 @@ public class ExecutionSpanAspect {
      * @param args   its arguments
      * @since 0.9.3
      */
-    public void enrichSpanWithTagsAndLogs(Span span, Method method, Object[] args) {
-        final AnnotationMethodScan annotationMethodScan = scanner.scan(method);
+    public void enrichSpanWithLogs(Span span, Method method, Object[] args) {
+        if (ArrayUtils.isNotEmpty(args)) {
+            final AnnotationMethodScan annotationMethodScan = scannerToLog.scan(method);
+            if (!annotationMethodScan.isEmpty()) {
+                final Annotation[] scanParamAnnotations = annotationMethodScan.getParamAnnotations();
+                if (args.length >= scanParamAnnotations.length) {
+                    for (int i = 0; i < scanParamAnnotations.length; i++) {
+                        final ToLog scanParamAnnotation = (ToLog) scanParamAnnotations[i];
+                        // Skip not annotated parameters
+                        if (scanParamAnnotation != null) {
+                            final String logName = scanParamAnnotation.value();
+                            final Object logValue = args[i];
+                            LOGGER.debug("Add logs name={} and value={}", logName, logValue);
+                            span.log(ImmutableMap.of(logName, logValue));
+                        }
+                    }
+                } else {
+                    LOGGER.warn("scanParamAnnotations name:{} size:{} not equal args size:{}", method.getName(), scanParamAnnotations.length, args.length);
+                }
+            }
+        }
+    }
+
+    /**
+     * Enrich span using annotation {@link Tag} or {@link ToTag} from {@link Method}.
+     * For {@link ToTag} also use method runtime argument.
+     *
+     * @param span   the current span
+     * @param method the run method
+     * @param args   its arguments
+     * @since 1.0.2
+     */
+    public void enrichSpanWithTags(Span span, Method method, Object[] args) {
+        final AnnotationMethodScan annotationMethodScan = scannerToTag.scan(method);
         if (!annotationMethodScan.isEmpty()) {
             final Tag[] tagsArray = (Tag[]) annotationMethodScan.getAnnotationValueArray();
             final Annotation[] scanParamAnnotations = annotationMethodScan.getParamAnnotations();
@@ -90,27 +125,25 @@ public class ExecutionSpanAspect {
             for (Tag tag : tagsArray) {
                 final String tagName = tag.tagName();
                 final String tagValue = tag.tagValue();
-                LOGGER.trace("Add tags name={} and value={}", tagName, tagValue);
+                LOGGER.debug("Add static tags name={} and value={}", tagName, tagValue);
                 span.setTag(tagName, tagValue);
 //                span.setBaggageItem("transaction", tagValue);
             }
-            if (args != null) {
-                if (args.length == scanParamAnnotations.length) {
+            if (ArrayUtils.isNotEmpty(args)) {
+                if (args.length >= scanParamAnnotations.length) {
                     for (int i = 0; i < scanParamAnnotations.length; i++) {
-                        final ToLog scanParamAnnotation = (ToLog) scanParamAnnotations[i];
+                        final ToTag scanParamAnnotation = (ToTag) scanParamAnnotations[i];
                         // Skip not annotated parameters
                         if (scanParamAnnotation != null) {
-                            final String logName = scanParamAnnotation.value();
-                            final Object logValue = args[i];
-                            LOGGER.info("Add logs name={} and value={}", logName, logValue);
-                            span.log(ImmutableMap.of(logName, logValue));
+                            final String tagName = scanParamAnnotation.value();
+                            final String tagValue = args[i].toString();
+                            LOGGER.debug("Add tags name={} and parameter value={}", tagName, tagValue);
+                            span.setTag(tagName, tagValue);
                         }
                     }
                 } else {
                     LOGGER.warn("scanParamAnnotations name:{} size:{} not equal args size:{}", method.getName(), scanParamAnnotations.length, args.length);
                 }
-            } else {
-                LOGGER.trace("args is NULL");
             }
         }
     }
