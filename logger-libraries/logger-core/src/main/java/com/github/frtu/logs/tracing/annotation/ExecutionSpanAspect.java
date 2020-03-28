@@ -7,7 +7,6 @@ import com.github.frtu.spring.annotation.AnnotationMethodScanner;
 import com.google.common.collect.ImmutableMap;
 import io.opentracing.Scope;
 import io.opentracing.Span;
-import io.opentracing.Tracer;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -15,8 +14,6 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,22 +54,21 @@ public class ExecutionSpanAspect {
             final String traceId = traceUtil.getTraceId(scope.span());
             LOGGER.debug("Creating span around signature={} and traceId={}", signatureName, traceId);
             try (var ignored = MDC.putCloseable(MDC_KEY_TRACE_ID, traceId)) {
-            if (joinPointSignature instanceof MethodSignature) {
-                final Method method = ((MethodSignature) joinPointSignature).getMethod();
-                final Object[] args = joinPoint.getArgs();
+                if (joinPointSignature instanceof MethodSignature) {
+                    final Method method = ((MethodSignature) joinPointSignature).getMethod();
+                    final Object[] args = joinPoint.getArgs();
 
-                enrichSpanWithTagsAndLogs(scope.span(), method, args);
-            }
+                    enrichSpanWithTagsAndLogs(scope.span(), method, args);
+                }
 
-            try {
-                return joinPoint.proceed();
-            } catch (Exception e) {
-                // Non intrusive : log and propagate
-                traceHelper.flagError(e.getMessage());
-                throw e;
+                try {
+                    return joinPoint.proceed();
+                } catch (Exception e) {
+                    // Non intrusive : log and propagate
+                    traceHelper.flagError(e.getMessage());
+                    throw e;
+                }
             }
-            }
-
         }
     }
 
