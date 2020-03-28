@@ -1,5 +1,6 @@
 package com.github.frtu.logs.tracing.annotation;
 
+import com.github.frtu.logs.tracing.core.TraceHelper;
 import com.github.frtu.logs.tracing.core.TraceUtil;
 import com.github.frtu.spring.annotation.AnnotationMethodScan;
 import com.github.frtu.spring.annotation.AnnotationMethodScanner;
@@ -39,7 +40,7 @@ public class ExecutionSpanAspect {
     boolean isFullClassName;
 
     @Autowired
-    private Tracer tracer;
+    private TraceHelper traceHelper;
 
     @Autowired
     private TraceUtil traceUtil;
@@ -51,7 +52,7 @@ public class ExecutionSpanAspect {
         final Signature joinPointSignature = joinPoint.getSignature();
         String signatureName = getName(joinPointSignature, isFullClassName);
 
-        try (Scope scope = tracer.buildSpan(signatureName).startActive(true)) {
+        try (Scope scope = traceHelper.getTracer().buildSpan(signatureName).startActive(true)) {
             final Span span = scope.span();
             if (joinPointSignature instanceof MethodSignature) {
                 final Method method = ((MethodSignature) joinPointSignature).getMethod();
@@ -63,7 +64,12 @@ public class ExecutionSpanAspect {
             MDC.put(MDC_KEY_TRACE_ID, traceId);
 
             LOGGER.debug("Creating span around signature={} and traceId={}", signatureName, traceId);
-            return joinPoint.proceed();
+            try {
+                return joinPoint.proceed();
+            } catch (Exception e) {
+                traceHelper.flagError(e. getMessage());
+                throw e;
+            }
         }
     }
 
