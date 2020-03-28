@@ -1,4 +1,4 @@
-package com.github.frtu.logs.example.demo;
+package com.github.frtu.logs.example.demo.biz;
 
 import com.github.frtu.logs.tracing.annotation.ExecutionSpan;
 import com.github.frtu.logs.tracing.annotation.Tag;
@@ -16,12 +16,22 @@ public class PrinterUtil {
     @Autowired
     private TraceHelper traceHelper;
 
+    @Autowired
+    private ChaosGenerator chaosGenerator;
+
     @ExecutionSpan(name = "formatStringOneParam")
     public String formatString(@ToLog("helloTo") String helloTo) {
         String helloStr = String.format("Hello, %s!", helloTo);
 
         traceHelper.addLog("log-hello", helloTo);
         printHello(helloStr);
+
+        try {
+            chaosGenerator.raiseException("Raise sample exception to demonstrate exception flag!");
+        } catch (IllegalStateException e) {
+            // Just to demonstrate exception calling issue
+        }
+        LOGGER.debug("Flow should continue");
 
         return helloStr;
     }

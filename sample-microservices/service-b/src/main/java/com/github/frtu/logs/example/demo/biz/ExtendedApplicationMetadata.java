@@ -1,4 +1,4 @@
-package com.github.frtu.logs.example.demo;
+package com.github.frtu.logs.example.demo.biz;
 
 import com.github.frtu.logs.core.ApplicationMetadata;
 import com.github.frtu.logs.core.DefaultApplicationMetadataFactory;
