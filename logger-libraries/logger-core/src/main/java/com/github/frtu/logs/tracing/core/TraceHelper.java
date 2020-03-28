@@ -3,6 +3,8 @@ package com.github.frtu.logs.tracing.core;
 import com.google.common.collect.ImmutableMap;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
+import io.opentracing.log.Fields;
+import io.opentracing.tag.Tags;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +21,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class TraceHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(TraceHelper.class);
-
-    /**
-     * @see <a href="https://github.com/opentracing/specification/blob/master/semantic_conventions.md#span-tags-table">OpenTracing Tag Semantic</a>
-     */
-    public static final String TAG_KEY_ERROR_FLAG = "error";
-
-    /**
-     * @see <a href="https://github.com/opentracing/specification/blob/master/semantic_conventions.md#captured-errors">OpenTracing Error Semantic</a>
-     */
-    public static final String LOG_KEY_EVENT = "event";
-    public static final String LOG_KEY_ERROR_MSG = "message";
 
     @Autowired
     Tracer tracer;
@@ -69,12 +60,31 @@ public class TraceHelper {
     public void flagError(final Span activeSpan, final String errorMsg) {
         LOGGER.error("Adding ERROR to current span. Error message: {}", errorMsg, new Exception(errorMsg));
         if (activeSpan != null) {
-            activeSpan.setTag(TAG_KEY_ERROR_FLAG, true);
+            flagError(activeSpan);
             if (errorMsg != null) {
-                activeSpan.log(ImmutableMap.of(LOG_KEY_EVENT, TAG_KEY_ERROR_FLAG, LOG_KEY_ERROR_MSG, errorMsg));
+                activeSpan.log(ImmutableMap.of(Fields.EVENT, Tags.ERROR.getKey(), Fields.MESSAGE, errorMsg));
             }
         } else {
             LOGGER.error("Span MUST NOT be null ! Loosing span info !!");
         }
+    }
+
+    /**
+     * Tag this span as error.
+     *
+     * @since 1.0.2
+     */
+    public void flagError() {
+        flagError(tracer.activeSpan());
+    }
+
+    /**
+     * Flag this span as error.
+     *
+     * @param activeSpan the active span
+     * @since 1.0.2
+     */
+    public void flagError(final Span activeSpan) {
+        Tags.ERROR.set(activeSpan, true);
     }
 }
