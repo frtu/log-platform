@@ -8,7 +8,6 @@ import com.google.common.collect.ImmutableMap;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -54,24 +53,28 @@ public class ExecutionSpanAspect {
 
         try (Scope scope = traceHelper.getTracer().buildSpan(signatureName).startActive(true)) {
             final String traceId = traceUtil.getTraceId(scope.span());
-            try (var ignored = MDC.putCloseable(MDC_KEY_TRACE_ID, traceId)) {
-                LOGGER.debug("Creating span around signature={} and traceId={}", signatureName, traceId);
-                if (joinPointSignature instanceof MethodSignature) {
-                    final Method method = ((MethodSignature) joinPointSignature).getMethod();
-                    final Object[] args = joinPoint.getArgs();
+            MDC.put(MDC_KEY_TRACE_ID, traceId);
+//            try (var ignored = MDC.putCloseable(MDC_KEY_TRACE_ID, traceId)) {
+            LOGGER.debug("Creating span around signature={} and traceId={}", signatureName, traceId);
+            if (joinPointSignature instanceof MethodSignature) {
+                final Method method = ((MethodSignature) joinPointSignature).getMethod();
+                final Object[] args = joinPoint.getArgs();
 
-                    enrichSpanWithLogs(scope.span(), method, args);
-                    enrichSpanWithTags(scope.span(), method, args);
-                }
-
-                try {
-                    return joinPoint.proceed();
-                } catch (Exception e) {
-                    // Non intrusive : log and propagate
-                    traceHelper.flagError(e.getMessage());
-                    throw e;
-                }
+                enrichSpanWithLogs(scope.span(), method, args);
+                enrichSpanWithTags(scope.span(), method, args);
             }
+
+            try {
+                return joinPoint.proceed();
+            } catch (Exception e) {
+                // Non intrusive : log and propagate
+                traceHelper.flagError(e.getMessage());
+                throw e;
+            } finally {
+                // TODO : Clean up MDC when Root Trace
+//                MDC.remove(MDC_KEY_TRACE_ID);
+            }
+//            }
         }
     }
 
