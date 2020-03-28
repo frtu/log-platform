@@ -35,9 +35,51 @@ public class TraceHelper {
         return tracer;
     }
 
+    /**
+     * Add tag to active span
+     *
+     * @param key   Tag key
+     * @param value Tag value
+     * @since 1.0.2
+     */
+    public void addTag(String key, String value) {
+        addTag(tracer.activeSpan(), key, value);
+    }
+
+    /**
+     * Add tag to a span
+     *
+     * @param span  A span
+     * @param key   Tag key
+     * @param value Tag value
+     * @since 1.0.2
+     */
+    public static void addTag(Span span, String key, String value) {
+        LOGGER.debug("Adding tag to span: {}={}", key, value);
+        span.setTag(key, value);
+    }
+
+    /**
+     * Add log to a active span
+     *
+     * @param key   Log key
+     * @param value Log value
+     */
     public void addLog(String key, String value) {
-        LOGGER.info("Adding to current span: {}={}", key, value);
-        tracer.activeSpan().log(ImmutableMap.of(key, value));
+        addLog(tracer.activeSpan(), key, value);
+    }
+
+    /**
+     * Add log to a span
+     *
+     * @param span  A span
+     * @param key   Log key
+     * @param value Log value
+     * @since 1.0.2
+     */
+    public static void addLog(Span span, String key, String value) {
+        LOGGER.debug("Adding log to span: {}={}", key, value);
+        span.log(ImmutableMap.of(key, value));
     }
 
     /**
@@ -53,16 +95,16 @@ public class TraceHelper {
     /**
      * Flag this span as error. OPTIONALLY add an error msg.
      *
-     * @param activeSpan the active span
-     * @param errorMsg   can be null
+     * @param span     A span
+     * @param errorMsg can be null
      * @since 0.9.4
      */
-    public void flagError(final Span activeSpan, final String errorMsg) {
+    public static void flagError(final Span span, final String errorMsg) {
         LOGGER.debug("Adding ERROR to current span. Error message: {}", errorMsg, new Exception(errorMsg));
-        if (activeSpan != null) {
-            flagError(activeSpan);
+        if (span != null) {
+            flagError(span);
             if (errorMsg != null) {
-                activeSpan.log(ImmutableMap.of(Fields.EVENT, Tags.ERROR.getKey(), Fields.MESSAGE, errorMsg));
+                span.log(ImmutableMap.of(Fields.EVENT, Tags.ERROR.getKey(), Fields.MESSAGE, errorMsg));
             }
         } else {
             LOGGER.warn("Span MUST NOT be null ! Loosing span info !!");
@@ -81,10 +123,10 @@ public class TraceHelper {
     /**
      * Flag this span as error.
      *
-     * @param activeSpan the active span
+     * @param span A span
      * @since 1.0.2
      */
-    public void flagError(final Span activeSpan) {
-        Tags.ERROR.set(activeSpan, true);
+    public static void flagError(final Span span) {
+        Tags.ERROR.set(span, true);
     }
 }
