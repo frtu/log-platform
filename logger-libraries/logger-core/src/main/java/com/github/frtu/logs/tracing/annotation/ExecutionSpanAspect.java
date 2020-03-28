@@ -9,6 +9,7 @@ import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import lombok.extern.slf4j.Slf4j;
+import lombok.var;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -53,24 +54,25 @@ public class ExecutionSpanAspect {
         String signatureName = getName(joinPointSignature, isFullClassName);
 
         try (Scope scope = traceHelper.getTracer().buildSpan(signatureName).startActive(true)) {
-            final Span span = scope.span();
+            final String traceId = traceUtil.getTraceId(scope.span());
+            LOGGER.debug("Creating span around signature={} and traceId={}", signatureName, traceId);
+            try (var ignored = MDC.putCloseable(MDC_KEY_TRACE_ID, traceId)) {
             if (joinPointSignature instanceof MethodSignature) {
                 final Method method = ((MethodSignature) joinPointSignature).getMethod();
                 final Object[] args = joinPoint.getArgs();
 
-                enrichSpanWithTagsAndLogs(span, method, args);
+                enrichSpanWithTagsAndLogs(scope.span(), method, args);
             }
-            final String traceId = traceUtil.getTraceId(span);
-            MDC.put(MDC_KEY_TRACE_ID, traceId);
 
-            LOGGER.debug("Creating span around signature={} and traceId={}", signatureName, traceId);
             try {
                 return joinPoint.proceed();
             } catch (Exception e) {
                 // Non intrusive : log and propagate
-                traceHelper.flagError(e. getMessage());
+                traceHelper.flagError(e.getMessage());
                 throw e;
             }
+            }
+
         }
     }
 
@@ -94,6 +96,7 @@ public class ExecutionSpanAspect {
                 final String tagValue = tag.tagValue();
                 LOGGER.trace("Add tags name={} and value={}", tagName, tagValue);
                 span.setTag(tagName, tagValue);
+//                span.setBaggageItem("transaction", tagValue);
             }
             if (args != null) {
                 if (args.length == scanParamAnnotations.length) {
