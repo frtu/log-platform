@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE logback>
+<included>
+    <!-- ATTENTION - NEED TO IMPORT JAR logstash-logback-encoder -->
+    <property name="JSON_FILE_NAME" value="${SERVICE_NAME:-application}-json"/>
+    <property name="JSON_LOG_FILE_LOCATION" value="${JSON_LOG_FILE_LOCATION:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/${JSON_FILE_NAME}.log}"/>
+
+    <property name="LOG_FILE_MAX_SIZE" value="${LOG_FILE_MAX_SIZE:-5MB}"/>
+    <property name="LOG_FILE_MAX_HISTORY" value="${LOG_FILE_MAX_HISTORY:-15}"/>
+    <property name="LOG_FILE_MAX_TOTAL_SIZE" value="${LOG_FILE_MAX_SIZE:-100MB}"/>
+
+    <!-- Send messages to a rolling file -->
+    <appender name="JSON_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+        <file>${JSON_LOG_FILE_LOCATION}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover. Make sure the path matches the one in the file element or else the rollover logs are placed in the working directory. -->
+            <fileNamePattern>${JSON_LOG_FILE_LOCATION}-json_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${LOG_FILE_MAX_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- keep 15 days' worth of history -->
+            <maxHistory>${LOG_FILE_MAX_HISTORY}</maxHistory>
+            <totalSizeCap>${LOG_FILE_MAX_TOTAL_SIZE}</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+</included>

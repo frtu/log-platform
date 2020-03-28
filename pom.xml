@@ -64,6 +64,7 @@
         <!--===========================-->
         <!--<slf4j.version>1.7.25</slf4j.version>-->
         <!--<logback.version>1.2.3</logback.version>-->
+        <logstash-logback-encoder.version>6.3</logstash-logback-encoder.version>
         <sndyuk.logback-more-appenders.version>1.7.1</sndyuk.logback-more-appenders.version>
         <fluentd.logger.version>0.3.4</fluentd.logger.version>
         <!-- ATTENTION Later version of OpenTracing change some Scope Interface-->
@@ -113,6 +114,13 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+
+            <!-- Logging - JSON encoder -->
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash-logback-encoder.version}</version>
             </dependency>
 
             <!-- Logging -->

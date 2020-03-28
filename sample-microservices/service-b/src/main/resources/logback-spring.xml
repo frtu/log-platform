@@ -8,6 +8,7 @@
     <springProperty scope="context" name="LOG_PATH" source="logging.path"/>
 
     <include resource="logback-web.xml"/>
+    <include resource="logback-appender-file-json-encoder.xml"/>
 
     <!--Local start up-->
     <springProfile name="default">
@@ -16,7 +17,7 @@
 
         <root level="INFO">
             <appender-ref ref="STDOUT"/>
-            <appender-ref ref="FILE_APPENDER"/>
+            <appender-ref ref="JSON_FILE"/>
         </root>
     </springProfile>
 
