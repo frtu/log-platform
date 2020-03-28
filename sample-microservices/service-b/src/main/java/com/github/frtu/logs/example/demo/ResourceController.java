@@ -29,8 +29,8 @@ public class ResourceController {
     @ResponseBody
     String home(@RequestParam(value = "service", defaultValue = "ServiceB", required = false)
                 @ToLog("name") String name) {
-        String formatString = printerUtil.formatString(name);
-        printerUtil.printHello(formatString);
+        String formatString = printerUtil.tagDemo(name);
+        printerUtil.logDemo(formatString);
         return formatString;
     }
 
