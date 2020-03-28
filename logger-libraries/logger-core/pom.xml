@@ -51,6 +51,12 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <!-- Import ONLY for logback-appender-file-json-encoder.xml -->
+            <optional>true</optional>
+        </dependency>
 
         <!-- Distributed Tracing -->
         <dependency>
