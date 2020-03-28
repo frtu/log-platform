@@ -5,7 +5,7 @@
 
     <include resource="logback-appender-console.xml"/>
     <include resource="logback-appender-file.xml"/>
-    <include resource="logback-appenders-fluentd.xml"/>
+    <include resource="logback-appender-fluentd.xml"/>
 
     <!--=================================================-->
     <!--Log and Trace configuration - RECOMMEND ALWAYS ON-->

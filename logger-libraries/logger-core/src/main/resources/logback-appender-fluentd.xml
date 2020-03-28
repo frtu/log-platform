@@ -22,6 +22,8 @@
         <!-- Host name/address and port number which Flentd placed -->
         <remoteHost>${FLUENTD_HOST}</remoteHost>
         <port>${FLUENTD_PORT}</port>
+        <!-- Allow to use timestamp of event-->
+        <useEventTime>true</useEventTime>
         <!-- [Optional] Additional fields(Pairs of key: value) -->
         <additionalField>
             <key>REGION</key>
