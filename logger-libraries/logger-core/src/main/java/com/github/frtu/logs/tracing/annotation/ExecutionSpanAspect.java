@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableMap;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -29,11 +30,10 @@ import java.lang.reflect.Method;
  * @author fred
  * @since 0.9.0
  */
+@Slf4j
 @Aspect
 @Component
 public class ExecutionSpanAspect {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionSpanAspect.class);
-
     public static final String MDC_KEY_TRACE_ID = "TRACE_ID";
 
     @Value("${trace.full.classname:#{environment.TRACE_FULL_CLASSNAME ?: false}}")
@@ -67,6 +67,7 @@ public class ExecutionSpanAspect {
             try {
                 return joinPoint.proceed();
             } catch (Exception e) {
+                // Non intrusive : log and propagate
                 traceHelper.flagError(e. getMessage());
                 throw e;
             }

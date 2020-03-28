@@ -58,14 +58,14 @@ public class TraceHelper {
      * @since 0.9.4
      */
     public void flagError(final Span activeSpan, final String errorMsg) {
-        LOGGER.error("Adding ERROR to current span. Error message: {}", errorMsg, new Exception(errorMsg));
+        LOGGER.debug("Adding ERROR to current span. Error message: {}", errorMsg, new Exception(errorMsg));
         if (activeSpan != null) {
             flagError(activeSpan);
             if (errorMsg != null) {
                 activeSpan.log(ImmutableMap.of(Fields.EVENT, Tags.ERROR.getKey(), Fields.MESSAGE, errorMsg));
             }
         } else {
-            LOGGER.error("Span MUST NOT be null ! Loosing span info !!");
+            LOGGER.warn("Span MUST NOT be null ! Loosing span info !!");
         }
     }
 
