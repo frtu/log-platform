@@ -85,6 +85,7 @@
         <!--<powermock.version>1.6.2</powermock.version>-->
         <!--<easymock.version>3.6</easymock.version>-->
         <!--===========================-->
+        <base-pom.version>1.0.3</base-pom.version>
         <governance-libraries.version>1.0.2</governance-libraries.version>
     </properties>
 
@@ -232,7 +233,7 @@
             <dependency>
                 <groupId>com.github.frtu.archetype</groupId>
                 <artifactId>base-pom</artifactId>
-                <version>1.0.0</version>
+                <version>${base-pom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
