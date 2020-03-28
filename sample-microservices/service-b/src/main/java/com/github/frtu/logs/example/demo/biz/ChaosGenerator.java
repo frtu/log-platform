@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ChaosGenerator {
     @ExecutionSpan(name = "ChaosGenerator.raiseException")
-    public void raiseException(@ToLog("error.message") String errorMsg) {
+    public void raiseException(@ToLog("input.parameter") String errorMsg) {
         throw new IllegalStateException(errorMsg);
     }
 }

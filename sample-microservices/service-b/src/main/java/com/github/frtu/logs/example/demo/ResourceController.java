@@ -1,5 +1,6 @@
 package com.github.frtu.logs.example.demo;
 
+import com.github.frtu.logs.example.demo.biz.PrinterUtil;
 import com.github.frtu.logs.tracing.annotation.ExecutionSpan;
 import com.github.frtu.logs.tracing.annotation.ToLog;
 import org.springframework.beans.factory.annotation.Autowired;
