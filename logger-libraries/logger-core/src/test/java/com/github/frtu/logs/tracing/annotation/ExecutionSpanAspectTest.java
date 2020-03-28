@@ -1,6 +1,6 @@
 package com.github.frtu.logs.tracing.annotation;
 
-import com.github.frtu.logs.config.ConfigTracingAOP;
+import com.github.frtu.logs.config.LogConfigTracingAOP;
 import com.github.frtu.spring.annotation.AnnotationMethodScan;
 import com.github.frtu.spring.annotation.AnnotationMethodScanner;
 import com.google.common.collect.ImmutableMap;
@@ -17,7 +17,7 @@ import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ConfigTracingAOP.class})
+@ContextConfiguration(classes = {LogConfigTracingAOP.class})
 public class ExecutionSpanAspectTest {
     @Autowired
     ExecutionSpanAspect executionSpanAspect;

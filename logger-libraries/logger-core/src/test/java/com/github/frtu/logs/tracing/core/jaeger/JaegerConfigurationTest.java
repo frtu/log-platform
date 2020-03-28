@@ -1,6 +1,6 @@
 package com.github.frtu.logs.tracing.core.jaeger;
 
-import com.github.frtu.logs.config.ConfigTracingOnly;
+import com.github.frtu.logs.config.LogConfigTracingOnly;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ConfigTracingOnly.class})
+@ContextConfiguration(classes = {LogConfigTracingOnly.class})
 public class JaegerConfigurationTest {
 
     @Autowired
@@ -42,7 +42,7 @@ public class JaegerConfigurationTest {
         System.setProperty("JAEGER_AGENT_HOST", agentHost);
         System.setProperty("JAEGER_AGENT_PORT", agentPort);
 
-        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(ConfigTracingOnly.class);
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(LogConfigTracingOnly.class);
         ctx.registerShutdownHook();
 
         final JaegerConfiguration jaegerConfiguration = ctx.getBean(JaegerConfiguration.class);

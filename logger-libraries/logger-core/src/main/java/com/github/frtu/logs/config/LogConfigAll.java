@@ -4,12 +4,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Enable {@link ConfigTracingAOP} and {@link ConfigFluentD}.
+ * Enable {@link LogConfigTracingAOP} and {@link LogConfigFluentD}.
  *
  * @author Frédéric TU
- * @since 0.9.5
+ * @since 1.0.2
  */
 @Configuration
-@ComponentScan(basePackageClasses = {ConfigTracingAOP.class, ConfigFluentD.class})
-public class ConfigAll {
+@ComponentScan(basePackageClasses = {LogConfigTracingAOP.class, LogConfigFluentD.class})
+public class LogConfigAll {
 }

@@ -7,13 +7,13 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Enable {@link ConfigTracingOnly} and {@link ExecutionSpanAspect}.
+ * Enable {@link LogConfigTracingOnly} and {@link ExecutionSpanAspect}.
  *
  * @author Frédéric TU
- * @since 0.9.5
+ * @since 1.0.2
  */
 @Configuration
-@ComponentScan(basePackageClasses = {ConfigTracingOnly.class, ExecutionSpanAspect.class})
+@ComponentScan(basePackageClasses = {LogConfigTracingOnly.class, ExecutionSpanAspect.class})
 @Conditional(value = AopConditionalOnClass.class)
-public class ConfigTracingAOP {
+public class LogConfigTracingAOP {
 }
