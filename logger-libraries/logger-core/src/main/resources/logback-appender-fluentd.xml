@@ -24,6 +24,8 @@
         <port>${FLUENTD_PORT}</port>
         <!-- Allow to use timestamp of event-->
         <useEventTime>true</useEventTime>
+        <!--  [Optional] If true, Map Marker is expanded instead of nesting in the marker name -->
+        <flattenMapMarker>true</flattenMapMarker>
         <!-- [Optional] Additional fields(Pairs of key: value) -->
         <additionalField>
             <key>REGION</key>
@@ -49,8 +51,6 @@
         <!--<key>TRACE_ID</key>-->
         <!--<value>%X{trace.id}</value>-->
         <!--</additionalField>-->
-        <!--  [Optional] If true, Map Marker is expanded instead of nesting in the marker name -->
-        <flattenMapMarker>false</flattenMapMarker>
 
         <encoder>
             <pattern>${ENCODER_PATTERN}</pattern>
