@@ -55,7 +55,7 @@ public class ExecutionSpanAspect {
             final String traceId = traceUtil.getTraceId(scope.span());
             MDC.put(MDC_KEY_TRACE_ID, traceId);
 //            try (var ignored = MDC.putCloseable(MDC_KEY_TRACE_ID, traceId)) {
-            LOGGER.debug("Creating span around signature={} and traceId={}", signatureName, traceId);
+            LOGGER.trace("Creating span around signature={} and traceId={}", signatureName, traceId);
             if (joinPointSignature instanceof MethodSignature) {
                 final Method method = ((MethodSignature) joinPointSignature).getMethod();
                 final Object[] args = joinPoint.getArgs();
@@ -130,7 +130,6 @@ public class ExecutionSpanAspect {
                 final String tagValue = tag.tagValue();
                 LOGGER.debug("Add static tags name={} and value={}", tagName, tagValue);
                 span.setTag(tagName, tagValue);
-//                span.setBaggageItem("transaction", tagValue);
             }
             if (ArrayUtils.isNotEmpty(args)) {
                 if (args.length >= scanParamAnnotations.length) {
