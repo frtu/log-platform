@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 public class StructuredLoggerTest {
 
     @Test
-    public void entries() {
+    public void entry() {
         //--------------------------------------
         // 1. Prepare data
         //--------------------------------------
@@ -19,16 +19,12 @@ public class StructuredLoggerTest {
         //--------------------------------------
         // 2. Execute
         //--------------------------------------
-        final Map.Entry<String, String> entries = StructuredLogger.entries(key, value);
+        final Map.Entry<String, String> entry = StructuredLogger.entry(key, value);
 
         //--------------------------------------
         // 3. Validate
         //--------------------------------------
-        assertEquals(key, entries.getKey());
-        assertEquals(value, entries.getValue());
-    }
-
-    @Test
-    public void info() {
+        assertEquals(key, entry.getKey());
+        assertEquals(value, entry.getValue());
     }
 }

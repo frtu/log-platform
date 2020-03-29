@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import static com.github.frtu.logs.core.StructuredLogger.entries;
+import static com.github.frtu.logs.core.StructuredLogger.entry;
 
 
 /**
@@ -35,8 +35,8 @@ public class ResourceController {
                 @ToLog("name") String name) {
 
         String orderId = "123";
-        LOGGER.debug(entries("txnId", orderId), entries("status", "NEW"));
-        LOGGER.info("Order saved {}", entries("orderId", orderId), entries("status", "OLD"));
+        LOGGER.debug(entry("txnId", orderId), entry("status", "NEW"));
+        LOGGER.info("Order saved {}", entry("orderId", orderId), entry("status", "OLD"));
 
         String formatString = printerUtil.tagDemo(name);
         printerUtil.logDemo(formatString);

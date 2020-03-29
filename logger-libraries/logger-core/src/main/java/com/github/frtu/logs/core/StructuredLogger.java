@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.AbstractMap;
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,9 +25,13 @@ public class StructuredLogger {
     private ObjectMapper mapper = new ObjectMapper();
     private Logger logger;
 
-    public static <K, V> Map.Entry<K, V> entries(K key, V value) {
+    public static <K, V> Map.Entry<K, V> entry(K key, V value) {
         final AbstractMap.SimpleImmutableEntry<K, V> entry = new AbstractMap.SimpleImmutableEntry<>(key, value);
         return entry;
+    }
+
+    public static Map unmodifiableMap(Map.Entry... entries) {
+        return Collections.unmodifiableMap(map(entries));
     }
 
     public static Map map(Map.Entry... entries) {
@@ -62,7 +67,7 @@ public class StructuredLogger {
 
     public void trace(String format, Map.Entry... entries) {
         if (this.logger.isTraceEnabled()) {
-            final Map map = map(entries);
+            final Map map = unmodifiableMap(entries);
             this.logger.trace(new MapMarker("", map), format, getData(map));
         }
     }
@@ -73,7 +78,7 @@ public class StructuredLogger {
 
     public void debug(String format, Map.Entry... entries) {
         if (this.logger.isDebugEnabled()) {
-            final Map map = map(entries);
+            final Map map = unmodifiableMap(entries);
             this.logger.debug(new MapMarker("", map), format, getData(map));
         }
     }
@@ -84,7 +89,7 @@ public class StructuredLogger {
 
     public void info(String format, Map.Entry... entries) {
         if (this.logger.isInfoEnabled()) {
-            final Map map = map(entries);
+            final Map map = unmodifiableMap(entries);
             this.logger.info(new MapMarker("", map), format, getData(map));
         }
     }
@@ -95,7 +100,7 @@ public class StructuredLogger {
 
     public void warn(String format, Map.Entry... entries) {
         if (this.logger.isWarnEnabled()) {
-            final Map map = map(entries);
+            final Map map = unmodifiableMap(entries);
             this.logger.warn(new MapMarker("", map), format, getData(map));
         }
     }
@@ -106,7 +111,7 @@ public class StructuredLogger {
 
     public void error(String format, Map.Entry... entries) {
         if (this.logger.isErrorEnabled()) {
-            final Map map = map(entries);
+            final Map map = unmodifiableMap(entries);
             this.logger.error(new MapMarker("", map), format, getData(map));
         }
     }
