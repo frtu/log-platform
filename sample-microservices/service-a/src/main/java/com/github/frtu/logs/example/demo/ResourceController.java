@@ -1,5 +1,8 @@
 package com.github.frtu.logs.example.demo;
 
+import com.github.frtu.logs.example.level.sub1.Sub1;
+import com.github.frtu.logs.example.level.sub1.sub2.Sub2;
+import com.github.frtu.logs.example.level.sub1.sub2.sub3.Sub3;
 import com.github.frtu.logs.tracing.core.TraceHelper;
 import com.google.common.collect.ImmutableMap;
 import io.micrometer.core.annotation.Timed;
@@ -66,5 +69,14 @@ public class ResourceController {
             scope.span().log(ImmutableMap.of("event", "println"));
             traceHelper.flagError("error msg!!");
         }
+    }
+
+    @RequestMapping("/levels")
+    @ResponseBody
+    String levels() {
+        new Sub1().levels();
+        new Sub2().levels();
+        new Sub3().levels();
+        return "See log levels in Logs";
     }
 }

@@ -40,6 +40,15 @@
             <version>${project.version}</version>
         </dependency>
 
+
+		<!--===========================-->
+		<!-- Platform - Lombok and Logback -->
+		<!--===========================-->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
 		<!-- logback-encoder -->
 		<dependency>
 			<groupId>net.logstash.logback</groupId>
