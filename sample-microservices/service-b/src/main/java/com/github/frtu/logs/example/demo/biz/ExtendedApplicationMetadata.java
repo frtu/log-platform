@@ -1,7 +1,7 @@
 package com.github.frtu.logs.example.demo.biz;
 
-import com.github.frtu.logs.core.ApplicationMetadata;
-import com.github.frtu.logs.core.DefaultApplicationMetadataFactory;
+import com.github.frtu.logs.core.metadata.ApplicationMetadata;
+import com.github.frtu.logs.core.metadata.DefaultApplicationMetadataFactory;
 import org.springframework.stereotype.Component;
 
 @Component(DefaultApplicationMetadataFactory.BEAN_NAME)
