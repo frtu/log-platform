@@ -27,7 +27,7 @@
         <logger name="com.github.frtu" level="INFO" additivity="true">
             <appender-ref ref="FLUENT"/>
         </logger>
-        <!--Remove the Span System.out-->
+        <!-- Deactivate 'Span reported' logs-->
         <logger name="io.jaegertracing.internal.reporters" level="WARN" additivity="true"/>
 
         <root level="WARN">

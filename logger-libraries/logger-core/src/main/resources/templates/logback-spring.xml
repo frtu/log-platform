@@ -8,6 +8,9 @@
     <springProperty scope="context" name="LOG_PATH" source="logging.path"/>
 
     <include resource="logback-web.xml"/>
+    <!-- OPTIONAL -->
+    <!--<include resource="logback-appender-file.xml"/>-->
+    <!--<include resource="logback-appender-file-json-encoder.xml"/>-->
 
     <!--Local start up-->
     <springProfile name="default">
@@ -20,8 +23,11 @@
     </springProfile>
 
     <!--Use for Staging env with fluentd -->
-    <springProfile name="prod">
+    <springProfile name="stage">
         <logger name="${groupId}" level="INFO" additivity="true"/>
+
+        <!-- Deactivate 'Span reported' logs-->
+        <logger name="io.jaegertracing.internal.reporters" level="WARN" additivity="true"/>
 
         <root level="WARN">
             <appender-ref ref="STDOUT"/>
@@ -32,6 +38,9 @@
     <!--Use for Production env -->
     <springProfile name="prod">
         <logger name="${groupId}" level="INFO" additivity="true"/>
+
+        <!-- Deactivate 'Span reported' logs-->
+        <logger name="io.jaegertracing.internal.reporters" level="WARN" additivity="true"/>
 
         <root level="WARN">
             <appender-ref ref="STDOUT"/>
