@@ -1,6 +1,6 @@
 package com.github.frtu.logs.config;
 
-import com.github.frtu.logs.core.DefaultApplicationMetadataFactory;
+import com.github.frtu.logs.core.metadata.DefaultApplicationMetadataFactory;
 import com.github.frtu.logs.tracing.core.TraceHelper;
 import com.github.frtu.logs.tracing.core.jaeger.JaegerConfiguration;
 import org.springframework.context.annotation.ComponentScan;

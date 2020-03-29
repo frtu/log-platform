@@ -1,6 +1,6 @@
 package com.github.frtu.logs.tracing.core.jaeger;
 
-import com.github.frtu.logs.core.ApplicationMetadata;
+import com.github.frtu.logs.core.metadata.ApplicationMetadata;
 import com.github.frtu.logs.tracing.core.TraceUtil;
 import io.jaegertracing.internal.JaegerSpan;
 import io.jaegertracing.internal.JaegerTracer;

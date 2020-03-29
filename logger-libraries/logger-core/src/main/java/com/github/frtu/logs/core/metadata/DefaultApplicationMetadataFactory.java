@@ -1,4 +1,4 @@
-package com.github.frtu.logs.core;
+package com.github.frtu.logs.core.metadata;
 
 import com.github.frtu.spring.conditional.LightConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * Allow override by creating another bean using name {@link #BEAN_NAME}
  *
  * @author Frédéric TU
- * @since 0.9.5
+ * @since 1.0.2
  */
 @Configuration
 public class DefaultApplicationMetadataFactory {

@@ -1,4 +1,4 @@
-package com.github.frtu.logs.core;
+package com.github.frtu.logs.core.metadata;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
  * Base {@link ApplicationMetadata} provider
  *
  * @author Frédéric TU
- * @since 0.9.5
+ * @since 1.0.2
  */
 public class BaseApplicationMetadata implements ApplicationMetadata {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseApplicationMetadata.class);

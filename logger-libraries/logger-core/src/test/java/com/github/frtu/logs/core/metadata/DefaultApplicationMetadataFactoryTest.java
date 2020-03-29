@@ -1,4 +1,4 @@
-package com.github.frtu.logs.core;
+package com.github.frtu.logs.core.metadata;
 
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

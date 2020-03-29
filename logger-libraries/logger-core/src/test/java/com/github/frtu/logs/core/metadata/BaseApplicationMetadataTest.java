@@ -1,10 +1,10 @@
-package com.github.frtu.logs.core;
+package com.github.frtu.logs.core.metadata;
 
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import static com.github.frtu.logs.core.BaseApplicationMetadata.SYSTEM_PROPERTY_SERVICE_NAME;
-import static org.junit.Assert.*;
+import static com.github.frtu.logs.core.metadata.BaseApplicationMetadata.SYSTEM_PROPERTY_SERVICE_NAME;
+import static org.junit.Assert.assertEquals;
 
 public class BaseApplicationMetadataTest {
     @Test

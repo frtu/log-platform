@@ -1,6 +1,6 @@
 package com.github.frtu.metrics.micrometer.config;
 
-import com.github.frtu.logs.core.ApplicationMetadata;
+import com.github.frtu.logs.core.metadata.ApplicationMetadata;
 import com.github.frtu.metrics.micrometer.aop.TimerSpanAspect;
 import com.github.frtu.spring.conditional.commons.AopConditionalOnClass;
 import io.micrometer.core.aop.TimedAspect;
