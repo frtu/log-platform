@@ -39,7 +39,7 @@ public class RpcLogger extends StructuredLogger {
     /**
      * Generic key equivalent to {@link io.opentracing.tag.Tags#HTTP_STATUS} for response code (usually number but can be String)
      */
-    public static final String KEY_RESPONSE_CODE = "response_code";
+    public static final String KEY_STATUS_CODE = "response_code";
 
     /**
      * Generic key equivalent to {@link io.opentracing.log.Fields#MESSAGE} for response message.
@@ -147,11 +147,11 @@ public class RpcLogger extends StructuredLogger {
     /**
      * Mark the response code (number or enum)
      *
-     * @param responseCode
+     * @param statusCode
      * @return
      */
-    public static Map.Entry<String, String> responseCode(String responseCode) {
-        return entry(KEY_RESPONSE_CODE, responseCode);
+    public static Map.Entry<String, String> statusCode(String statusCode) {
+        return entry(KEY_STATUS_CODE, statusCode);
     }
 
     /**

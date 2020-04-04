@@ -16,7 +16,9 @@ public class RpcLoggerTest {
         rpcLogger.info(client(),
                 method("POST"),
                 uri("/v1/users/"),
-                responseCode("201")
+                requestBody("{ \"user\": { \"name\": \"Fred\" }}"),
+                responseBody("{ \"id\": \"1234\" }"),
+                statusCode("201")
         );
     }
 
@@ -29,7 +31,8 @@ public class RpcLoggerTest {
         rpcLogger.warn(client(),
                 method("Query"),
                 uri("/HeroNameAndFriends"),
-                responseCode("409")
+                statusCode("123"),
+                errorMessage("The invitation has expired, please request a new one")
         );
     }
 }
