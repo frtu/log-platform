@@ -64,7 +64,10 @@ public class StructuredLogger {
                     }
                     return true;
                 })
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .collect(Collectors.toMap(Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (val1, val2) -> val2,
+                        LinkedHashMap::new));
         // Add null value for key back here
         nullValues.forEach(key -> result.put(key, null));
         return result;
