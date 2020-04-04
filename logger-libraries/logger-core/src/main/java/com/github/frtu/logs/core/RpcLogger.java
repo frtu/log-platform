@@ -27,14 +27,24 @@ public class RpcLogger extends StructuredLogger {
     public static final String KEY_METHOD = "method";
 
     /**
+     * Generic key for Request body
+     */
+    public static final String KEY_REQUEST_BODY = "request";
+
+    /**
+     * Generic key for Response body
+     */
+    public static final String KEY_RESPONSE_BODY = "response";
+
+    /**
      * Generic key equivalent to {@link io.opentracing.tag.Tags#HTTP_STATUS} for response code (usually number but can be String)
      */
     public static final String KEY_RESPONSE_CODE = "response_code";
+
     /**
      * Generic key equivalent to {@link io.opentracing.log.Fields#MESSAGE} for response message.
      */
-    public static final String KEY_RESPONSE_MESSAGE = "response_message";
-
+    public static final String KEY_ERROR_MESSAGE = "error_message";
 
     public static RpcLogger create(Class<?> clazz) {
         return create(LoggerFactory.getLogger(clazz));
@@ -115,6 +125,26 @@ public class RpcLogger extends StructuredLogger {
     }
 
     /**
+     * Log the request body
+     *
+     * @param requestBody
+     * @return
+     */
+    public static Map.Entry<String, String> requestBody(String requestBody) {
+        return entry(KEY_REQUEST_BODY, requestBody);
+    }
+
+    /**
+     * Log the response body
+     *
+     * @param responseBody
+     * @return
+     */
+    public static Map.Entry<String, String> responseBody(String responseBody) {
+        return entry(KEY_RESPONSE_BODY, responseBody);
+    }
+
+    /**
      * Mark the response code (number or enum)
      *
      * @param responseCode
@@ -125,12 +155,12 @@ public class RpcLogger extends StructuredLogger {
     }
 
     /**
-     * Log the response message
+     * Log the error message
      *
-     * @param responseMessage
+     * @param errorMessage
      * @return
      */
-    public static Map.Entry<String, String> responseMessage(String responseMessage) {
-        return entry(KEY_RESPONSE_MESSAGE, responseMessage);
+    public static Map.Entry<String, String> errorMessage(String errorMessage) {
+        return entry(KEY_ERROR_MESSAGE, errorMessage);
     }
 }
