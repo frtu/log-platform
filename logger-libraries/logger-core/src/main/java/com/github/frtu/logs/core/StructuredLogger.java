@@ -95,6 +95,10 @@ public class StructuredLogger {
         return create(LoggerFactory.getLogger(clazz));
     }
 
+    public static StructuredLogger create(String loggerName) {
+        return create(LoggerFactory.getLogger(loggerName));
+    }
+
     public static StructuredLogger create(Logger logger) {
         return new StructuredLogger(logger);
     }

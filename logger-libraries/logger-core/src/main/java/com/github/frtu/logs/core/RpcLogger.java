@@ -50,6 +50,10 @@ public class RpcLogger extends StructuredLogger {
         return create(LoggerFactory.getLogger(clazz));
     }
 
+    public static RpcLogger create(String loggerName) {
+        return create(LoggerFactory.getLogger(loggerName));
+    }
+
     public static RpcLogger create(Logger logger) {
         return new RpcLogger(logger);
     }

@@ -1,7 +1,6 @@
 package com.github.frtu.logs.core;
 
 import org.junit.Test;
-import org.slf4j.LoggerFactory;
 
 import static com.github.frtu.logs.core.RpcLogger.*;
 import static org.junit.Assert.assertNotNull;
@@ -10,7 +9,7 @@ public class RpcLoggerTest {
 
     @Test
     public void rest() {
-        final RpcLogger rpcLogger = RpcLogger.create(LoggerFactory.getLogger("rest"));
+        final RpcLogger rpcLogger = RpcLogger.create("rest");
         assertNotNull(rpcLogger);
 
         rpcLogger.info(client(),
@@ -24,7 +23,7 @@ public class RpcLoggerTest {
 
     @Test
     public void graphQl() {
-        final RpcLogger rpcLogger = RpcLogger.create(LoggerFactory.getLogger("graphQL"));
+        final RpcLogger rpcLogger = RpcLogger.create("graphQL");
         assertNotNull(rpcLogger);
 
         // https://graphql.org/learn/queries/#operation-name

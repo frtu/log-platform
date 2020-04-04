@@ -47,6 +47,77 @@ Allow to tag every logs sent to EFK with following information :
 * Specific Keys (logs) : TXN-123567, PERSIST-67890, ..
 * Business Data (logs) : username, ..
 
+
+### StructuredLogger
+
+Allow to create new dimension in ElasticSearch. Initialize the logger similar with Slf4j LOGGER :
+
+```java
+final static StructuredLogger STRUCTURED_LOGGER = StructuredLogger.create("usage");
+```
+
+Then use it for logging String or Integer values :
+
+```java
+STRUCTURED_LOGGER.info(entry("key1", "value1"), entry("key2", "value2"));
+STRUCTURED_LOGGER.info(entry("key1", 123), entry("key2", 456));
+```
+
+Gives a JSON log :
+
+```json
+{"key1":"value1","key2":"value2"}
+{"key1":123,"key2":456}
+```
+
+
+### RpcLogger
+
+Implementation to logs RPC calls, in a generic way :
+
+* RESTful
+* GraphQL
+* etc..
+
+#### RESTful sample
+
+Logging REST request & response API
+
+```java
+rpcLogger.info(client(),
+    method("POST"),
+    uri("/v1/users/"),
+    requestBody("{ \"user\": { \"name\": \"Fred\" }}"),
+    responseBody("{ \"id\": \"1234\" }"),
+    statusCode("201")
+);
+```
+
+Gives a log :
+
+```json
+{"kind":"client","method":"POST","uri":"/v1/users/","request":"{ \"user\": { \"name\": \"Fred\" }}","response":"{ \"id\": \"1234\" }","response_code":"201"}
+```
+
+#### GraphQL sample
+
+Logging API errors :
+
+```java
+rpcLogger.warn(client(),
+    method("Query"),
+    uri("/HeroNameAndFriends"),
+    statusCode("123"),
+    errorMessage("The invitation has expired, please request a new one")
+);
+```
+
+Gives a log :
+
+```json
+{"kind":"client","method":"Query","uri":"/HeroNameAndFriends","response_code":"123","error_message":"The invitation has expired, please request a new one"}
+```
+
 ## Adoption
 
 Import using :
@@ -126,7 +197,7 @@ Import logback configuration from [templates folder](https://github.com/frtu/log
 
 For troubleshooting, add the import to flush fluentd config into log :
 
-```
+```java
 @ComponentScan(basePackages = {"com.github.frtu.logs.infra.fluentd", "..."})
 ```
 
@@ -141,14 +212,14 @@ Just log with logback, activate FLUENT appender on Staging or Production.
 
 If you only need Jaeger io.opentracing.Tracer, just add :
 
-```
+```java
 @ComponentScan(basePackages = {"com.github.frtu.logs.tracing.core", "..."})
 ```
 
 #### Usage
 You can create a single Span structure :
 
-```
+```java
 Span span = tracer.buildSpan("say-hello1").start();
 LOGGER.info("hello1");
 span.finish();
@@ -156,7 +227,7 @@ span.finish();
 
 OR a node from a graph using Scope :
 
-```
+```java
 try (Scope scope = tracer.buildSpan("say-hello2").startActive(true)) {
 	LOGGER.info("hello2");
 }
@@ -172,7 +243,7 @@ try (Scope scope = tracer.buildSpan("say-hello2").startActive(true)) {
 
 If you want to use @ExecutionSpan to mark a method to create Span, add :
 
-```
+```java
 @ComponentScan(basePackages = {"com.github.frtu.logs.tracing", "..."})
 ```
 
@@ -202,7 +273,7 @@ OR spring-boot AOP :
 
 Just annotate with @ExecutionSpan all the methods you need to create a [DAG](https://en.wikipedia.org/wiki/Directed_acyclic_graph) :
 
-```
+```java
 @ExecutionSpan
 public String method() {}
 ```
@@ -219,7 +290,7 @@ See [sample-microservices/service-b](https://github.com/frtu/log-platform/tree/m
 
 To add Tag use :
 
-```
+```java
 @ExecutionSpan({
         @Tag(tagName = "key1", tagValue = "value1"),
         @Tag(tagName = "key2", tagValue = "value2")
@@ -229,7 +300,7 @@ public void method() {}
 
 To add Log use :
 
-```
+```java
 @ExecutionSpan
 public String method(@ToLog("paramName") String param) {}
 ```
@@ -238,7 +309,7 @@ public String method(@ToLog("paramName") String param) {}
 
 Use spring @Autowired to get instance of com.github.frtu.logs.tracing.core.TraceHelper :
 
-```
+```java
 @Autowired
 private TraceHelper traceHelper;
 
