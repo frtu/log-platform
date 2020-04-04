@@ -96,7 +96,7 @@ public class StructuredLogger {
         return new StructuredLogger(logger);
     }
 
-    public StructuredLogger(Logger logger) {
+    protected StructuredLogger(Logger logger) {
         this.logger = logger;
     }
 
