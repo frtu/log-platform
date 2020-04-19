@@ -101,11 +101,17 @@ Gives a log :
 
 #### GraphQL sample
 
+method
+
+* query
+* mutation
+* subscription 
+
 Logging API errors :
 
 ```java
 rpcLogger.warn(client(),
-    method("Query"),
+    method("query"),
     uri("/HeroNameAndFriends"),
     statusCode("123"),
     errorMessage("The invitation has expired, please request a new one")
