@@ -154,6 +154,16 @@ public class RpcLogger extends StructuredLogger {
      * @param statusCode
      * @return
      */
+    public static Map.Entry<String, String> statusCode(int statusCode) {
+        return statusCode(Integer.toString(statusCode));
+    }
+
+    /**
+     * Mark the response code (number or enum)
+     *
+     * @param statusCode
+     * @return
+     */
     public static Map.Entry<String, String> statusCode(String statusCode) {
         return entry(KEY_STATUS_CODE, statusCode);
     }
