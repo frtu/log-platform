@@ -22,6 +22,8 @@ import org.springframework.stereotype.Component;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import static com.github.frtu.logs.tracing.core.TraceHelper.MDC_KEY_TRACE_ID;
+
 /**
  * Aspect that create a {@link io.opentracing.Span} around the annotated method using {@link ExecutionSpan}.
  *
@@ -32,8 +34,6 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 public class ExecutionSpanAspect {
-    public static final String MDC_KEY_TRACE_ID = "TRACE_ID";
-
     @Value("${trace.full.classname:#{environment.TRACE_FULL_CLASSNAME ?: false}}")
     boolean isFullClassName;
 
@@ -53,7 +53,7 @@ public class ExecutionSpanAspect {
 
         try (Scope scope = traceHelper.getTracer().buildSpan(signatureName).startActive(true)) {
             final String traceId = traceUtil.getTraceId(scope.span());
-            MDC.put(MDC_KEY_TRACE_ID, traceId);
+            traceHelper.setTraceId(traceId);
 //            try (var ignored = MDC.putCloseable(MDC_KEY_TRACE_ID, traceId)) {
             LOGGER.trace("Creating span around signature={} and traceId={}", signatureName, traceId);
             if (joinPointSignature instanceof MethodSignature) {

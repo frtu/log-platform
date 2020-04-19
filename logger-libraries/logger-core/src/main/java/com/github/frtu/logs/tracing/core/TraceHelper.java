@@ -7,6 +7,7 @@ import io.opentracing.log.Fields;
 import io.opentracing.tag.Tags;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,8 @@ import org.springframework.stereotype.Component;
 public class TraceHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(TraceHelper.class);
 
+    public static final String MDC_KEY_TRACE_ID = "TRACE_ID";
+
     @Autowired
     Tracer tracer;
 
@@ -33,6 +36,10 @@ public class TraceHelper {
      */
     public Tracer getTracer() {
         return tracer;
+    }
+
+    public void setTraceId(String traceId) {
+        MDC.put(MDC_KEY_TRACE_ID, traceId);
     }
 
     /**
