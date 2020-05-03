@@ -1,9 +1,12 @@
 package com.github.frtu.logs.core;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -134,8 +137,38 @@ public class RpcLogger extends StructuredLogger {
      * @param requestBody
      * @return
      */
-    public static Map.Entry<String, String> requestBody(String requestBody) {
+    public static Map.Entry<String, Object> requestBody(String requestBody) {
+        return requestBody(requestBody, true);
+    }
+
+    /**
+     * Log the request body and allow to inline the JSON directly as an object
+     *
+     * @param requestBody
+     * @param inline
+     * @return
+     */
+    public static Map.Entry<String, Object> requestBody(String requestBody, boolean inline) {
+        if (inline) {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                JsonNode actualObj = mapper.readTree(requestBody);
+                return requestBody(actualObj);
+            } catch (IOException e) {
+                LOGGER.warn("Impossible to inline JSON, use the encapsulation instead for {}", requestBody, e);
+            }
+        }
         return entry(KEY_REQUEST_BODY, requestBody);
+    }
+
+    /**
+     * Log the request body as an JSON object
+     *
+     * @param jsonNode
+     * @return
+     */
+    public static Map.Entry<String, Object> requestBody(JsonNode jsonNode) {
+        return StructuredLogger.entry(KEY_REQUEST_BODY, jsonNode);
     }
 
     /**
@@ -144,8 +177,39 @@ public class RpcLogger extends StructuredLogger {
      * @param responseBody
      * @return
      */
-    public static Map.Entry<String, String> responseBody(String responseBody) {
+    public static Map.Entry<String, Object> responseBody(String responseBody) {
+        return requestBody(responseBody, true);
+    }
+
+    /**
+     * Log the response body and allow to inline the JSON directly as an object
+     *
+     * @param responseBody
+     * @param inline
+     * @return
+     */
+    public static Map.Entry<String, Object> responseBody(String responseBody, boolean inline) {
+        if (inline) {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                JsonNode actualObj = mapper.readTree(responseBody);
+                return responseBody(actualObj);
+            } catch (IOException e) {
+                LOGGER.warn("Impossible to inline JSON, use the encapsulation instead for {}", responseBody, e);
+            }
+        }
         return entry(KEY_RESPONSE_BODY, responseBody);
+
+    }
+
+    /**
+     * Log the response body as a JSON object
+     *
+     * @param jsonNode
+     * @return
+     */
+    public static Map.Entry<String, Object> responseBody(JsonNode jsonNode) {
+        return StructuredLogger.entry(KEY_RESPONSE_BODY, jsonNode);
     }
 
     /**

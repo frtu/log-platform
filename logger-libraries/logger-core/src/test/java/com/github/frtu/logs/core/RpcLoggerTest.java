@@ -16,7 +16,7 @@ public class RpcLoggerTest {
                 method("POST"),
                 uri("/v1/users/"),
                 requestBody("{ \"user\": { \"name\": \"Fred\" }}"),
-                responseBody("{ \"id\": \"1234\" }"),
+                responseBody("{ \"id\": \"1234\" }", false),
                 statusCode("201")
         );
     }
