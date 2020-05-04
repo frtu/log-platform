@@ -134,7 +134,7 @@ public class RpcLogger extends StructuredLogger {
     /**
      * Log the request body
      *
-     * @param requestBody
+     * @param requestBody request payload (if NOT JSON please pass false {@link #responseBody(String, boolean)})
      * @return
      */
     public static Map.Entry<String, Object> requestBody(String requestBody) {
@@ -144,18 +144,18 @@ public class RpcLogger extends StructuredLogger {
     /**
      * Log the request body and allow to inline the JSON directly as an object
      *
-     * @param requestBody
-     * @param inline
+     * @param requestBody request payload
+     * @param inlineJson  If is JSON and if we want to inline it
      * @return
      */
-    public static Map.Entry<String, Object> requestBody(String requestBody, boolean inline) {
-        if (inline) {
+    public static Map.Entry<String, Object> requestBody(String requestBody, boolean inlineJson) {
+        if (inlineJson) {
             ObjectMapper mapper = new ObjectMapper();
             try {
                 JsonNode actualObj = mapper.readTree(requestBody);
                 return requestBody(actualObj);
             } catch (IOException e) {
-                LOGGER.warn("Impossible to inline JSON, use the encapsulation instead for {}", requestBody, e);
+                LOGGER.trace("Input parameter is not be a well-format JSON : {}", requestBody, e);
             }
         }
         return entry(KEY_REQUEST_BODY, requestBody);
@@ -174,7 +174,7 @@ public class RpcLogger extends StructuredLogger {
     /**
      * Log the response body
      *
-     * @param responseBody
+     * @param responseBody response payload (if NOT JSON please pass false {@link #responseBody(String, boolean)})
      * @return
      */
     public static Map.Entry<String, Object> responseBody(String responseBody) {
@@ -184,18 +184,18 @@ public class RpcLogger extends StructuredLogger {
     /**
      * Log the response body and allow to inline the JSON directly as an object
      *
-     * @param responseBody
-     * @param inline
+     * @param responseBody response payload
+     * @param inlineJson   If is JSON and if we want to inline it
      * @return
      */
-    public static Map.Entry<String, Object> responseBody(String responseBody, boolean inline) {
-        if (inline) {
+    public static Map.Entry<String, Object> responseBody(String responseBody, boolean inlineJson) {
+        if (inlineJson) {
             ObjectMapper mapper = new ObjectMapper();
             try {
                 JsonNode actualObj = mapper.readTree(responseBody);
                 return responseBody(actualObj);
             } catch (IOException e) {
-                LOGGER.warn("Impossible to inline JSON, use the encapsulation instead for {}", responseBody, e);
+                LOGGER.trace("Input parameter is not be a well-format JSON : {}", responseBody, e);
             }
         }
         return entry(KEY_RESPONSE_BODY, responseBody);

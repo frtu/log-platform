@@ -99,7 +99,7 @@ public class ExecutionSpanAspect {
                         if (scanParamAnnotation != null) {
                             final String logName = scanParamAnnotation.value();
                             final Object logValue = args[i];
-                            LOGGER.debug("Add logs name={} and value={}", logName, logValue);
+                            LOGGER.trace("Add logs name={} and value={}", logName, logValue);
                             span.log(ImmutableMap.of(logName, logValue));
                         }
                     }

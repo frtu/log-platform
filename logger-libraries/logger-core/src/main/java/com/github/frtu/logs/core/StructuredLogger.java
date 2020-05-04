@@ -35,7 +35,7 @@ public class StructuredLogger {
      * @return null if one of key or value is null
      */
     public static <K, V> Map.Entry<K, V> entry(K key, V value) {
-        LOGGER.trace("Add key:{} value:{{}", key, value);
+        LOGGER.trace("Add key:{} value:{}", key, value);
         AbstractMap.SimpleImmutableEntry<K, V> entry = new AbstractMap.SimpleImmutableEntry<>(key, value);
         return entry;
     }
