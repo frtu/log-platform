@@ -1,5 +1,6 @@
 package com.github.frtu.logs.example.demo.biz;
 
+import com.github.frtu.logs.core.RpcLogger;
 import com.github.frtu.logs.tracing.annotation.ExecutionSpan;
 import com.github.frtu.logs.tracing.annotation.Tag;
 import com.github.frtu.logs.tracing.annotation.ToLog;
@@ -10,9 +11,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
+import static com.github.frtu.logs.core.RpcLogger.*;
+
 @Component
 public class PrinterUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(PrinterUtil.class);
+    private static final RpcLogger RPC_LOGGER = RpcLogger.create(LOGGER);
 
     @Autowired
     private TraceHelper traceHelper;
@@ -28,10 +34,16 @@ public class PrinterUtil {
         String helloStr = String.format("Hello, %s!", helloTo);
         traceHelper.addTag("tag-block", helloTo);
 
+        final Map.Entry[] entries = entries(client(),
+                method("GET"),
+                uri(ChaosGenerator.OPERATION_NAME_RAISE_EXCEPTION),
+                requestBody(helloTo, false));
         try {
-            chaosGenerator.raiseException("Raise sample exception to demonstrate exception flag!");
+            final String response = chaosGenerator.raiseException("Randomly generate exception to demonstrate exception flag!");
+            RPC_LOGGER.info(entries, responseBody(response, false), statusCode("200"));
         } catch (IllegalStateException e) {
             // Just to demonstrate exception calling issue
+            RPC_LOGGER.warn(entries, statusCode("500"));
         }
         LOGGER.debug("Flow should continue");
 

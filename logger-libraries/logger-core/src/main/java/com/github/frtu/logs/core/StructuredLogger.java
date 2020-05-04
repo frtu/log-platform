@@ -4,6 +4,7 @@ import ch.qos.logback.more.appenders.marker.MapMarker;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +39,10 @@ public class StructuredLogger {
         LOGGER.trace("Add key:{} value:{}", key, value);
         AbstractMap.SimpleImmutableEntry<K, V> entry = new AbstractMap.SimpleImmutableEntry<>(key, value);
         return entry;
+    }
+
+    public static Map.Entry[] entries(Map.Entry... entries) {
+        return entries;
     }
 
     /**
@@ -111,6 +116,11 @@ public class StructuredLogger {
         trace(BASE_FORMAT, entries);
     }
 
+    public void trace(Map.Entry[] entryArray, Map.Entry... entries) {
+        final Map.Entry[] allEntries = ArrayUtils.addAll(entryArray, entries);
+        trace(BASE_FORMAT, allEntries);
+    }
+
     public void trace(String format, Map.Entry... entries) {
         if (this.logger.isTraceEnabled()) {
             final Map map = unmodifiableMap(entries);
@@ -120,6 +130,11 @@ public class StructuredLogger {
 
     public void debug(Map.Entry... entries) {
         debug(BASE_FORMAT, entries);
+    }
+
+    public void debug(Map.Entry[] entryArray, Map.Entry... entries) {
+        final Map.Entry[] allEntries = ArrayUtils.addAll(entryArray, entries);
+        debug(BASE_FORMAT, allEntries);
     }
 
     public void debug(String format, Map.Entry... entries) {
@@ -133,6 +148,11 @@ public class StructuredLogger {
         info(BASE_FORMAT, entries);
     }
 
+    public void info(Map.Entry[] entryArray, Map.Entry... entries) {
+        final Map.Entry[] allEntries = ArrayUtils.addAll(entryArray, entries);
+        info(BASE_FORMAT, allEntries);
+    }
+
     public void info(String format, Map.Entry... entries) {
         if (this.logger.isInfoEnabled()) {
             final Map map = unmodifiableMap(entries);
@@ -144,6 +164,11 @@ public class StructuredLogger {
         warn(BASE_FORMAT, entries);
     }
 
+    public void warn(Map.Entry[] entryArray, Map.Entry... entries) {
+        final Map.Entry[] allEntries = ArrayUtils.addAll(entryArray, entries);
+        warn(BASE_FORMAT, allEntries);
+    }
+
     public void warn(String format, Map.Entry... entries) {
         if (this.logger.isWarnEnabled()) {
             final Map map = unmodifiableMap(entries);
@@ -153,6 +178,11 @@ public class StructuredLogger {
 
     public void error(Map.Entry... entries) {
         error(BASE_FORMAT, entries);
+    }
+
+    public void error(Map.Entry[] entryArray, Map.Entry... entries) {
+        final Map.Entry[] allEntries = ArrayUtils.addAll(entryArray, entries);
+        error(BASE_FORMAT, allEntries);
     }
 
     public void error(String format, Map.Entry... entries) {

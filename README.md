@@ -99,6 +99,15 @@ Gives a log :
 {"kind":"client","method":"POST","uri":"/v1/users/","request":"{ \"user\": { \"name\": \"Fred\" }}","response":"{ \"id\": \"1234\" }","response_code":"201"}
 ```
 
+#### Structured Log
+
+* kind : client|server
+* method : String
+* uri : String
+* response_code
+* request
+* response
+
 #### GraphQL sample
 
 method

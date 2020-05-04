@@ -7,15 +7,23 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Slf4j
 @Component
 public class ChaosGenerator {
+    public static final String OPERATION_NAME_RAISE_EXCEPTION = "ChaosGenerator.raiseException";
+
     private List<String> memoryLeak = new ArrayList<>();
 
-    @ExecutionSpan(name = "ChaosGenerator.raiseException")
-    public void raiseException(@ToLog("input.parameter") String errorMsg) {
-        throw new IllegalStateException(errorMsg);
+    @ExecutionSpan(name = OPERATION_NAME_RAISE_EXCEPTION)
+    public String raiseException(@ToLog("input.parameter") String errorMsg) {
+        Random rand = new Random();
+        int n = rand.nextInt(100);
+        if ((n % 2) == 0) {
+            throw new IllegalStateException(errorMsg);
+        }
+        return Integer.toString(n);
     }
 
     public String memoryleak() {
