@@ -199,7 +199,6 @@ public class RpcLogger extends StructuredLogger {
             }
         }
         return entry(KEY_RESPONSE_BODY, responseBody);
-
     }
 
     /**
