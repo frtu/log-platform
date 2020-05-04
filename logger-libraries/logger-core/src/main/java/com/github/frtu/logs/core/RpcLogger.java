@@ -178,7 +178,7 @@ public class RpcLogger extends StructuredLogger {
      * @return
      */
     public static Map.Entry<String, Object> responseBody(String responseBody) {
-        return requestBody(responseBody, true);
+        return responseBody(responseBody, true);
     }
 
     /**
