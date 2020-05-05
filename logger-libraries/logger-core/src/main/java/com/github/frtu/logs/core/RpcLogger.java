@@ -3,7 +3,6 @@ package com.github.frtu.logs.core;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,8 +49,6 @@ public class RpcLogger extends StructuredLogger {
      */
     public static final String KEY_ERROR_MESSAGE = "error_message";
 
-    private final String prefix;
-
     public static RpcLogger create(Class<?> clazz) {
         return create(clazz, null);
     }
@@ -76,17 +73,8 @@ public class RpcLogger extends StructuredLogger {
         return new RpcLogger(logger, prefixes);
     }
 
-    protected RpcLogger(Logger logger) {
-        this(logger, null);
-    }
-
-    public RpcLogger(Logger logger, String... prefixes) {
-        super(logger);
-        if (ArrayUtils.isEmpty(prefixes)) {
-            this.prefix = "";
-        } else {
-            this.prefix = String.join(".", prefixes) + ".";
-        }
+    protected RpcLogger(Logger logger, String... prefixes) {
+        super(logger, prefixes);
     }
 
     /**
@@ -141,28 +129,8 @@ public class RpcLogger extends StructuredLogger {
      * @param uri
      * @return
      */
-    public Map.Entry<String, String> urip(String uri) {
-        return entry(this.prefix + KEY_URI, uri);
-    }
-
-    /**
-     * Business operation name
-     *
-     * @param uri
-     * @return
-     */
     public static Map.Entry<String, String> uri(String uri) {
         return entry(KEY_URI, uri);
-    }
-
-    /**
-     * To categorize Query (read without modification) or Mutation (modification)
-     *
-     * @param method
-     * @return
-     */
-    public Map.Entry<String, String> methodp(String method) {
-        return entry(this.prefix + KEY_METHOD, method);
     }
 
     /**
@@ -253,16 +221,6 @@ public class RpcLogger extends StructuredLogger {
      */
     public static Map.Entry<String, Object> responseBody(JsonNode jsonNode) {
         return StructuredLogger.entry(KEY_RESPONSE_BODY, jsonNode);
-    }
-
-    /**
-     * Mark the response code (number or enum)
-     *
-     * @param statusCode
-     * @return
-     */
-    public Map.Entry<String, String> statusCodep(String statusCode) {
-        return entry(this.prefix + KEY_STATUS_CODE, statusCode);
     }
 
     /**

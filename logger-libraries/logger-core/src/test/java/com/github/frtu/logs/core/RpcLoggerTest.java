@@ -27,11 +27,11 @@ public class RpcLoggerTest {
         assertNotNull(rpcLogger);
 
         rpcLogger.info(client(),
-                rpcLogger.methodp("POST"),
-                rpcLogger.urip("/v1/users/"),
+                method("POST"),
+                uri("/v1/users/"),
                 requestBody("{ \"user\": { \"name\": \"Fred\" }}"),
                 responseBody("{ \"id\": \"1234\" }", false),
-                rpcLogger.statusCodep("201")
+                statusCode("201")
         );
     }
 
