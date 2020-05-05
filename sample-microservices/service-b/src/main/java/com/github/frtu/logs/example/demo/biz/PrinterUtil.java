@@ -35,15 +35,15 @@ public class PrinterUtil {
         traceHelper.addTag("tag-block", helloTo);
 
         final Map.Entry[] entries = entries(client(),
-                RPC_LOGGER.methodp("GET"),
-                RPC_LOGGER.urip(ChaosGenerator.OPERATION_NAME_RAISE_EXCEPTION),
+                method("GET"),
+                uri(ChaosGenerator.OPERATION_NAME_RAISE_EXCEPTION),
                 requestBody(helloTo, false));
         try {
             final String response = chaosGenerator.raiseException("Randomly generate exception to demonstrate exception flag!");
-            RPC_LOGGER.info(entries, responseBody(response, false), RPC_LOGGER.statusCodep("200"));
+            RPC_LOGGER.info(traceHelper, entries, responseBody(response, false), statusCode("200"));
         } catch (IllegalStateException e) {
             // Just to demonstrate exception calling issue
-            RPC_LOGGER.warn(entries, RPC_LOGGER.statusCodep("500"));
+            RPC_LOGGER.warn(traceHelper, entries, statusCode("500"));
         }
         LOGGER.debug("Flow should continue");
 

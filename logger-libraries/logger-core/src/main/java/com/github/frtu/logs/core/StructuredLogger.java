@@ -161,6 +161,10 @@ public class StructuredLogger {
         trace(traceHelper, allEntries);
     }
 
+    public void trace(String format, Map.Entry... entries) {
+        trace(null, format, entries);
+    }
+
     public void trace(TraceHelper traceHelper, String format, Map.Entry... entries) {
         if (this.logger.isTraceEnabled()) {
             final Map map = unmodifiableMap(this.prefix, entries);
@@ -184,6 +188,10 @@ public class StructuredLogger {
     public void debug(TraceHelper traceHelper, Map.Entry[] entryArray, Map.Entry... entries) {
         final Map.Entry[] allEntries = ArrayUtils.addAll(entryArray, entries);
         debug(traceHelper, allEntries);
+    }
+
+    public void debug(String format, Map.Entry... entries) {
+        debug(null, format, entries);
     }
 
     public void debug(TraceHelper traceHelper, String format, Map.Entry... entries) {
@@ -211,6 +219,10 @@ public class StructuredLogger {
         info(traceHelper, allEntries);
     }
 
+    public void info(String format, Map.Entry... entries) {
+        info(null, format, entries);
+    }
+
     public void info(TraceHelper traceHelper, String format, Map.Entry... entries) {
         if (this.logger.isInfoEnabled()) {
             final Map map = unmodifiableMap(this.prefix, entries);
@@ -236,9 +248,14 @@ public class StructuredLogger {
         warn(traceHelper, allEntries);
     }
 
+    public void warn(String format, Map.Entry... entries) {
+        warn(null, format, entries);
+    }
+
     public void warn(TraceHelper traceHelper, String format, Map.Entry... entries) {
         if (this.logger.isWarnEnabled()) {
             final Map map = unmodifiableMap(this.prefix, entries);
+            traceHelper.flagError();
             logTracer(traceHelper, map);
             this.logger.warn(new MapMarker("", map), format, getJson(map));
         }
@@ -261,9 +278,14 @@ public class StructuredLogger {
         error(traceHelper, allEntries);
     }
 
+    public void error(String format, Map.Entry... entries) {
+        error(null, format, entries);
+    }
+
     public void error(TraceHelper traceHelper, String format, Map.Entry... entries) {
         if (this.logger.isErrorEnabled()) {
             final Map map = unmodifiableMap(this.prefix, entries);
+            traceHelper.flagError();
             logTracer(traceHelper, map);
             this.logger.error(new MapMarker("", map), format, getJson(map));
         }
