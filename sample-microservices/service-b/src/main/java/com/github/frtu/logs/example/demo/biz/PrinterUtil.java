@@ -18,7 +18,7 @@ import static com.github.frtu.logs.core.RpcLogger.*;
 @Component
 public class PrinterUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(PrinterUtil.class);
-    private static final RpcLogger RPC_LOGGER = RpcLogger.create(LOGGER);
+    private static final RpcLogger RPC_LOGGER = RpcLogger.create(LOGGER, "frtu");
 
     @Autowired
     private TraceHelper traceHelper;
@@ -35,15 +35,15 @@ public class PrinterUtil {
         traceHelper.addTag("tag-block", helloTo);
 
         final Map.Entry[] entries = entries(client(),
-                method("GET"),
-                uri(ChaosGenerator.OPERATION_NAME_RAISE_EXCEPTION),
+                RPC_LOGGER.methodp("GET"),
+                RPC_LOGGER.urip(ChaosGenerator.OPERATION_NAME_RAISE_EXCEPTION),
                 requestBody(helloTo, false));
         try {
             final String response = chaosGenerator.raiseException("Randomly generate exception to demonstrate exception flag!");
-            RPC_LOGGER.info(entries, responseBody(response, false), statusCode("200"));
+            RPC_LOGGER.info(entries, responseBody(response, false), RPC_LOGGER.statusCodep("200"));
         } catch (IllegalStateException e) {
             // Just to demonstrate exception calling issue
-            RPC_LOGGER.warn(entries, statusCode("500"));
+            RPC_LOGGER.warn(entries, RPC_LOGGER.statusCodep("500"));
         }
         LOGGER.debug("Flow should continue");
 

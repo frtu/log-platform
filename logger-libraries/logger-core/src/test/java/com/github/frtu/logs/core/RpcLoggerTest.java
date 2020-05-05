@@ -22,6 +22,20 @@ public class RpcLoggerTest {
     }
 
     @Test
+    public void restPrefix() {
+        final RpcLogger rpcLogger = RpcLogger.create("rest", "frtu");
+        assertNotNull(rpcLogger);
+
+        rpcLogger.info(client(),
+                rpcLogger.methodp("POST"),
+                rpcLogger.urip("/v1/users/"),
+                requestBody("{ \"user\": { \"name\": \"Fred\" }}"),
+                responseBody("{ \"id\": \"1234\" }", false),
+                rpcLogger.statusCodep("201")
+        );
+    }
+
+    @Test
     public void graphQl() {
         final RpcLogger rpcLogger = RpcLogger.create("graphQL");
         assertNotNull(rpcLogger);
