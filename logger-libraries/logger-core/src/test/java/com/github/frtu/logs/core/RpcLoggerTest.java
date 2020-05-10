@@ -23,7 +23,7 @@ public class RpcLoggerTest {
 
     @Test
     public void restPrefix() {
-        final RpcLogger rpcLogger = RpcLogger.create("rest", "frtu");
+        final RpcLogger rpcLogger = RpcLogger.create("rest", "com", "frtu");
         assertNotNull(rpcLogger);
 
         rpcLogger.info(client(),

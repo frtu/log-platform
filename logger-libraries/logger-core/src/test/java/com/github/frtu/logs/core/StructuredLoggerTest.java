@@ -109,4 +109,11 @@ public class StructuredLoggerTest {
         assertNotNull(STRUCTURED_LOGGER);
         STRUCTURED_LOGGER.info(entry("key1", 123), entry("key2", 456));
     }
+
+    @Test
+    public void usageStringValuePrefix() {
+        final StructuredLogger STRUCTURED_LOGGER_PREFIX = StructuredLogger.create("usage", "com", "frtu");
+        assertNotNull(STRUCTURED_LOGGER_PREFIX);
+        STRUCTURED_LOGGER_PREFIX.info(entry("key1", "value1"), entry("key2", "value2"));
+    }
 }
