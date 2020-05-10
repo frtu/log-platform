@@ -50,6 +50,8 @@ Allow to tag every logs sent to EFK with following information :
 
 ### StructuredLogger
 
+#### Logs
+
 Allow to create new dimension in ElasticSearch. Initialize the logger similar with Slf4j LOGGER :
 
 ```java
@@ -70,7 +72,6 @@ Gives a JSON log :
 {"key1":123,"key2":456}
 ```
 
-
 ### RpcLogger
 
 Implementation to logs RPC calls, in a generic way :
@@ -79,42 +80,7 @@ Implementation to logs RPC calls, in a generic way :
 * GraphQL
 * etc..
 
-#### RESTful sample
-
-Logging REST request & response API
-
-```java
-rpcLogger.info(client(),
-    method("POST"),
-    uri("/v1/users/"),
-    requestBody("{ \"user\": { \"name\": \"Fred\" }}"),
-    responseBody("{ \"id\": \"1234\" }"),
-    statusCode("201")
-);
-```
-
-Gives a log :
-
-```json
-{"kind":"client","method":"POST","uri":"/v1/users/","request":"{ \"user\": { \"name\": \"Fred\" }}","response":"{ \"id\": \"1234\" }","response_code":"201"}
-```
-
-#### Structured Log
-
-* kind : client|server
-* method : String
-* uri : String
-* response_code
-* request
-* response
-
 #### GraphQL sample
-
-method
-
-* query
-* mutation
-* subscription 
 
 Logging API errors :
 
@@ -129,9 +95,24 @@ rpcLogger.warn(client(),
 
 Gives a log :
 
+* kind : client | server
+* method : query | mutation | subscription
+* uri : String
+* response_code
+
 ```json
-{"kind":"client","method":"Query","uri":"/HeroNameAndFriends","response_code":"123","error_message":"The invitation has expired, please request a new one"}
+{
+   "kind":"client",
+   "method":"Query",
+   "uri":"/HeroNameAndFriends",
+   "response_code":"123",
+   "error_message":"The invitation has expired, please request a new one"
+}
 ```
+
+#### Full guide for Structured Logging
+
+[Full guide for Structured Logging](docs/guide_for_structured_logging.md)
 
 ## Adoption
 
