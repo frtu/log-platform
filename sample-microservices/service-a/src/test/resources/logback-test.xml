@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- https://logback.qos.ch/manual/configuration.html -->
+<!-- https://logback.qos.ch/manual/appenders.html#FileAppender -->
+<configuration>
+    <property name="ENCODER_PATTERN"
+              value="%d{HH:mm:ss.SSS} [%thread] %X{TRACE_ID} %-5level %logger{36} #%line - %msg"/>
+    <include resource="logback-appender-console.xml"/>
+
+    <property name="LOG_PATH" value="./target/logs"/>
+    <include resource="logback-appender-file.xml"/>
+
+    <logger name="com.github.frtu.logs.example.level" level="ERROR" additivity="true">
+        <appender-ref ref="FILE_APPENDER"/>
+    </logger>
+
+    <logger name="com.github.frtu.logs.example.level.sub1" level="DEBUG" additivity="true"/>
+    <logger name="com.github.frtu.logs.example.level.sub1.sub2" level="TRACE" additivity="true"/>
+    <logger name="com.github.frtu.logs.example.level.sub1.sub2.sub3" level="INFO" additivity="true"/>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

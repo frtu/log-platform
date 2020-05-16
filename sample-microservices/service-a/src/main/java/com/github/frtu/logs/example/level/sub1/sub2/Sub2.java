@@ -8,5 +8,6 @@ public class Sub2 {
         LOGGER.trace("trace logs");
         LOGGER.debug("debug logs");
         LOGGER.info("info logs");
+        LOGGER.error("error logs");
     }
 }
