@@ -24,7 +24,25 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>de.codecentric</groupId>
+			<artifactId>spring-boot-admin-starter-client</artifactId>
+		</dependency>
 	</dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Internal domain dependencies -->
+            <dependency>
+                <groupId>com.github.frtu.logs</groupId>
+                <artifactId>tools-bom</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 	<build>
         <resources>
