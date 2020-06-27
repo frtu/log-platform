@@ -19,6 +19,7 @@
     <modules>
         <module>logger-libraries</module>
         <!--<module>sample-microservices</module>-->
+        <module>tools</module>
     </modules>
 
     <url>https://github.com/frtu/log-platform/</url>
