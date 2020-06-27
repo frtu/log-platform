@@ -314,17 +314,6 @@ void method() {
 }
 ```
 
-## Runtime changing the level
-
-[Dynamically changing spring-boot application logs LEVEL](https://www.baeldung.com/spring-boot-changing-log-level-at-runtime)
-
-* Using Actuator => org.springframework.boot:**spring-boot-starter-actuator**
-
-```
-management.endpoints.web.exposure.include=loggers
-management.endpoint.loggers.enabled=true
-```
-
 ## Context passing
 
 ### Dev local
@@ -349,6 +338,22 @@ Also add Jaeger Configuration for :
 
 Go to folder **/sample-microservices/** and ```docker-compose up```
 
+## Tools & Tips
+
+### Runtime changing the level
+
+[Dynamically changing spring-boot application logs LEVEL](https://www.baeldung.com/spring-boot-changing-log-level-at-runtime)
+
+* Using Actuator => org.springframework.boot:**spring-boot-starter-actuator**
+
+```
+management.endpoints.web.exposure.include=loggers
+management.endpoint.loggers.enabled=true
+```
+
+### Operation tools
+
+Check [Tools](tools)
 
 ## Infrastructure
 
