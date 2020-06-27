@@ -1,0 +1,87 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+*.versionsBackup
+
+# For more precise ignore, look at https://www.gitignore.io/api/jetbrains
+**/.idea/**
+**/*.iml
+
+# CMake
+**/cmake-build-*/
+
+# File-based project format
+*.iws
+
+# IntelliJ
+out/
+
+
+*.pydevproject
+**/.project
+**/.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+**/target/
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# CDT-specific
+.cproject
+
+# PDT-specific
+.buildpath
+
+# Windows image file caches
+**/Thumbs.db
+**/ehthumbs.db
+
+# Folder config file
+**/Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Mac crap
+**/.DS_Store
+
+
+*.py[co]
+
+# Packages
+*.egg
+*.egg-info
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
