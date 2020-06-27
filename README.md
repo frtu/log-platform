@@ -351,9 +351,11 @@ management.endpoints.web.exposure.include=loggers
 management.endpoint.loggers.enabled=true
 ```
 
+Can also use the shell scripts at [bash-fwk/lib-dev-spring](https://github.com/frtu/bash-fwk/blob/master/libs/README.md#library-dev-spring)
+
 ### Operation tools
 
-Check [Tools](tools)
+Check [Tools](tools) module.
 
 ## Infrastructure
 

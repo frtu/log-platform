@@ -8,7 +8,7 @@ Based on [https://www.baeldung.com/spring-boot-admin](https://www.baeldung.com/s
 
 ### Starting Admin Server
 
-Quickly start an spring-boot-admin using [spring-boot-admin-web](tools/spring-boot-admin-web)
+Quickly start an spring-boot-admin using [spring-boot-admin-web](spring-boot-admin-web)
 
 Reach it out using [http://localhost:8888](http://localhost:8888) OR behind a reverse proxy.
 
