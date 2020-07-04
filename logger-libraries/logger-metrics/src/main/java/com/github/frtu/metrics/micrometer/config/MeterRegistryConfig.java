@@ -26,8 +26,11 @@ public class MeterRegistryConfig {
     @Bean
     MeterRegistryCustomizer<MeterRegistry> metricsCommonTags(ApplicationMetadata applicationMetadata) {
         final String applicationName = applicationMetadata.getApplicationName();
-        LOGGER.debug("Adding app.name='{}' to MeterRegistry", applicationName);
-        return registry -> registry.config().commonTags("app.name", applicationName);
+
+        // Aligned with https://grafana.com/grafana/dashboards/4701
+        LOGGER.debug("Adding application='{}' to MeterRegistry", applicationName);
+        return registry -> registry.config()
+                .commonTags("application", applicationName);
     }
 
     /**

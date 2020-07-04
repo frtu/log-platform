@@ -338,6 +338,54 @@ Also add Jaeger Configuration for :
 
 Go to folder **/sample-microservices/** and ```docker-compose up```
 
+## Metrics
+
+### Adoption
+
+#### Import the JAR
+
+```XML
+<dependency>
+    <groupId>com.github.frtu.logs</groupId>
+    <artifactId>logger-metrics</artifactId>
+    <version>${frtu-logger.version}</version>
+</dependency>
+```
+
+Check the latest version (clickable) :
+
+[<img src="https://img.shields.io/maven-central/v/com.github.frtu.logs/logger-metrics?label=latest%20release%20:%20logger-metrics"/>](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22logger-metrics%22+g%3A%22com.github.frtu.logs%22)
+
+#### Spring Annotation
+
+Import Spring Configuration :
+
+```java
+@Import({MetricsConfig.class, ...})
+```
+
+#### Spring Properties
+
+```properties
+# =================================
+# Metrics related configurations
+# =================================
+# https://www.callicoder.com/spring-boot-actuator/
+management.endpoints.web.exposure.include=*
+
+management.endpoint.health.show-details=always
+
+management.endpoint.metrics.enabled=true
+management.endpoint.prometheus.enabled=true
+
+management.metrics.export.prometheus.enabled=true
+```
+
+### Adoption
+
+* [Grafana Dashboard JVM (Micrometer) - 4701](https://grafana.com/grafana/dashboards/4701)
+
+
 ## Tools & Tips
 
 ### Runtime changing the level
