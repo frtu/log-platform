@@ -383,8 +383,14 @@ management.metrics.export.prometheus.enabled=true
 
 ### Adoption
 
-* [Grafana Dashboard JVM (Micrometer) - 4701](https://grafana.com/grafana/dashboards/4701)
+Grafana Dashboard :
 
+* [JVM (Micrometer) - 4701](https://grafana.com/grafana/dashboards/4701)
+* [Spring Boot 2.1 Statistics - 10280](https://grafana.com/grafana/dashboards/10280)
+
+### See more
+
+* [micrometer.io prometheus installation](http://micrometer.io/docs/registry/prometheus#_installing)
 
 ## Tools & Tips
 
