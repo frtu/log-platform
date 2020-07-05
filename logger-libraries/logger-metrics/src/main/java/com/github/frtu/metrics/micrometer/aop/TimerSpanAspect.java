@@ -2,6 +2,7 @@ package com.github.frtu.metrics.micrometer.aop;
 
 import com.github.frtu.logs.tracing.annotation.ExecutionSpan;
 import com.github.frtu.logs.tracing.annotation.ExecutionSpanAspect;
+import com.github.frtu.metrics.micrometer.model.MeasurementHandle;
 import com.github.frtu.metrics.micrometer.model.Measurement;
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -84,16 +85,12 @@ public class TimerSpanAspect {
         }
         final Measurement measurement = new Measurement(registry, operationName);
         measurement.setOperationDescription(operationDescription);
+        measurement.setTags(tagsBasedOnJoinPoint.apply(joinPoint));
 
-        measurement.startExecution();
-        final Iterable<Tag> tags = tagsBasedOnJoinPoint.apply(joinPoint);
-        try {
-            final Object proceed = joinPoint.proceed();
-            measurement.stopExecution(tags);
-            return proceed;
+        try (MeasurementHandle handle = new MeasurementHandle(measurement)) {
+            return joinPoint.proceed();
         } catch (Throwable ex) {
-            measurement.stopExecution(ex.getClass().getSimpleName(), tags);
-            throw ex;
+            throw MeasurementHandle.flagError(ex);
         }
     }
 }

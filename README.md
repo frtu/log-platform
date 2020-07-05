@@ -392,15 +392,12 @@ final Iterable<Tag> tags = ...;
 
 final Measurement measurement = new Measurement(registry, operationName);
 measurement.setOperationDescription(operationDescription);
+measurement.setTags(tags);
 
-measurement.startExecution();
-try {
-    final Object proceed = joinPoint.proceed();
-    measurement.stopExecution(tags);
-    return proceed;
+try (MeasurementHandle handle = new MeasurementHandle(measurement)) {
+    return joinPoint.proceed();
 } catch (Throwable ex) {
-    measurement.stopExecution(ex.getClass().getSimpleName(), tags);
-    throw ex;
+    throw MeasurementHandle.flagError(ex);
 }
 ```
 

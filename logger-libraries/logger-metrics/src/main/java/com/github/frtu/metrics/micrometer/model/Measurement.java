@@ -23,6 +23,10 @@ public class Measurement {
     @Setter
     private String operationDescription;
 
+    @Getter
+    @Setter
+    private Iterable<Tag> tags;
+
     private final MeterRegistry registry;
     private final Counter executionCounter;
     private Timer.Sample timerSample;
@@ -43,11 +47,11 @@ public class Measurement {
     }
 
 
-    public void stopExecution(Iterable<Tag> tags) {
-        stopExecution(null, tags);
+    public void stopExecution() {
+        stopExecution(null);
     }
 
-    public void stopExecution(String exceptionName, Iterable<Tag> tags) {
+    public void stopExecution(String exceptionName) {
         try {
             LOGGER.trace("Stop Timer for {} with exception:{}", operationName, exceptionName);
             counter(exceptionName).increment();
