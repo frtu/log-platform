@@ -7,6 +7,9 @@
 
     <include resource="logback-web.xml"/>
 
+    <!-- IMPORT TO GET SPRING Context init, URLs & JPA -->
+    <!--<include resource="logback-spring-debug.xml"/>-->
+
     <!--Current application-->
     <logger name="${groupId}" level="TRACE" additivity="true">
         <appender-ref ref="FLUENT"/>
