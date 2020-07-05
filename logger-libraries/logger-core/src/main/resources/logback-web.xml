@@ -3,20 +3,11 @@
 <included>
     <include resource="logback-core.xml"/>
 
-    <!--===========================-->
-    <!--Web and App Container-->
-    <!--===========================-->
-    <!--Spring init latency-->
-    <!--<logger name="org.springframework.web.context" level="INFO" additivity="true"/>-->
-    <!--Web server protocol events-->
-    <!--<logger name="org.apache.coyote" level="INFO" additivity="true"/>-->
-    <!--App server starting INFO and server.xml, session, filters, lifecycle DEBUG-->
-    <!--<logger name="org.apache.catalina" level="INFO" additivity="true"/>-->
     <!--=============================-->
     <!--SERVICE - RECOMMEND ALWAYS ON-->
     <!--=============================-->
     <!--Tomcat port information and startup complete-->
-    <logger name="org.springframework.boot.web.embedded.tomcat" level="INFO" additivity="true"/>
+    <!--<logger name="org.springframework.boot.web.embedded.tomcat" level="INFO" additivity="true"/>-->
     <!--=============================-->
     <!--SERVICE - RECOMMEND ALWAYS OFF-->
     <!--=============================-->
@@ -25,36 +16,9 @@
     <!--=============================-->
 
     <!--===========================-->
-    <!--Spring Init-->
-    <!--===========================-->
-    <!--Scanned properties-->
-    <!--<logger name="org.springframework.boot.context.config" level="DEBUG" additivity="true"/>-->
-    <!--Scanned annotations-->
-    <!--<logger name="org.springframework.context.annotation" level="DEBUG" additivity="true"/>-->
-    <!--Bean instanciation-->
-    <!--<logger name="org.springframework.beans.factory.support" level="DEBUG" additivity="true"/>-->
-    <!--Spring Boot scan-->
-    <!--<logger name="org.springframework.boot.autoconfigure.logging" level="INFO" additivity="true"/>-->
-    <!--===========================-->
-    <!--Spring Web-->
-    <!--===========================-->
-    <!--URLs-->
-    <!--<logger name="org.springframework.boot.web.servlet" level="DEBUG" additivity="true"/>-->
-    <!--<logger name="org.springframework.web.servlet" level="DEBUG" additivity="true"/>-->
-    <!--Exception mapper and Reponse Body-->
-    <!--<logger name="org.springframework.web.servlet.mvc.method.annotation" level="DEBUG" additivity="true"/>-->
-    <!--<logger name="org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor" level="DEBUG" additivity="true"/>-->
-    <!--===========================-->
     <!--Spring Others-->
     <!--===========================-->
     <!-- TO CHECK VERSION for spring-boot, spring & Tomcat -->
     <!--<logger name="${groupId}.Application" level="DEBUG" additivity="true"/>-->
     <!--<logger name="org.apache.catalina.core.StandardEngine" level="INFO" additivity="true"/>-->
-    
-    <!-- ENDPOINTS Actuate-->
-    <!--<logger name="org.springframework.boot.actuate.metrics.web.servlet" level="DEBUG" additivity="true"/>-->
-    <!--<logger name="org.springframework.boot.actuate.endpoint.web" level="DEBUG" additivity="true"/>-->
-
-    <!--Validator and JPA-->
-    <!--<logger name="org.hibernate.validator.internal.engine" level="DEBUG" additivity="true"/>-->
 </included>
