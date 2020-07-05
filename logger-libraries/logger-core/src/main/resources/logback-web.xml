@@ -16,7 +16,7 @@
     <!--SERVICE - RECOMMEND ALWAYS ON-->
     <!--=============================-->
     <!--Tomcat port information and startup complete-->
-    <logger name="org.springframework.boot.web.embedded.tomcat" level="WARN" additivity="true"/>
+    <logger name="org.springframework.boot.web.embedded.tomcat" level="INFO" additivity="true"/>
     <!--=============================-->
     <!--SERVICE - RECOMMEND ALWAYS OFF-->
     <!--=============================-->
@@ -47,7 +47,11 @@
     <!--===========================-->
     <!--Spring Others-->
     <!--===========================-->
-    <!--Actuate-->
+    <!-- TO CHECK VERSION for spring-boot, spring & Tomcat -->
+    <!--<logger name="${groupId}.Application" level="DEBUG" additivity="true"/>-->
+    <!--<logger name="org.apache.catalina.core.StandardEngine" level="INFO" additivity="true"/>-->
+    
+    <!-- ENDPOINTS Actuate-->
     <!--<logger name="org.springframework.boot.actuate.metrics.web.servlet" level="DEBUG" additivity="true"/>-->
     <!--<logger name="org.springframework.boot.actuate.endpoint.web" level="DEBUG" additivity="true"/>-->
 

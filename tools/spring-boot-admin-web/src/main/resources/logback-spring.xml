@@ -14,8 +14,10 @@
 
     <!--Local start up-->
     <springProfile name="default">
-        <!--Current application-->
-        <logger name="${groupId}" level="TRACE" additivity="true"/>
+        <!-- SECURE SCAN - PRINT VERSION for spring-boot, spring & Tomcat -->
+        <logger name="org.apache.catalina.core.StandardEngine" level="INFO" additivity="true"/>
+        <!-- Current application & Profile-->
+        <logger name="com.github.frtu" level="TRACE" additivity="true"/>
 
         <root level="INFO">
             <appender-ref ref="STDOUT"/>
@@ -24,7 +26,7 @@
 
     <!--Use for Staging env with fluentd -->
     <springProfile name="stage">
-        <logger name="${groupId}" level="INFO" additivity="true"/>
+        <logger name="com.github.frtu" level="INFO" additivity="true"/>
 
         <!-- Deactivate 'Span reported' logs-->
         <logger name="io.jaegertracing.internal.reporters" level="WARN" additivity="true"/>
@@ -37,7 +39,7 @@
 
     <!--Use for Production env -->
     <springProfile name="prod">
-        <logger name="${groupId}" level="INFO" additivity="true"/>
+        <logger name="com.github.frtu" level="INFO" additivity="true"/>
 
         <!-- Deactivate 'Span reported' logs-->
         <logger name="io.jaegertracing.internal.reporters" level="WARN" additivity="true"/>

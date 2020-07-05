@@ -28,7 +28,7 @@ public class MeterRegistryConfig {
         final String applicationName = applicationMetadata.getApplicationName();
 
         // Aligned with https://grafana.com/grafana/dashboards/4701
-        LOGGER.debug("Adding application='{}' to MeterRegistry", applicationName);
+        LOGGER.info("METRICS - Adding application='{}' to MeterRegistry", applicationName);
         return registry -> registry.config()
                 .commonTags("application", applicationName);
     }
@@ -42,7 +42,7 @@ public class MeterRegistryConfig {
     @Bean
     @Conditional(AopConditionalOnClass.class)
     TimedAspect timedAspect(MeterRegistry registry) {
-        LOGGER.info("Activate @Annotation io.micrometer.core.annotation.Timed using TimedAspect");
+        LOGGER.debug("Activate @Annotation io.micrometer.core.annotation.Timed using TimedAspect");
         return new TimedAspect(registry);
     }
 
@@ -56,7 +56,7 @@ public class MeterRegistryConfig {
     @Bean
     @Conditional(AopConditionalOnClass.class)
     TimerSpanAspect timerSpanAspect(MeterRegistry registry) {
-        LOGGER.info("Activate @Annotation com.github.frtu.logs.tracing.annotation.ExecutionSpan using TimerSpanAspect");
+        LOGGER.debug("Activate @Annotation com.github.frtu.logs.tracing.annotation.ExecutionSpan using TimerSpanAspect");
         return new TimerSpanAspect(registry);
     }
 }

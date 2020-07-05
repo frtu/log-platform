@@ -26,6 +26,6 @@ public class BaseApplicationMetadata implements ApplicationMetadata {
 
     @PostConstruct
     public void logs() {
-        LOGGER.info("applicationName:{}", applicationName);
+        LOGGER.debug("applicationName:{}", applicationName);
     }
 }

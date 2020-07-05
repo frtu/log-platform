@@ -52,7 +52,7 @@ public class JaegerConfiguration implements TraceUtil {
 
     @PostConstruct
     public void logs() {
-        LOGGER.info("jaegerEndpoint:'{}', jaegerAgentHost:'{}', jaegerAgentPort:'{}'", jaegerEndpoint, jaegerAgentHost, jaegerAgentPort);
+        LOGGER.info("TRACING - jaegerEndpoint:'{}', jaegerAgentHost:'{}', jaegerAgentPort:'{}'", jaegerEndpoint, jaegerAgentHost, jaegerAgentPort);
         this.tracer = initTracer(applicationMetadata.getApplicationName(), samplingTrace);
         checkTracerInitialized();
         if (!GlobalTracer.isRegistered()) {
@@ -85,7 +85,7 @@ public class JaegerConfiguration implements TraceUtil {
     }
 
     public static JaegerTracer initTracer(String applicationName, boolean samplingTrace) {
-        LOGGER.info("Creating Tracer using applicationName={} samplingTrace={}", applicationName, samplingTrace);
+        LOGGER.info("TRACING - Creating Tracer using applicationName={} samplingTrace={}", applicationName, samplingTrace);
 
         // https://www.jaegertracing.io/docs/1.15/sampling/
         SamplerConfiguration samplerConfig = SamplerConfiguration.fromEnv();

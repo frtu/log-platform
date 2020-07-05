@@ -29,7 +29,7 @@ public class FluentdConfiguration {
 
     @PostConstruct
     public void logs() {
-        LOGGER.info("fluentdHost:'{}', fluentdPort:'{}'", fluentdHost, fluentdPort);
+        LOGGER.info("LOGGING - fluentdHost:'{}', fluentdPort:'{}'", fluentdHost, fluentdPort);
         final boolean isHealthCheckActivated = fluentdHealthCheckPort != null;
         if (isHealthCheckActivated) {
             LOGGER.debug("Activate fluentd HealthCheck HTTP using port:{}", fluentdHealthCheckPort);
