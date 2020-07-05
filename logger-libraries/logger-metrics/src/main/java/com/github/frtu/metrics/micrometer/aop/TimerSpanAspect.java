@@ -2,8 +2,12 @@ package com.github.frtu.metrics.micrometer.aop;
 
 import com.github.frtu.logs.tracing.annotation.ExecutionSpan;
 import com.github.frtu.logs.tracing.annotation.ExecutionSpanAspect;
+import com.github.frtu.metrics.micrometer.model.Measurement;
 import io.micrometer.core.aop.TimedAspect;
-import io.micrometer.core.instrument.*;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Metrics;
+import io.micrometer.core.instrument.Tag;
+import io.micrometer.core.instrument.Tags;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -16,8 +20,6 @@ import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 import java.util.function.Function;
-
-import static io.micrometer.core.aop.TimedAspect.EXCEPTION_TAG;
 
 /**
  * Same as {@link TimedAspect} but allow to run metrics based on {@link ExecutionSpan}.
@@ -62,38 +64,36 @@ public class TimerSpanAspect {
     public Object timedExecutionSpan(ProceedingJoinPoint joinPoint) throws Throwable {
         final Signature joinPointSignature = joinPoint.getSignature();
 
-        String metricName = null;
-        String description = null;
+        String operationName = null;
+        String operationDescription = null;
+        // Get Name & Description from annotation @ExecutionSpan
         if (joinPointSignature instanceof MethodSignature) {
             final Method method = ((MethodSignature) joinPointSignature).getMethod();
             final ExecutionSpan methodAnnotation = method.getAnnotation(ExecutionSpan.class);
-            description = methodAnnotation.description();
-            metricName = methodAnnotation.name();
+            operationName = methodAnnotation.name();
+            operationDescription = methodAnnotation.description();
         }
-        if (StringUtils.isEmpty(metricName)) {
-            metricName = ExecutionSpanAspect.getName(joinPointSignature, isFullClassName);
-        }
-
-        Timer.Sample sample = Timer.start(registry);
-
-        String exceptionClass = "none";
-        try {
-            return joinPoint.proceed();
-        } catch (Exception ex) {
-            exceptionClass = ex.getClass().getSimpleName();
-            throw ex;
-        } finally {
-            try {
-                LOGGER.trace("Stop Timer for {}", metricName);
-                sample.stop(Timer.builder(metricName)
-                        .description(description)
-                        .tags(EXCEPTION_TAG, exceptionClass)
-                        .tags(tagsBasedOnJoinPoint.apply(joinPoint))
-                        .register(registry));
-            } catch (Exception e) {
-                // ignoring on purpose
+        // Get Name & Description from method name
+        if (StringUtils.isEmpty(operationName)) {
+            operationDescription = ExecutionSpanAspect.getName(joinPointSignature, true);
+            if (isFullClassName) {
+                operationName = operationDescription;
+            } else {
+                operationName = ExecutionSpanAspect.getName(joinPointSignature, false);
             }
         }
-    }
+        final Measurement measurement = new Measurement(registry, operationName);
+        measurement.setOperationDescription(operationDescription);
 
+        measurement.startExecution();
+        final Iterable<Tag> tags = tagsBasedOnJoinPoint.apply(joinPoint);
+        try {
+            final Object proceed = joinPoint.proceed();
+            measurement.stopExecution(tags);
+            return proceed;
+        } catch (Throwable ex) {
+            measurement.stopExecution(ex.getClass().getSimpleName(), tags);
+            throw ex;
+        }
+    }
 }

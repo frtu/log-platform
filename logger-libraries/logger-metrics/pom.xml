@@ -43,6 +43,14 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
 
+        <!--===========================-->
+        <!-- Platform - Lombok and Logback -->
+        <!--===========================-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
         <!-- TEST -->
         <dependency>
             <groupId>junit</groupId>
