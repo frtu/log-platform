@@ -381,7 +381,30 @@ management.endpoint.prometheus.enabled=true
 management.metrics.export.prometheus.enabled=true
 ```
 
-### Adoption
+### Custom measurement
+
+This library provide a class to abtract from direct Counter & Timer :
+
+* *com.github.frtu.metrics.micrometer.model.Measurement*
+
+```java
+final Iterable<Tag> tags = ...;
+
+final Measurement measurement = new Measurement(registry, operationName);
+measurement.setOperationDescription(operationDescription);
+
+measurement.startExecution();
+try {
+    final Object proceed = joinPoint.proceed();
+    measurement.stopExecution(tags);
+    return proceed;
+} catch (Throwable ex) {
+    measurement.stopExecution(ex.getClass().getSimpleName(), tags);
+    throw ex;
+}
+```
+
+### Dashboard
 
 Grafana Dashboard :
 
@@ -418,6 +441,26 @@ Check [Tools](tools) module.
 ### With Docker Compose (dev local)
 
 * [EFK Docker Compose](https://docs.fluentd.org/container-deployment/docker-compose) : Using Elastic Search & Kibana OSS (Open source under Apache 2.0 license)
+
+#### URLs
+
+Monitoring
+
+* Grafana : [http://localhost:3000/](http://localhost:3000/)
+* Prometheus : [http://localhost:9090/](http://localhost:9090/)
+* Prometheus Targets : [http://localhost:9090/targets](http://localhost:9090/)
+
+Distributed Tracing :
+
+* Jaeger : [http://localhost:16686/](http://localhost:16686/)
+
+Logging :
+
+* Kibana : [http://localhost:5601/](http://localhost:5601/)
+
+Tools :
+
+* Spring Admin : [http://localhost:8888/](http://localhost:8888/)
 
 ### With K8S (production)
 
