@@ -255,8 +255,10 @@ public class StructuredLogger {
     public void warn(TraceHelper traceHelper, String format, Map.Entry... entries) {
         if (this.logger.isWarnEnabled()) {
             final Map map = unmodifiableMap(this.prefix, entries);
-            traceHelper.flagError();
-            logTracer(traceHelper, map);
+            if (traceHelper != null) {
+                traceHelper.flagError();
+                logTracer(traceHelper, map);
+            }
             this.logger.warn(new MapMarker("", map), format, getJson(map));
         }
     }
