@@ -25,11 +25,12 @@ scrape_configs:
     static_configs:
       - targets: ['node-exporter:9100']
 
-#  - job_name: 'spring-actuator'
-#    metrics_path: '/actuator/prometheus'
-#    scrape_interval: 5s
-#    static_configs:
-#    - targets: ['HOST_IP:8080']
+  # https://stackabuse.com/monitoring-spring-boot-apps-with-micrometer-prometheus-and-grafana/
+  - job_name: 'spring-actuator'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+    - targets: ['10.0.0.11:8080']
 
 #alerting:
 #  alertmanagers:

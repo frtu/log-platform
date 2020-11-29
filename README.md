@@ -401,6 +401,14 @@ try (MeasurementHandle handle = new MeasurementHandle(measurement)) {
 }
 ```
 
+### Troubleshooting
+
+ATTENTION : docker node-exporter is pulling using local IP. You may need to check if the IP configured is correct in file [/infra/docker/prometheus/prometheus.yml](/infra/docker/prometheus/prometheus.yml)
+
+Check if Prometheus Node-Exporter Dashboard at ```/targets``` url :
+
+* From docker : [http://localhost:9090/targets](http://localhost:9090/targets)
+
 ### Dashboard
 
 Grafana Dashboard :
