@@ -57,7 +57,8 @@ public class Measurement {
             counter(exceptionName).increment();
 
             if (timerSample != null) {
-                this.timerSample.stop(timer(exceptionName, tags));
+                final long durationInNS = this.timerSample.stop(timer(exceptionName, tags));
+                LOGGER.trace("Added duration:{}", durationInNS);
             }
         } catch (Exception e) {
             // ignoring on purpose

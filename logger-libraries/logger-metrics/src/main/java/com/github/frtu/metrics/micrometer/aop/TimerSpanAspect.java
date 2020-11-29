@@ -2,13 +2,10 @@ package com.github.frtu.metrics.micrometer.aop;
 
 import com.github.frtu.logs.tracing.annotation.ExecutionSpan;
 import com.github.frtu.logs.tracing.annotation.ExecutionSpanAspect;
-import com.github.frtu.metrics.micrometer.model.MeasurementHandle;
 import com.github.frtu.metrics.micrometer.model.Measurement;
+import com.github.frtu.metrics.micrometer.model.MeasurementHandle;
 import io.micrometer.core.aop.TimedAspect;
-import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.Metrics;
-import io.micrometer.core.instrument.Tag;
-import io.micrometer.core.instrument.Tags;
+import io.micrometer.core.instrument.*;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -19,8 +16,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
 import java.util.function.Function;
+
+import static io.micrometer.core.aop.TimedAspect.EXCEPTION_TAG;
 
 /**
  * Same as {@link TimedAspect} but allow to run metrics based on {@link ExecutionSpan}.
@@ -59,6 +59,11 @@ public class TimerSpanAspect {
     public TimerSpanAspect(MeterRegistry registry, Function<ProceedingJoinPoint, Iterable<Tag>> tagsBasedOnJoinPoint) {
         this.registry = registry;
         this.tagsBasedOnJoinPoint = tagsBasedOnJoinPoint;
+    }
+
+    @PostConstruct
+    public void init() {
+        LOGGER.debug("Init {} with TimerSpanAspect:{}", TimerSpanAspect.class, isFullClassName);
     }
 
     @Around("@annotation(com.github.frtu.logs.tracing.annotation.ExecutionSpan)")
