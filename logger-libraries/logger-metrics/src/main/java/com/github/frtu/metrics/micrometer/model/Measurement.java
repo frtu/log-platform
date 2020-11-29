@@ -32,14 +32,29 @@ public class Measurement {
     private Timer.Sample timerSample;
 
     public Measurement(MeterRegistry registry, String operationName) {
-        this(registry, operationName, operationName);
+        this(registry, operationName, null);
     }
 
     public Measurement(MeterRegistry registry, String operationName, String metricName) {
         this.registry = registry;
         this.metricName = metricName;
         this.operationName = operationName;
-        executionCounter = registry.counter(metricName + COUNTER_SUFFIX_EXEC);
+        executionCounter = registry.counter(buildMetricName(COUNTER_SUFFIX_EXEC));
+    }
+
+    public String buildMetricName(String... suffixes) {
+        StringBuilder metricNameBuilder = new StringBuilder();
+        if (!StringUtils.isEmpty(metricName)) {
+            metricNameBuilder.append(metricName);
+        } else {
+            metricNameBuilder.append(operationName);
+        }
+        if (suffixes != null) {
+            for (String suffix : suffixes) {
+                metricNameBuilder.append('.').append(suffix);
+            }
+        }
+        return metricNameBuilder.toString();
     }
 
     public void startExecution() {
@@ -71,14 +86,17 @@ public class Measurement {
             return this.executionCounter;
         } else {
             return registry.counter(
-                    metricName + COUNTER_SUFFIX_FAILURE,
+                    buildMetricName(COUNTER_SUFFIX_FAILURE),
                     Tags.of("type", exceptionName));
         }
     }
 
     protected Timer timer(String exceptionName, Iterable<Tag> tags) {
-        return Timer.builder(operationName)
-                .description(operationDescription)
+        final Timer.Builder builder = Timer.builder(buildMetricName()).description(operationDescription);
+        if (!StringUtils.isEmpty(metricName)) {
+            builder.tag("operation", operationName);
+        }
+        return builder
                 .tags(EXCEPTION_TAG, (exceptionName != null) ? exceptionName : "none")
                 .tags(tags)
                 .register(registry);
