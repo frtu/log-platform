@@ -99,6 +99,7 @@ public class Measurement {
         return builder
                 .tags(EXCEPTION_TAG, (exceptionName != null) ? exceptionName : "none")
                 .tags(tags)
+                .publishPercentiles(0.5, 0.95, 0.99)
                 .register(registry);
     }
 }
