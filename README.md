@@ -409,16 +409,24 @@ Check if Prometheus Node-Exporter Dashboard at ```/targets``` url :
 
 * From docker : [http://localhost:9090/targets](http://localhost:9090/targets)
 
-### Dashboard
+### Grafana Dashboard
 
 Grafana Dashboard :
 
 * [JVM (Micrometer) - 4701](https://grafana.com/grafana/dashboards/4701)
 * [Spring Boot 2.1 Statistics - 10280](https://grafana.com/grafana/dashboards/10280)
 
+#### with Prometheus
+
+Prometheus is a TSDB (TimeSerie DataBase), meanings all metrics data points will always contains a Time. To see different metrics types, you can refer to this blog to correctly fetch metrics :
+
+* [https://blog.pvincent.io/2017/12/prometheus-blog-series-part-2-metric-types/](https://blog.pvincent.io/2017/12/prometheus-blog-series-part-2-metric-types/)
+
+
 ### See more
 
 * [micrometer.io prometheus installation](http://micrometer.io/docs/registry/prometheus#_installing)
+* [Concepts & Metrics naming](https://micrometer.io/docs/concepts)
 
 ## Tools & Tips
 
