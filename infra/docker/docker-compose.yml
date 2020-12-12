@@ -1,13 +1,39 @@
 version: '3'
 services:
+  fluentbit:
+    image: ${FLUENT_BIT_IMAGE}
+    expose:
+      - 24224
+    ports:
+      - 24224:24224
+      - 24224:24224/udp
+    volumes:
+      - ./fluent-bit:/fluent-bit/etc/
+    command: /fluent-bit/bin/fluent-bit -c /fluent-bit/etc/fluent-bit.conf
+#   UNCOMMENT FOR PULLING ./log folder
+#    volumes:
+#      - ./log:/var/log
+#    command: |
+#      /fluent-bit/bin/fluent-bit
+#        -i tail
+#        -p Refresh_Interval=10
+#        -p path=/var/log/*.log
+#        -o es
+#        -p Host=elasticsearch.logging
+#        -p Port=9200
+#        -p Index=fluent_bit
+#        -p Type=logs
+    networks:
+      - logging
+
   elasticsearch.logging:
     image: ${ELASTICSEARCH_IMAGE}
     restart: always
     environment:
-      - 'node.name=LOGGING'
-      - 'discovery.type=single-node'
-#      - 'bootstrap.memory_lock=true'
-#      - 'ES_JAVA_OPTS=-Xms256m -Xmx256m'
+      - node.name=LOGGING
+      - discovery.type=single-node
+#      - bootstrap.memory_lock=true
+#      - ES_JAVA_OPTS=-Xms256m -Xmx256m
     expose:
       - 9200
     ports:
@@ -30,29 +56,29 @@ services:
       # https://www.elastic.co/guide/en/kibana/current/docker.html
       ELASTICSEARCH_HOSTS: http://elasticsearch.logging:9200
 
-  fluentd.logging:
-    image: ${FLUENTD_IMAGE}
-    volumes:
-      - ./fluentd/conf:/etc/fluent
-#    build: ./fluentd
+#  fluentd.logging:
+#    image: ${FLUENTD_IMAGE}
 #    volumes:
-#      - ./fluentd/conf:/fluentd/etc
-    links:
-      - elasticsearch.logging
-    ports:
-      - 24220:24220
-      - 24224:24224
-      - 24224:24224/udp
-      - 9880:9880
-    networks:
-      - logging
-    environment:
-      ES_PORT_9200_TCP_ADDR: elasticsearch.logging
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "1G"
-        max-file: "2"
+#      - ./fluentd/conf:/etc/fluent
+##    build: ./fluentd
+##    volumes:
+##      - ./fluentd/conf:/fluentd/etc
+#    links:
+#      - elasticsearch.logging
+#    ports:
+#      - 24220:24220
+#      - 24224:24224
+#      - 24224:24224/udp
+#      - 9880:9880
+#    networks:
+#      - logging
+#    environment:
+#      ES_PORT_9200_TCP_ADDR: elasticsearch.logging
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "1G"
+#        max-file: "2"
 
   jaeger.logging:
     image: ${JAEGER_IMAGE}
