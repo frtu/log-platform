@@ -12,6 +12,8 @@ import static io.micrometer.core.aop.TimedAspect.EXCEPTION_TAG;
 public class Measurement {
     public static final String COUNTER_SUFFIX_EXEC = "_count";
     public static final String COUNTER_SUFFIX_FAILURE = "_failure";
+    public static final String MEASUREMENT_PREFIX = "span";
+
 
     @Getter
     private final String metricName;
@@ -44,6 +46,7 @@ public class Measurement {
 
     public String buildMetricName(String... suffixes) {
         StringBuilder metricNameBuilder = new StringBuilder();
+        metricNameBuilder.append(MEASUREMENT_PREFIX).append(".");
         if (!StringUtils.isEmpty(metricName)) {
             metricNameBuilder.append(metricName);
         } else {
@@ -97,9 +100,9 @@ public class Measurement {
             builder.tag("operation", operationName);
         }
         return builder
-                .tags(EXCEPTION_TAG, (exceptionName != null) ? exceptionName : "none")
                 .tags(tags)
-                .publishPercentiles(0.5, 0.95, 0.99)
+//                .tags(EXCEPTION_TAG, (exceptionName != null) ? exceptionName : "none")
+//                .publishPercentiles(0.5, 0.95, 0.99)
                 .register(registry);
     }
 }

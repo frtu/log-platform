@@ -2,15 +2,21 @@ package com.github.frtu.metrics.micrometer.config;
 
 import com.github.frtu.logs.core.metadata.ApplicationMetadata;
 import com.github.frtu.metrics.micrometer.aop.TimerSpanAspect;
+import com.github.frtu.metrics.micrometer.model.MeasurementHandle;
 import com.github.frtu.spring.conditional.commons.AopConditionalOnClass;
 import io.micrometer.core.aop.TimedAspect;
+import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.config.MeterFilter;
+import io.micrometer.core.instrument.distribution.DistributionStatisticConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+
+import java.time.Duration;
 
 /**
  * Micrometer registry configuration
@@ -30,7 +36,27 @@ public class MeterRegistryConfig {
         // Aligned with https://grafana.com/grafana/dashboards/4701
         LOGGER.info("METRICS - Adding application='{}' to MeterRegistry", applicationName);
         return registry -> registry.config()
-                .commonTags("application", applicationName);
+                .commonTags("application", applicationName)
+                .meterFilter(
+                        new MeterFilter() {
+                            @Override
+                            public DistributionStatisticConfig configure(Meter.Id id, DistributionStatisticConfig config) {
+                                if (MeasurementHandle.isMeasurement(id)) {
+                                    return DistributionStatisticConfig.builder()
+                                            .percentilesHistogram(true)
+                                            .percentiles(0.5, 0.90, 0.95, 0.99)
+                                            .sla(Duration.ofMillis(50).toNanos(),
+                                                    Duration.ofMillis(200).toNanos(),
+                                                    Duration.ofSeconds(1).toNanos())
+                                            .minimumExpectedValue(Duration.ofMillis(1).toNanos())
+                                            .maximumExpectedValue(Duration.ofSeconds(1).toNanos())
+                                            .build()
+                                            .merge(config);
+                                } else {
+                                    return config;
+                                }
+                            }
+                        });
     }
 
     /**
