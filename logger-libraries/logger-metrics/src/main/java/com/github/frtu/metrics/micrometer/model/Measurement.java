@@ -8,6 +8,9 @@ import org.springframework.util.StringUtils;
 
 import static io.micrometer.core.aop.TimedAspect.EXCEPTION_TAG;
 
+/**
+ * @see <a href="https://ordina-jworks.github.io/microservices/2017/09/17/monitoring-your-microservices-with-micrometer.html">Micrometer API</a>
+ */
 @Slf4j
 public class Measurement {
     public static final String COUNTER_SUFFIX_EXEC = "_count";
@@ -44,6 +47,14 @@ public class Measurement {
         executionCounter = registry.counter(buildMetricName(COUNTER_SUFFIX_EXEC));
     }
 
+    /**
+     * Creating metric name based on Data Model [a-zA-Z_:][a-zA-Z0-9_:]*.
+     *
+     * @param suffixes
+     * @return
+     * @see <a href="https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels">Prometheus data_model</a>
+     * @see <a href="https://prometheus.io/docs/practices/naming/">Prometheus naming</a>
+     */
     public String buildMetricName(String... suffixes) {
         StringBuilder metricNameBuilder = new StringBuilder();
         metricNameBuilder.append(MEASUREMENT_PREFIX).append(".");

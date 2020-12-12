@@ -422,6 +422,22 @@ Prometheus is a TSDB (TimeSerie DataBase), meanings all metrics data points will
 
 * [https://blog.pvincent.io/2017/12/prometheus-blog-series-part-2-metric-types/](https://blog.pvincent.io/2017/12/prometheus-blog-series-part-2-metric-types/)
 
+Histogram details :
+
+* [prometheus.io - Histograms and Summaries](https://prometheus.io/docs/practices/histograms/)
+* [blog.pvincent.io - Histograms: sampling observations](https://blog.pvincent.io/2017/12/prometheus-blog-series-part-2-metric-types#histograms-sampling-observations)
+
+Query language for Prometheus :
+
+* [PromQL](https://prometheus.io/docs/prometheus/latest/querying/basics/)
+* Syntax for Range Vector Selectors ```http_requests_total{job="prometheus"}[5m]```
+* Can create week over week with : ```rate(http_requests_total[5m] offset 1w)```
+* Can query multiple metrics with ```{__name__=~"job:.*"}```
+
+#### Alerts
+
+Tips for Grafana Alert :
+[https://www.robustperception.io/reduce-noise-from-disk-space-alerts](https://www.robustperception.io/reduce-noise-from-disk-space-alerts)
 
 ### See more
 
