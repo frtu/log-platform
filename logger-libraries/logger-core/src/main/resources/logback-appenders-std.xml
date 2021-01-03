@@ -14,7 +14,7 @@
         </encoder>
     </appender>
 
-    <appender name="JSON_ENCODING" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="STDOUT_JSON" class="ch.qos.logback.core.ConsoleAppender">
         <!-- The encoder treat the log as JSON. -->
         <encoder class="ch.qos.logback.more.appenders.encoder.FastJsonEncoder">
             <pattern><![CDATA[{
@@ -32,5 +32,15 @@
             <!-- Remove redandant spaces and lines. -->
             <compressSpace>true</compressSpace>
         </encoder>
+    </appender>
+
+    <!-- for JSON logs -->
+    <appender name="STDOUT_JSON_JACKSON" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+            <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                <prettyPrint>true</prettyPrint>
+            </jsonFormatter>
+            <timestampFormat>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampFormat>
+        </layout>
     </appender>
 </included>
