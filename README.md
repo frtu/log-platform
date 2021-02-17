@@ -15,6 +15,10 @@ On tracing using :
 
 Note : [OpenTelemetry](https://medium.com/jaegertracing/jaeger-and-opentelemetry-1846f701d9f2) will be replacing OpenTracing, nevertheless it is **not ready and stable as of now**. Expect also implementation to be fully stable before migrating to the latest version of Jaeger.
 
+## Guidelines
+
+* [Monitoring Guidelines](/GuidelineMonitoring.md)
+
 ## Structured logs
 
 Logs used to be a long chain of words and events, **requiring a human** to read and interpret. 
@@ -401,48 +405,9 @@ try (MeasurementHandle handle = new MeasurementHandle(measurement)) {
 }
 ```
 
-### Troubleshooting
+### Infrastructure
 
-ATTENTION : docker node-exporter is pulling using local IP. You may need to check if the IP configured is correct in file [/infra/docker/prometheus/prometheus.yml](/infra/docker/prometheus/prometheus.yml)
-
-Check if Prometheus Node-Exporter Dashboard at ```/targets``` url :
-
-* From docker : [http://localhost:9090/targets](http://localhost:9090/targets)
-
-### Grafana Dashboard
-
-Grafana Dashboard :
-
-* [JVM (Micrometer) - 4701](https://grafana.com/grafana/dashboards/4701)
-* [Spring Boot 2.1 Statistics - 10280](https://grafana.com/grafana/dashboards/10280)
-
-#### with Prometheus
-
-Prometheus is a TSDB (TimeSerie DataBase), meanings all metrics data points will always contains a Time. To see different metrics types, you can refer to this blog to correctly fetch metrics :
-
-* [https://blog.pvincent.io/2017/12/prometheus-blog-series-part-2-metric-types/](https://blog.pvincent.io/2017/12/prometheus-blog-series-part-2-metric-types/)
-
-Histogram details :
-
-* [prometheus.io - Histograms and Summaries](https://prometheus.io/docs/practices/histograms/)
-* [blog.pvincent.io - Histograms: sampling observations](https://blog.pvincent.io/2017/12/prometheus-blog-series-part-2-metric-types#histograms-sampling-observations)
-
-Query language for Prometheus :
-
-* [PromQL](https://prometheus.io/docs/prometheus/latest/querying/basics/)
-* Syntax for Range Vector Selectors ```http_requests_total{job="prometheus"}[5m]```
-* Can create week over week with : ```rate(http_requests_total[5m] offset 1w)```
-* Can query multiple metrics with ```{__name__=~"job:.*"}```
-
-#### Alerts
-
-Tips for Grafana Alert :
-[https://www.robustperception.io/reduce-noise-from-disk-space-alerts](https://www.robustperception.io/reduce-noise-from-disk-space-alerts)
-
-### See more
-
-* [micrometer.io prometheus installation](http://micrometer.io/docs/registry/prometheus#_installing)
-* [Concepts & Metrics naming](https://micrometer.io/docs/concepts)
+More details at [GuidelineMonitoring.md](/GuidelineMonitoring.md)
 
 ## Tools & Tips
 
