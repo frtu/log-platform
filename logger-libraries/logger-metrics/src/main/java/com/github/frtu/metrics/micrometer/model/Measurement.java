@@ -13,10 +13,10 @@ import static io.micrometer.core.aop.TimedAspect.EXCEPTION_TAG;
  */
 @Slf4j
 public class Measurement {
-    public static final String COUNTER_SUFFIX_EXEC = "_count";
-    public static final String COUNTER_SUFFIX_FAILURE = "_failure";
     public static final String MEASUREMENT_PREFIX = "span";
 
+    public static final String COUNTER_SUFFIX_FAILURE = "failure";
+    public static final String COUNTER_SUFFIX_EXEC = "count";
 
     @Getter
     private final String metricName;

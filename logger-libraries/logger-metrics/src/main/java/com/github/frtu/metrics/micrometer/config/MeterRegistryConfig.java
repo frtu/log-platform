@@ -44,7 +44,7 @@ public class MeterRegistryConfig {
                                 if (MeasurementHandle.isMeasurement(id)) {
                                     return DistributionStatisticConfig.builder()
                                             .percentilesHistogram(true)
-                                            .percentiles(0.5, 0.90, 0.95, 0.99)
+                                            .percentiles(0.5, 0.95, 0.99)
                                             .sla(Duration.ofMillis(50).toNanos(),
                                                     Duration.ofMillis(200).toNanos(),
                                                     Duration.ofSeconds(1).toNanos())

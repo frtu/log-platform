@@ -438,6 +438,11 @@ Check [Tools](tools) module.
 
 #### URLs
 
+sample-microservices
+
+* Service URL : [http://localhost:8080/](http://localhost:8080/)
+* Prometheus : [http://localhost:8080/actuator/prometheus](http://localhost:8080/actuator/prometheus/)
+
 Monitoring
 
 * Grafana : [http://localhost:3000/](http://localhost:3000/)
