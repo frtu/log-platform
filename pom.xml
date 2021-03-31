@@ -76,7 +76,7 @@
         <prometheus.simpleclient.version>0.8.1</prometheus.simpleclient.version>
         <opentracing-spring-web-starter.version>1.1.2</opentracing-spring-web-starter.version>
         <!--===========================-->
-        <guava.version>28.1-jre</guava.version>
+        <guava.version>29.0-jre</guava.version>
         <!--<commons-lang3.version>3.5</commons-lang3.version>-->
         <!--<commons-io.version>2.4</commons-io.version>-->
         <!--https://search.maven.org/search?q=g:org.springframework.boot%20a:spring-boot-dependencies-->
