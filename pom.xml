@@ -81,7 +81,7 @@
         <!--<commons-io.version>2.4</commons-io.version>-->
         <!--https://search.maven.org/search?q=g:org.springframework.boot%20a:spring-boot-dependencies-->
         <!--<spring-boot.version>2.2.1.RELEASE</spring-boot.version>-->
-        <spring.version>5.2.1.RELEASE</spring.version>
+        <spring.version>5.2.9.RELEASE</spring.version>
         <!--===========================-->
         <!--<junit.version>4.12</junit.version>-->
         <!--<powermock.version>1.6.2</powermock.version>-->
