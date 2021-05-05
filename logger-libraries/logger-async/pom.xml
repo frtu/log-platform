@@ -20,15 +20,13 @@
     </properties>
 
     <dependencies>
-        <!-- Core logging lib -->
+        <!--===========================-->
+        <!-- SLF4J Logs imports -->
+        <!--===========================-->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
         </dependency>
-
-        <!--===========================-->
-        <!-- SLF4J Logs imports -->
-        <!--===========================-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -43,11 +41,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jul-to-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
 

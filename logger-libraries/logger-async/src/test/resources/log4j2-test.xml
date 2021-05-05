@@ -7,11 +7,11 @@
                   value="%d{HH:mm:ss.SSS} [%thread] %X{TRACE_ID} %-5level %logger{36} #%line - %msg"/>
     </Properties>
     <Appenders>
-        <xi:include href="log4j2-appender-console.xml"/>
+        <xi:include href="log4j2-appender-list.xml" />
     </Appenders>
     <Loggers>
-        <Root level="WARN">
-            <AppenderRef ref="Console"/>
+        <Root level="DEBUG">
+            <AppenderRef ref="List"/>
         </Root>
     </Loggers>
 </Configuration>
