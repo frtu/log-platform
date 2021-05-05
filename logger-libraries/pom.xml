@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>logger-async</module>
         <module>logger-core</module>
         <module>logger-metrics</module>
         <module>logger-security</module>

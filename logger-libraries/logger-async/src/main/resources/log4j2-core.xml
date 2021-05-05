@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- https://logging.apache.org/log4j/2.x/manual/configuration.html -->
+<Configuration xmlns:xi="http://www.w3.org/2001/XInclude"
+               status="warn" name="log4j2-core">
+    <Properties>
+        <Property name="ENCODER_PATTERN"
+                  value="%d{HH:mm:ss.SSS} [%thread] %X{TRACE_ID} %-5level %logger{36} #%line - %msg"/>
+    </Properties>
+    <Appenders>
+        <xi:include href="log4j2-appender-console.xml"/>
+        <!--<xi:include href="log4j2-appender-list.xml" />-->
+    </Appenders>
+    <Loggers>
+        <Root level="WARN">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

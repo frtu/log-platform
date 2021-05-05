@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Console name="Console" target="SYSTEM_OUT">
+    <PatternLayout>
+        <Pattern>${ENCODER_PATTERN}%n</Pattern>
+    </PatternLayout>
+</Console>
+
