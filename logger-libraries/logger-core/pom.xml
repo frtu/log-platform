@@ -57,6 +57,10 @@
             <!-- Import ONLY for logback-appender-file-json-encoder.xml -->
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.sndyuk</groupId>
+            <artifactId>logback-more-appenders</artifactId>
+        </dependency>
 
         <!-- TEST -->
         <dependency>

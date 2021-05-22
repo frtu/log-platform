@@ -2,9 +2,7 @@ package com.github.frtu.logs.core;
 
 import ch.qos.logback.more.appenders.marker.MapMarker;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.frtu.logs.tracing.core.TraceHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
@@ -15,8 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Highly inspired from {@link net.logstash.logback.argument.StructuredArguments},
- * but adapt it to {@link ch.qos.logback.more.appenders.DataFluentAppender}.
+ * Highly inspired from {@link net.logstash.logback.argument.StructuredArguments}.
  *
  * @author Frédéric TU
  * @since 1.0.2
@@ -26,8 +23,8 @@ public class StructuredLogger {
     public static final String BASE_FORMAT = "{}";
 
     private ObjectMapper mapper = new ObjectMapper();
-    private Logger logger;
-    private String prefix;
+    protected Logger logger;
+    protected String prefix;
 
     /**
      * Create a KV {@link Map.Entry} using parameters.
@@ -145,171 +142,82 @@ public class StructuredLogger {
     }
 
     public void trace(Map.Entry... entries) {
-        trace((TraceHelper) null, entries);
-    }
-
-    public void trace(TraceHelper traceHelper, Map.Entry... entries) {
-        trace(traceHelper, BASE_FORMAT, entries);
+        trace(BASE_FORMAT, entries);
     }
 
     public void trace(Map.Entry[] entryArray, Map.Entry... entries) {
-        trace((TraceHelper) null, entryArray, entries);
-    }
-
-    public void trace(TraceHelper traceHelper, Map.Entry[] entryArray, Map.Entry... entries) {
         final Map.Entry[] allEntries = ArrayUtils.addAll(entryArray, entries);
-        trace(traceHelper, allEntries);
+        trace(BASE_FORMAT, allEntries);
     }
 
     public void trace(String format, Map.Entry... entries) {
-        trace(null, format, entries);
-    }
-
-    public void trace(TraceHelper traceHelper, String format, Map.Entry... entries) {
         if (this.logger.isTraceEnabled()) {
             final Map map = unmodifiableMap(this.prefix, entries);
-            logTracer(traceHelper, map);
             this.logger.trace(new MapMarker("", map), format, getJson(map));
         }
     }
 
     public void debug(Map.Entry... entries) {
-        debug((TraceHelper) null, entries);
-    }
-
-    public void debug(TraceHelper traceHelper, Map.Entry... entries) {
-        debug(traceHelper, BASE_FORMAT, entries);
+        debug(BASE_FORMAT, entries);
     }
 
     public void debug(Map.Entry[] entryArray, Map.Entry... entries) {
-        debug((TraceHelper) null, entryArray, entries);
-    }
-
-    public void debug(TraceHelper traceHelper, Map.Entry[] entryArray, Map.Entry... entries) {
         final Map.Entry[] allEntries = ArrayUtils.addAll(entryArray, entries);
-        debug(traceHelper, allEntries);
+        debug(BASE_FORMAT, allEntries);
     }
 
     public void debug(String format, Map.Entry... entries) {
-        debug(null, format, entries);
-    }
-
-    public void debug(TraceHelper traceHelper, String format, Map.Entry... entries) {
         if (this.logger.isDebugEnabled()) {
             final Map map = unmodifiableMap(this.prefix, entries);
-            logTracer(traceHelper, map);
             this.logger.debug(new MapMarker("", map), format, getJson(map));
         }
     }
 
     public void info(Map.Entry... entries) {
-        info((TraceHelper) null, entries);
-    }
-
-    public void info(TraceHelper traceHelper, Map.Entry... entries) {
-        info(traceHelper, BASE_FORMAT, entries);
+        info(BASE_FORMAT, entries);
     }
 
     public void info(Map.Entry[] entryArray, Map.Entry... entries) {
-        info((TraceHelper) null, entryArray, entries);
-    }
-
-    public void info(TraceHelper traceHelper, Map.Entry[] entryArray, Map.Entry... entries) {
         final Map.Entry[] allEntries = ArrayUtils.addAll(entryArray, entries);
-        info(traceHelper, allEntries);
+        info(BASE_FORMAT, allEntries);
     }
 
     public void info(String format, Map.Entry... entries) {
-        info(null, format, entries);
-    }
-
-    public void info(TraceHelper traceHelper, String format, Map.Entry... entries) {
         if (this.logger.isInfoEnabled()) {
             final Map map = unmodifiableMap(this.prefix, entries);
-            logTracer(traceHelper, map);
             this.logger.info(new MapMarker("", map), format, getJson(map));
         }
     }
 
     public void warn(Map.Entry... entries) {
-        warn((TraceHelper) null, entries);
-    }
-
-    public void warn(TraceHelper traceHelper, Map.Entry... entries) {
-        warn(traceHelper, BASE_FORMAT, entries);
+        warn(BASE_FORMAT, entries);
     }
 
     public void warn(Map.Entry[] entryArray, Map.Entry... entries) {
-        warn((TraceHelper) null, entryArray, entries);
-    }
-
-    public void warn(TraceHelper traceHelper, Map.Entry[] entryArray, Map.Entry... entries) {
         final Map.Entry[] allEntries = ArrayUtils.addAll(entryArray, entries);
-        warn(traceHelper, allEntries);
+        warn(BASE_FORMAT, allEntries);
     }
 
     public void warn(String format, Map.Entry... entries) {
-        warn(null, format, entries);
-    }
-
-    public void warn(TraceHelper traceHelper, String format, Map.Entry... entries) {
         if (this.logger.isWarnEnabled()) {
             final Map map = unmodifiableMap(this.prefix, entries);
-            if (traceHelper != null) {
-                traceHelper.flagError();
-                logTracer(traceHelper, map);
-            }
             this.logger.warn(new MapMarker("", map), format, getJson(map));
         }
     }
 
     public void error(Map.Entry... entries) {
-        error((TraceHelper) null, entries);
-    }
-
-    public void error(TraceHelper traceHelper, Map.Entry... entries) {
-        error(traceHelper, BASE_FORMAT, entries);
+        error(BASE_FORMAT, entries);
     }
 
     public void error(Map.Entry[] entryArray, Map.Entry... entries) {
-        error((TraceHelper) null, entryArray, entries);
-    }
-
-    public void error(TraceHelper traceHelper, Map.Entry[] entryArray, Map.Entry... entries) {
         final Map.Entry[] allEntries = ArrayUtils.addAll(entryArray, entries);
-        error(traceHelper, allEntries);
+        error(BASE_FORMAT, allEntries);
     }
 
     public void error(String format, Map.Entry... entries) {
-        error(null, format, entries);
-    }
-
-    public void error(TraceHelper traceHelper, String format, Map.Entry... entries) {
         if (this.logger.isErrorEnabled()) {
             final Map map = unmodifiableMap(this.prefix, entries);
-            traceHelper.flagError();
-            logTracer(traceHelper, map);
             this.logger.error(new MapMarker("", map), format, getJson(map));
-        }
-    }
-
-    public void logTracer(TraceHelper traceHelper, Map map) {
-        if (traceHelper != null && map != null) {
-            map.forEach((k, v) -> {
-                if (k instanceof String) {
-                    if (v instanceof String) {
-                        String stringValue = (String) v;
-                        traceHelper.addLog((String) k, stringValue);
-                    } else if (v instanceof JsonNode) {
-                        JsonNode jsonNodeValue = (JsonNode) v;
-                        traceHelper.addLog((String) k, jsonNodeValue.asText());
-                    } else {
-                        LOGGER.info("Impossible to call traceHelper.addLog with VALUE type:[{}]", v.getClass());
-                    }
-                } else {
-                    LOGGER.info("Impossible to call traceHelper.addLog with KEY type:[{}]", k.getClass());
-                }
-            });
         }
     }
 }
