@@ -12,6 +12,7 @@
     <description>log library for security</description>
 
     <properties>
+        <hibernate-validator.version>7.0.1.Final</hibernate-validator.version>
     </properties>
 
     <dependencies>
@@ -37,7 +38,7 @@
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>6.0.16.Final</version>
+            <version>${hibernate-validator.version}</version>
         </dependency>
 
         <dependency>
