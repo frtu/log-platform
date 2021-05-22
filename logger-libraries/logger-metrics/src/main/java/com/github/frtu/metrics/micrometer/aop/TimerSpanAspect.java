@@ -5,7 +5,10 @@ import com.github.frtu.logs.tracing.annotation.ExecutionSpanAspect;
 import com.github.frtu.metrics.micrometer.model.Measurement;
 import com.github.frtu.metrics.micrometer.model.MeasurementHandle;
 import io.micrometer.core.aop.TimedAspect;
-import io.micrometer.core.instrument.*;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Metrics;
+import io.micrometer.core.instrument.Tag;
+import io.micrometer.core.instrument.Tags;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -19,8 +22,6 @@ import org.springframework.util.StringUtils;
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
 import java.util.function.Function;
-
-import static io.micrometer.core.aop.TimedAspect.EXCEPTION_TAG;
 
 /**
  * Same as {@link TimedAspect} but allow to run metrics based on {@link ExecutionSpan}.

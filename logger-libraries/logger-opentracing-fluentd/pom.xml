@@ -13,7 +13,6 @@
     <description>log instrumentation with open tracing and fluentd aggregator library</description>
 
     <properties>
-        <sndyuk.logback-more-appenders.version>1.7.1</sndyuk.logback-more-appenders.version>
         <fluentd.logger.version>0.3.4</fluentd.logger.version>
         <!-- ATTENTION Later version of OpenTracing change some Scope Interface-->
         <!--<opentracing.version>0.33.0</opentracing.version>-->
@@ -72,6 +71,10 @@
             <!-- Import ONLY for logback-appender-file-json-encoder.xml -->
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.sndyuk</groupId>
+            <artifactId>logback-more-appenders</artifactId>
+        </dependency>
 
         <!-- Distributed Tracing -->
         <dependency>
@@ -80,10 +83,6 @@
         </dependency>
 
         <!-- Internal logs implementation -->
-        <dependency>
-            <groupId>com.sndyuk</groupId>
-            <artifactId>logback-more-appenders</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.fluentd</groupId>
             <artifactId>fluent-logger</artifactId>
@@ -136,11 +135,6 @@
                 <groupId>org.fluentd</groupId>
                 <artifactId>fluent-logger</artifactId>
                 <version>${fluentd.logger.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sndyuk</groupId>
-                <artifactId>logback-more-appenders</artifactId>
-                <version>${sndyuk.logback-more-appenders.version}</version>
             </dependency>
             <!--        <dependency>-->
             <!--            <groupId>org.komamitsu</groupId>-->

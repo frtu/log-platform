@@ -35,7 +35,7 @@
         <!--===========================-->
         <dependency>
             <groupId>com.github.frtu.logs</groupId>
-            <artifactId>logger-core</artifactId>
+            <artifactId>logger-opentracing-fluentd</artifactId>
             <version>${project.version}</version>
         </dependency>
 

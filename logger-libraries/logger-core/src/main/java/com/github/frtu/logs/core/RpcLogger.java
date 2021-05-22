@@ -15,17 +15,17 @@ import java.util.Map;
 @Slf4j
 public class RpcLogger extends StructuredLogger {
     /**
-     * Generic key equivalent to {@link io.opentracing.tag.Tags#SPAN_KIND}
+     * Generic key equivalent to Tags#SPAN_KIND
      */
     public static final String KEY_KIND = "kind";
 
     /**
-     * Generic key equivalent to {@link io.opentracing.tag.Tags#HTTP_URL} but for ANY business interface name
+     * Generic key equivalent to Tags#HTTP_URL but for ANY business interface name
      */
     public static final String KEY_URI = "uri";
 
     /**
-     * Generic key equivalent to {@link io.opentracing.tag.Tags#HTTP_METHOD} usually to categorize (Query or Mutation)
+     * Generic key equivalent to Tags#HTTP_METHOD usually to categorize (Query or Mutation)
      */
     public static final String KEY_METHOD = "method";
 
@@ -40,14 +40,34 @@ public class RpcLogger extends StructuredLogger {
     public static final String KEY_RESPONSE_BODY = "response";
 
     /**
-     * Generic key equivalent to {@link io.opentracing.tag.Tags#HTTP_STATUS} for response code (usually number but can be String)
+     * Generic key equivalent to Tags#HTTP_STATUS for response code (usually number but can be String)
      */
     public static final String KEY_STATUS_CODE = "response_code";
 
     /**
-     * Generic key equivalent to {@link io.opentracing.log.Fields#MESSAGE} for response message.
+     * Generic key equivalent to Fields#MESSAGE for response message.
      */
     public static final String KEY_ERROR_MESSAGE = "error_message";
+
+    /**
+     * A constant for setting the span kind to indicate that it represents a server span.
+     */
+    public static final String SPAN_KIND_SERVER = "server";
+
+    /**
+     * A constant for setting the span kind to indicate that it represents a client span.
+     */
+    public static final String SPAN_KIND_CLIENT = "client";
+
+    /**
+     * A constant for setting the span kind to indicate that it represents a producer span, in a messaging scenario.
+     */
+    public static final String SPAN_KIND_PRODUCER = "producer";
+
+    /**
+     * A constant for setting the span kind to indicate that it represents a consumer span, in a messaging scenario.
+     */
+    public static final String SPAN_KIND_CONSUMER = "consumer";
 
     public static RpcLogger create(Class<?> clazz) {
         return create(clazz, null);
@@ -83,7 +103,7 @@ public class RpcLogger extends StructuredLogger {
      * @return
      */
     public static Map.Entry<String, String> client() {
-        return kind(io.opentracing.tag.Tags.SPAN_KIND_CLIENT);
+        return kind(SPAN_KIND_CLIENT);
     }
 
     /**
@@ -92,7 +112,7 @@ public class RpcLogger extends StructuredLogger {
      * @return
      */
     public static Map.Entry<String, String> server() {
-        return kind(io.opentracing.tag.Tags.SPAN_KIND_SERVER);
+        return kind(SPAN_KIND_SERVER);
     }
 
     /**
@@ -101,7 +121,7 @@ public class RpcLogger extends StructuredLogger {
      * @return
      */
     public static Map.Entry<String, String> producer() {
-        return kind(io.opentracing.tag.Tags.SPAN_KIND_PRODUCER);
+        return kind(SPAN_KIND_PRODUCER);
     }
 
     /**
@@ -110,7 +130,7 @@ public class RpcLogger extends StructuredLogger {
      * @return
      */
     public static Map.Entry<String, String> consumer() {
-        return kind(io.opentracing.tag.Tags.SPAN_KIND_CONSUMER);
+        return kind(SPAN_KIND_CONSUMER);
     }
 
     /**
