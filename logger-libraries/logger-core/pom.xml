@@ -58,44 +58,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Distributed Tracing -->
-        <dependency>
-            <groupId>io.opentracing</groupId>
-            <artifactId>opentracing-api</artifactId>
-        </dependency>
-
-        <!-- Internal logs implementation -->
-        <dependency>
-            <groupId>com.sndyuk</groupId>
-            <artifactId>logback-more-appenders</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.fluentd</groupId>
-            <artifactId>fluent-logger</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.jaegertracing</groupId>
-            <artifactId>jaeger-client</artifactId>
-        </dependency>
-
-        <!-- Metric instrumentation with micrometer -->
-        <dependency>
-            <groupId>io.jaegertracing</groupId>
-            <artifactId>jaeger-micrometer</artifactId>
-        </dependency>
-
-        <!-- NEEDED IF including package com.github.frtu.logs.tracing.annotation -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- TEST -->
         <dependency>
             <groupId>junit</groupId>

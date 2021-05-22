@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--For Java Application-->
+<included>
+    <property name="ENCODER_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %X{TRACE_ID} %-5level %logger{36} #%line - %msg"/>
+
+    <include resource="logback-appender-console.xml"/>
+    <include resource="logback-appender-fluentd.xml"/>
+
+    <!--=================================================-->
+    <!--Log and Trace configuration - RECOMMEND ALWAYS ON-->
+    <!--=================================================-->
+    <!--Connectivity props INFO-->
+    <logger name="com.github.frtu.logs.infra.fluentd" level="INFO" additivity="true"/>
+    <logger name="com.github.frtu.logs.tracing.core.jaeger" level="INFO" additivity="true"/>
+    <!--distributed tracing INFO-->
+    <logger name="io.jaegertracing" level="INFO" additivity="true"/>
+    <!--=================================================-->
+
+    <root level="WARN">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</included>
