@@ -48,7 +48,8 @@ public class StructuredLogger {
     /**
      * Create a {@link Map} from the
      *
-     * @param entries
+     * @param <V> Ability to specify the Type for all the log entries
+     * @param entries All the log entry pair
      * @return return null if entries is null
      */
     public static <V> Map<String, V> map(Map.Entry<String, V>... entries) {

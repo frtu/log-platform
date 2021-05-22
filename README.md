@@ -76,6 +76,20 @@ Gives a JSON log :
 {"key1":123,"key2":456}
 ```
 
+Stack logs
+
+```java
+import static com.github.frtu.logs.core.StructuredLogger.entries;
+
+...
+
+// Create logs entries
+val entries = entries(entry("key1", "value1"), entry("key2", "value2"));
+...
+// Log later
+STRUCTURED_LOGGER.info(entries);
+```
+
 ### RpcLogger
 
 Implementation to logs RPC calls, in a generic way :
@@ -112,6 +126,34 @@ Gives a log :
    "response_code":"123",
    "error_message":"The invitation has expired, please request a new one"
 }
+```
+
+#### Debugging sample
+
+You can also logs very steps for the same request :
+
+```java
+// Debugging steps
+rpcLogger.debug(client(),
+        method(query),
+        uri(uri),
+        requestId(requestId),
+        phase("INIT")
+);
+
+// Debugging steps
+rpcLogger.debug(client(),
+        requestId(requestId),
+        phase("SENDING")
+);
+
+// Info success or Warn or Error result
+rpcLogger.warn(client(),
+        requestId(requestId),
+        phase("SENT"),
+        statusCode("123"),
+        errorMessage("The invitation has expired, please request a new one")
+);
 ```
 
 #### Full guide for Structured Logging

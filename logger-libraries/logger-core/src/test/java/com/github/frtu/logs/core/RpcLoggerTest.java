@@ -71,15 +71,13 @@ public class RpcLoggerTest {
 
         // Debugging steps
         rpcLogger.debug(client(),
-                method(query),
-                uri(uri),
+                requestId(requestId),
                 phase("SENDING")
         );
 
         // Info success or Warn or Error result
         rpcLogger.warn(client(),
-                method(query),
-                uri(uri),
+                requestId(requestId),
                 phase("SENT"),
                 statusCode("123"),
                 errorMessage("The invitation has expired, please request a new one")
