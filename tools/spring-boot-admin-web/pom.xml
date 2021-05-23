@@ -89,4 +89,37 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <url>https://github.com/frtu/log-platform/</url>
+    <scm>
+        <connection>scm:git:git@github.com:frtu/log-platform.git</connection>
+        <developerConnection>scm:git:git@github.com:frtu/log-platform.git</developerConnection>
+        <url>https://github.com/frtu/log-platform/tree/master</url>
+        <tag>HEAD</tag>
+    </scm>
+    <developers>
+        <developer>
+            <name>Frédéric TU</name>
+            <email>frederic.tu@gmail.com</email>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus snapshot repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <name>Sonatype Nexus release repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 </project>
