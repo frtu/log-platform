@@ -3,15 +3,36 @@
 <Configuration xmlns:xi="http://www.w3.org/2001/XInclude"
                status="warn" name="log4j2-core">
     <Properties>
+        <!-- TO OVERRIDE -->
+        <!--        <Property name="SERVICE_NAME" value="application"/>-->
+        <!--        <Property name="LOG_PATH" value="./target"/>-->
+
+        <!-- DEFAULT VALUES -->
+        <property name="FILE_NAME" value="${SERVICE_NAME:-application}"/>
+        <property name="LOG_FILE_LOCATION"
+                  value="${LOG_FILE_LOCATION:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-./target}}}/${FILE_NAME}.log}"/>
+
+        <property name="LOG_FILE_MAX_SIZE" value="${LOG_FILE_MAX_SIZE:-5MB}"/>
+        <property name="LOG_FILE_MAX_HISTORY" value="${LOG_FILE_MAX_HISTORY:-15}"/>
+
         <Property name="ENCODER_PATTERN"
-                  value="%d{HH:mm:ss.SSS} [%thread] %X{TRACE_ID} %-5level %logger{36} #%line - %msg"/>
+                  value="%d{ISO8601} [%thread] %X{TRACE_ID} %-5level %logger{36} #%line - %msg"/>
     </Properties>
     <Appenders>
+        <xi:include href="log4j2-appender-file.xml"/>
         <xi:include href="log4j2-appender-console.xml"/>
+        <Async name="ASYNC">
+            <AppenderRef ref="STDOUT"/>
+        </Async>
     </Appenders>
     <Loggers>
+        <!-- https://logging.apache.org/log4j/2.x/manual/async.html-->
+        <Logger name="com.github.frtu" level="debug" includeLocation="true" additivity="true">
+            <AppenderRef ref="ASYNC"/>
+        </Logger>
+
         <Root level="WARN">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FILE_APPENDER"/>
         </Root>
     </Loggers>
 </Configuration>

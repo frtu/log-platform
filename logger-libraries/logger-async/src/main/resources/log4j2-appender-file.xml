@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RollingFile name="FILE_APPENDER" ignoreExceptions="false"
+             fileName="${LOG_FILE_LOCATION}"
+             filePattern="${LOG_FILE_LOCATION}_%d{yyyy-MM-dd}.%i.log.gz">
+    <PatternLayout>
+        <Pattern>${ENCODER_PATTERN}%n</Pattern>
+    </PatternLayout>
+    <Policies>
+        <SizeBasedTriggeringPolicy size="${LOG_FILE_MAX_SIZE}"/>
+    </Policies>
+    <DefaultRolloverStrategy max="${LOG_FILE_MAX_HISTORY}"/>
+</RollingFile>
