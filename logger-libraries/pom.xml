@@ -18,5 +18,6 @@
         <module>logger-metrics</module>
         <module>logger-opentracing-fluentd</module>
         <module>logger-security</module>
+        <module>logger-bom</module>
     </modules>
 </project>
