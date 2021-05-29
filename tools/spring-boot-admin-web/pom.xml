@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -12,11 +13,15 @@
     <version>1.1.1-SNAPSHOT</version>
 
     <properties>
+        <start-class>com.github.frtu.spring.admin.AdminApplication</start-class>
         <!--===========================-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!--===========================-->
         <java.version>1.8</java.version>
+        <frtu.logger.version>1.0.2</frtu.logger.version>
+        <!--===========================-->
+        <spring-boot-admin.version>2.2.2</spring-boot-admin.version>
     </properties>
 
     <dependencies>
@@ -38,12 +43,6 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- JUnit 4 -->
-        <!--<dependency>-->
-        <!--<groupId>junit</groupId>-->
-        <!--<artifactId>junit</artifactId>-->
-        <!--<scope>test</scope>-->
-        <!--</dependency>-->
 
         <!--===========================-->
         <!-- Platform - Lombok and Logback -->
@@ -55,6 +54,7 @@
         <dependency>
             <groupId>com.github.frtu.logs</groupId>
             <artifactId>logger-core</artifactId>
+            <version>${frtu.logger.version}</version>
         </dependency>
     </dependencies>
 
@@ -68,24 +68,44 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
+
     <dependencyManagement>
         <dependencies>
-            <!-- Internal domain dependencies -->
             <dependency>
-                <groupId>com.github.frtu.archetype</groupId>
-                <artifactId>base-pom</artifactId>
-                <version>1.1.4</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-server</artifactId>
+                <version>${spring-boot-admin.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.frtu.logs</groupId>
-                <artifactId>tools-bom</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-server-ui</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-client</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-server-ui-login</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-server</artifactId>
+                <version>${spring-boot-admin.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
