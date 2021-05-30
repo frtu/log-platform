@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,6 +45,16 @@ public class RpcLogger extends StructuredLogger {
      * @since 1.1.0
      */
     public static final String KEY_REQUEST_ID = "request_id";
+
+    /**
+     * Generic key for Request headers
+     */
+    public static final String KEY_REQUEST_HEADERS = "request_headers";
+
+    /**
+     * Generic key for Response headers
+     */
+    public static final String KEY_RESPONSE_HEADERS = "response_headers";
 
     /**
      * Generic key for Request body
@@ -200,16 +211,65 @@ public class RpcLogger extends StructuredLogger {
         return entry(KEY_METHOD, method);
     }
 
-    private static JsonNode toJsonNode(String requestBody) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode actualObj = mapper.readTree(requestBody);
-        return actualObj;
+    private static JsonNode toJsonNode(Map<String, List<String>> map) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.convertValue(map, JsonNode.class);
+        return jsonNode;
     }
 
     private static <T> JsonNode toJsonNode(T requestBody) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode actualObj = mapper.readTree(mapper.writeValueAsString(requestBody));
-        return actualObj;
+        ObjectMapper objectMapper = new ObjectMapper();
+        return getJsonNode(objectMapper.writeValueAsString(requestBody), objectMapper);
+    }
+
+    private static JsonNode toJsonNode(String requestBody) throws JsonProcessingException {
+        return getJsonNode(requestBody, new ObjectMapper());
+    }
+
+    private static JsonNode getJsonNode(String requestBody, ObjectMapper objectMapper) throws JsonProcessingException {
+        return objectMapper.readTree(requestBody);
+    }
+
+    /**
+     * Log the request header as a JSON object
+     *
+     * @param headers KV pair for request headers
+     * @return log entry pair
+     */
+    public static Map.Entry<String, Object> requestHeaders(Map<String, List<String>> headers) {
+        if (headers.isEmpty()) return null;
+        return requestHeaders(toJsonNode(headers));
+    }
+
+    /**
+     * Log the response body as a JSON object
+     *
+     * @param jsonNode JsonNode representation for the payload
+     * @return log entry pair
+     */
+    public static Map.Entry<String, Object> requestHeaders(JsonNode jsonNode) {
+        return StructuredLogger.entry(KEY_REQUEST_HEADERS, jsonNode);
+    }
+
+    /**
+     * Log the response header as a JSON object
+     *
+     * @param headers KV pair for response headers
+     * @return log entry pair
+     */
+    public static Map.Entry<String, Object> responseHeaders(Map<String, List<String>> headers) {
+        if (headers.isEmpty()) return null;
+        return requestHeaders(toJsonNode(headers));
+    }
+
+    /**
+     * Log the response body as a JSON object
+     *
+     * @param jsonNode JsonNode representation for the payload
+     * @return log entry pair
+     */
+    public static Map.Entry<String, Object> responseHeaders(JsonNode jsonNode) {
+        return StructuredLogger.entry(KEY_RESPONSE_HEADERS, jsonNode);
     }
 
     /**
