@@ -13,14 +13,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 @Slf4j
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LogExchangeFilterFunctionTest {
     private WebClient webClient() {
+        return webClient(null);
+    }
+
+    private WebClient webClient(Set<String> authorizedHeaderFilter) {
         return WebClient.builder()
                 .baseUrl("http://localhost:" + mockWebServer.getPort())
-                .filter(new LogExchangeFilterFunction())
+                .filter(new LogExchangeFilterFunction(authorizedHeaderFilter))
                 .build();
     }
 
@@ -49,9 +55,8 @@ class LogExchangeFilterFunctionTest {
         //--------------------------------------
     }
 
-
     @Test
-    void testFilterWithHeaders() {
+    void testFilterWithFilteredHeaders() {
         //--------------------------------------
         // 1. Prepare server data & Init client
         //--------------------------------------
@@ -65,7 +70,11 @@ class LogExchangeFilterFunctionTest {
         //--------------------------------------
         // 2. Execute
         //--------------------------------------
-        String result = webClient().get()
+        // ONLY one header authorized for security reason
+        HashSet authorizedHeaderFilter = new HashSet<>();
+        authorizedHeaderFilter.add("header1");
+
+        String result = webClient(authorizedHeaderFilter).get()
                 .uri("/resources/1234")
                 .header("header1", "value1", "value2")
                 .header("header2", "value3", "value4")
