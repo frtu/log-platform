@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Map;
 
 /**
@@ -175,6 +176,16 @@ public class RpcLogger extends StructuredLogger {
      */
     public static Map.Entry<String, String> uri(String uri) {
         return entry(KEY_URI, uri);
+    }
+
+    /**
+     * Business operation name
+     *
+     * @param uri Service URI
+     * @return log entry pair
+     */
+    public static Map.Entry<String, String> uri(URI uri) {
+        return entry(KEY_URI, uri.toString());
     }
 
     /**
