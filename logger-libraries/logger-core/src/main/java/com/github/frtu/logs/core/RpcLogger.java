@@ -33,12 +33,14 @@ public class RpcLogger extends StructuredLogger {
 
     /**
      * Indicate the current phase the RPC call is at (init, sending, sent, ..)
+     *
      * @since 1.1.0
      */
     public static final String KEY_PHASE = "phase";
 
     /**
      * Generic key for Request ID
+     *
      * @since 1.1.0
      */
     public static final String KEY_REQUEST_ID = "request_id";
@@ -213,7 +215,7 @@ public class RpcLogger extends StructuredLogger {
     /**
      * Log the request body
      *
-     * @param <T> Ability to specify the Type of request
+     * @param <T>         Ability to specify the Type of request
      * @param requestBody request payload (if NOT JSON please pass false {@link #responseBody(String, boolean)})
      * @return log entry pair
      * @since 1.1.0
@@ -225,7 +227,7 @@ public class RpcLogger extends StructuredLogger {
     /**
      * Log the request body and allow to inline the JSON directly as an object
      *
-     * @param <T> Ability to specify the Type of request
+     * @param <T>         Ability to specify the Type of request
      * @param requestBody request payload
      * @param inlineJson  If is JSON and if we want to inline it
      * @return log entry pair
@@ -286,7 +288,7 @@ public class RpcLogger extends StructuredLogger {
     /**
      * Log the response body
      *
-     * @param <T> Ability to specify the Type of request
+     * @param <T>          Ability to specify the Type of request
      * @param responseBody response payload (if NOT JSON please pass false {@link #responseBody(String, boolean)})
      * @return log entry pair
      * @since 1.1.0
@@ -298,7 +300,7 @@ public class RpcLogger extends StructuredLogger {
     /**
      * Log the response body and allow to inline the JSON directly as an object
      *
-     * @param <T> Ability to specify the Type of request
+     * @param <T>          Ability to specify the Type of request
      * @param responseBody response payload
      * @param inlineJson   If is JSON and if we want to inline it
      * @return log entry pair
