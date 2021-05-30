@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<List name="LIST">
+<Console name="STDOUT" target="SYSTEM_OUT">
     <PatternLayout>
         <Pattern>${ENCODER_PATTERN}%n</Pattern>
     </PatternLayout>
-</List>
-
+</Console>

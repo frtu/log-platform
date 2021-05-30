@@ -7,11 +7,20 @@
                   value="%d{HH:mm:ss.SSS} [%thread] %X{TRACE_ID} %-5level %logger{36} #%line - %msg"/>
     </Properties>
     <Appenders>
-        <xi:include href="log4j2-appender-list.xml" />
+        <xi:include href="log4j2-appender-list.xml"/>
+        <xi:include href="log4j2-appender-console.xml"/>
+        <Async name="ASYNC">
+            <AppenderRef ref="STDOUT"/>
+        </Async>
     </Appenders>
+
     <Loggers>
-        <Root level="DEBUG">
-            <AppenderRef ref="List"/>
+        <Logger name="com.github.frtu.logs" level="debug" includeLocation="true"
+                additivity="true"/>
+
+        <Root level="WARN">
+            <AppenderRef ref="LIST"/>
+            <AppenderRef ref="ASYNC"/>
         </Root>
     </Loggers>
 </Configuration>

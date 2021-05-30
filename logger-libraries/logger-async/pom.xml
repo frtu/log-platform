@@ -28,6 +28,7 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
+            <scope>provided</scope>
         </dependency>
         <!-- Bridge of the logs of the library you import : https://www.slf4j.org/legacy.html -->
         <dependency>
