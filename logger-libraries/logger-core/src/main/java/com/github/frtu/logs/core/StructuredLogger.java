@@ -2,7 +2,10 @@ package com.github.frtu.logs.core;
 
 import ch.qos.logback.more.appenders.marker.MapMarker;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.frtu.logs.utils.jackson.ObjectMapperLifecycleManager;
+import com.github.frtu.logs.utils.jackson.ObjectMapperHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
@@ -84,6 +87,17 @@ public class StructuredLogger {
     }
 
     /**
+     * Mark the current phase
+     *
+     * @param phase Phase on which the current execution is at (init, sending, sent, ..)
+     * @return log entry pair
+     * @since 1.1.1
+     */
+    public static Map.Entry<String, String> phase(String phase) {
+        return entry(KEY_PHASE, phase);
+    }
+
+    /**
      * Create a KV {@link Map.Entry} using parameters.
      *
      * @param key   Key for this entry (support null)
@@ -156,16 +170,6 @@ public class StructuredLogger {
             return null;
         }
         return Collections.unmodifiableMap(map(prefix, entries));
-    }
-
-    private String getJson(Map map) {
-        String data;
-        try {
-            data = mapper.writeValueAsString(map);
-        } catch (JsonProcessingException e) {
-            data = map.toString();
-        }
-        return data;
     }
 
     public static StructuredLogger create(Class<?> clazz) {
@@ -279,7 +283,44 @@ public class StructuredLogger {
         }
     }
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private String getJson(Map map) {
+        String data;
+        try {
+            data = HOLDER.getObjectMapper().writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            data = map.toString();
+        }
+        return data;
+    }
+
+    /**
+     * Create a KV {@link Map.Entry} for JSON value
+     *
+     * @param key   Key for this entry (support null)
+     * @param value Json value for this entry (support null)
+     * @param <V>   Value type
+     * @return null if one of key or value is null
+     * @since 1.1.1
+     */
+    // Following https://github.com/FasterXML/jackson-docs/wiki/Presentation:-Jackson-Performance
+    public static <V> Map.Entry<String, Object> entryJsonNode(String key, V value) {
+        try {
+            JsonNode jsonNode = HOLDER.getObjectMapper().convertValue(value, JsonNode.class);
+            return entry(key, jsonNode);
+        } catch (IllegalArgumentException e) {
+            // purpose is to generate a log, so should only log at a DEBUG level if need to troubleshoot
+            LOGGER.debug("Input parameter cannot be transformed to JsonNode : {}", value, e);
+            return entry(key, value);
+        }
+    }
+
+    /**
+     * Holder to access {@link ObjectMapper}
+     *
+     * @since 1.1.1
+     */
+    private static ObjectMapperHolder HOLDER = new ObjectMapperLifecycleManager().getObjectMapperHolder();
+
     protected Logger logger;
     protected String prefix;
 }

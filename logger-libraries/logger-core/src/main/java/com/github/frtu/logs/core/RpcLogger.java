@@ -1,10 +1,6 @@
 package com.github.frtu.logs.core;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +11,8 @@ import java.util.Map;
 
 /**
  * Specialized version of {@link StructuredLogger} to normalize RPC calls.
+ *
+ * @author Frédéric TU
  */
 @Slf4j
 public class RpcLogger extends StructuredLogger {
@@ -32,13 +30,6 @@ public class RpcLogger extends StructuredLogger {
      * Generic key equivalent to Tags#HTTP_METHOD usually to categorize (Query or Mutation)
      */
     public static final String KEY_METHOD = "method";
-
-    /**
-     * Indicate the current phase the RPC call is at (init, sending, sent, ..)
-     *
-     * @since 1.1.0
-     */
-    public static final String KEY_PHASE = "phase";
 
     /**
      * Generic key for Request ID
@@ -359,38 +350,4 @@ public class RpcLogger extends StructuredLogger {
     public static Map.Entry<String, String> errorMessage(String errorMessage) {
         return entry(KEY_ERROR_MESSAGE, errorMessage);
     }
-
-    /**
-     * Mark the current phase
-     *
-     * @param phase Phase on which the current execution is at (init, sending, sent, ..)
-     * @return log entry pair
-     * @since 1.1.0
-     */
-    public static Map.Entry<String, String> phase(String phase) {
-        return entry(KEY_PHASE, phase);
-    }
-
-    // Following https://github.com/FasterXML/jackson-docs/wiki/Presentation:-Jackson-Performance
-    private static <T> Map.Entry<String, Object> entryJsonNode(String entryName, T value) {
-        try {
-            JsonNode jsonNode = OBJECT_MAPPER.convertValue(value, JsonNode.class);
-            return entry(entryName, jsonNode);
-        } catch (IllegalArgumentException e) {
-            // purpose is to generate a log, so should only log at a DEBUG level if need to troubleshoot
-            LOGGER.debug("Input parameter cannot be transformed to JsonNode : {}", value, e);
-            return entry(entryName, value);
-        }
-    }
-
-    static ObjectMapper buildObjectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        // ignore the null fields globally
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        return objectMapper;
-    }
-
-    private static ObjectMapper OBJECT_MAPPER = buildObjectMapper();
 }
