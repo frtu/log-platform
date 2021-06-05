@@ -1,13 +1,14 @@
 package com.github.frtu.logs.core;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -211,25 +212,6 @@ public class RpcLogger extends StructuredLogger {
         return entry(KEY_METHOD, method);
     }
 
-    private static JsonNode toJsonNode(Map<String, List<String>> map) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.convertValue(map, JsonNode.class);
-        return jsonNode;
-    }
-
-    private static <T> JsonNode toJsonNode(T requestBody) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return getJsonNode(objectMapper.writeValueAsString(requestBody), objectMapper);
-    }
-
-    private static JsonNode toJsonNode(String requestBody) throws JsonProcessingException {
-        return getJsonNode(requestBody, new ObjectMapper());
-    }
-
-    private static JsonNode getJsonNode(String requestBody, ObjectMapper objectMapper) throws JsonProcessingException {
-        return objectMapper.readTree(requestBody);
-    }
-
     /**
      * Log the request header as a JSON object
      *
@@ -238,17 +220,17 @@ public class RpcLogger extends StructuredLogger {
      */
     public static Map.Entry<String, Object> requestHeaders(Map<String, List<String>> headers) {
         if (headers.isEmpty()) return null;
-        return requestHeaders(toJsonNode(headers));
+        return entryJsonNode(KEY_REQUEST_HEADERS, headers);
     }
 
     /**
-     * Log the response body as a JSON object
+     * Log the request header as a JSON object
      *
-     * @param jsonNode JsonNode representation for the payload
+     * @param jsonNode JsonNode representation for the request headers
      * @return log entry pair
      */
     public static Map.Entry<String, Object> requestHeaders(JsonNode jsonNode) {
-        return StructuredLogger.entry(KEY_REQUEST_HEADERS, jsonNode);
+        return entry(KEY_REQUEST_HEADERS, jsonNode);
     }
 
     /**
@@ -259,24 +241,24 @@ public class RpcLogger extends StructuredLogger {
      */
     public static Map.Entry<String, Object> responseHeaders(Map<String, List<String>> headers) {
         if (headers.isEmpty()) return null;
-        return requestHeaders(toJsonNode(headers));
+        return entryJsonNode(KEY_RESPONSE_HEADERS, headers);
     }
 
     /**
-     * Log the response body as a JSON object
+     * Log the response header as a JSON object
      *
-     * @param jsonNode JsonNode representation for the payload
+     * @param jsonNode JsonNode representation for the response headers
      * @return log entry pair
      */
     public static Map.Entry<String, Object> responseHeaders(JsonNode jsonNode) {
-        return StructuredLogger.entry(KEY_RESPONSE_HEADERS, jsonNode);
+        return entry(KEY_RESPONSE_HEADERS, jsonNode);
     }
 
     /**
      * Log the request body
      *
      * @param <T>         Ability to specify the Type of request
-     * @param requestBody request payload (if NOT JSON please pass false {@link #responseBody(String, boolean)})
+     * @param requestBody request payload (if NOT JSON please pass false {@link #requestBody(T, boolean)})
      * @return log entry pair
      * @since 1.1.0
      */
@@ -295,41 +277,7 @@ public class RpcLogger extends StructuredLogger {
      */
     public static <T> Map.Entry<String, Object> requestBody(T requestBody, boolean inlineJson) {
         if (inlineJson) {
-            try {
-                JsonNode actualObj = toJsonNode(requestBody);
-                return requestBody(actualObj);
-            } catch (IOException e) {
-                LOGGER.trace("Input parameter is not be a well-format JSON : {}", requestBody, e);
-            }
-        }
-        return entry(KEY_REQUEST_BODY, requestBody);
-    }
-
-    /**
-     * Log the request body
-     *
-     * @param requestBody request payload (if NOT JSON please pass false {@link #responseBody(String, boolean)})
-     * @return log entry pair
-     */
-    public static Map.Entry<String, Object> requestBody(String requestBody) {
-        return requestBody(requestBody, true);
-    }
-
-    /**
-     * Log the request body and allow to inline the JSON directly as an object
-     *
-     * @param requestBody request payload
-     * @param inlineJson  If is JSON and if we want to inline it
-     * @return log entry pair
-     */
-    public static Map.Entry<String, Object> requestBody(String requestBody, boolean inlineJson) {
-        if (inlineJson) {
-            try {
-                JsonNode actualObj = toJsonNode(requestBody);
-                return requestBody(actualObj);
-            } catch (IOException e) {
-                LOGGER.trace("Input parameter is not be a well-format JSON : {}", requestBody, e);
-            }
+            return entryJsonNode(KEY_REQUEST_BODY, requestBody);
         }
         return entry(KEY_REQUEST_BODY, requestBody);
     }
@@ -341,15 +289,14 @@ public class RpcLogger extends StructuredLogger {
      * @return log entry pair
      */
     public static Map.Entry<String, Object> requestBody(JsonNode jsonNode) {
-        return StructuredLogger.entry(KEY_REQUEST_BODY, jsonNode);
+        return entry(KEY_REQUEST_BODY, jsonNode);
     }
-
 
     /**
      * Log the response body
      *
      * @param <T>          Ability to specify the Type of request
-     * @param responseBody response payload (if NOT JSON please pass false {@link #responseBody(String, boolean)})
+     * @param responseBody response payload (if NOT JSON please pass false {@link #responseBody(T, boolean)})
      * @return log entry pair
      * @since 1.1.0
      */
@@ -368,41 +315,7 @@ public class RpcLogger extends StructuredLogger {
      */
     public static <T> Map.Entry<String, Object> responseBody(T responseBody, boolean inlineJson) {
         if (inlineJson) {
-            try {
-                JsonNode actualObj = toJsonNode(responseBody);
-                return responseBody(actualObj);
-            } catch (IOException e) {
-                LOGGER.trace("Input parameter is not be a well-format JSON : {}", responseBody, e);
-            }
-        }
-        return entry(KEY_RESPONSE_BODY, responseBody);
-    }
-
-    /**
-     * Log the response body
-     *
-     * @param responseBody response payload (if NOT JSON please pass false {@link #responseBody(String, boolean)})
-     * @return log entry pair
-     */
-    public static Map.Entry<String, Object> responseBody(String responseBody) {
-        return responseBody(responseBody, true);
-    }
-
-    /**
-     * Log the response body and allow to inline the JSON directly as an object
-     *
-     * @param responseBody response payload
-     * @param inlineJson   If is JSON and if we want to inline it
-     * @return log entry pair
-     */
-    public static Map.Entry<String, Object> responseBody(String responseBody, boolean inlineJson) {
-        if (inlineJson) {
-            try {
-                JsonNode actualObj = toJsonNode(responseBody);
-                return responseBody(actualObj);
-            } catch (IOException e) {
-                LOGGER.trace("Input parameter is not be a well-format JSON : {}", responseBody, e);
-            }
+            return entryJsonNode(KEY_RESPONSE_BODY, responseBody);
         }
         return entry(KEY_RESPONSE_BODY, responseBody);
     }
@@ -414,7 +327,7 @@ public class RpcLogger extends StructuredLogger {
      * @return log entry pair
      */
     public static Map.Entry<String, Object> responseBody(JsonNode jsonNode) {
-        return StructuredLogger.entry(KEY_RESPONSE_BODY, jsonNode);
+        return entry(KEY_RESPONSE_BODY, jsonNode);
     }
 
     /**
@@ -457,4 +370,27 @@ public class RpcLogger extends StructuredLogger {
     public static Map.Entry<String, String> phase(String phase) {
         return entry(KEY_PHASE, phase);
     }
+
+    // Following https://github.com/FasterXML/jackson-docs/wiki/Presentation:-Jackson-Performance
+    private static <T> Map.Entry<String, Object> entryJsonNode(String entryName, T value) {
+        try {
+            JsonNode jsonNode = OBJECT_MAPPER.convertValue(value, JsonNode.class);
+            return entry(entryName, jsonNode);
+        } catch (IllegalArgumentException e) {
+            // purpose is to generate a log, so should only log at a DEBUG level if need to troubleshoot
+            LOGGER.debug("Input parameter cannot be transformed to JsonNode : {}", value, e);
+            return entry(entryName, value);
+        }
+    }
+
+    static ObjectMapper buildObjectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        // ignore the null fields globally
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        return objectMapper;
+    }
+
+    private static ObjectMapper OBJECT_MAPPER = buildObjectMapper();
 }
