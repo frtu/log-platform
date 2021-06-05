@@ -4,14 +4,9 @@ import ch.qos.logback.classic.LoggerContext;
 import com.github.frtu.logs.dummy.Log4JTransferService;
 import com.github.frtu.logs.dummy.Transfer;
 import com.github.frtu.logs.dummy.TransferService;
-import org.junit.After;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-
-import java.util.concurrent.ExecutorService;
-
-import static java.util.concurrent.Executors.newFixedThreadPool;
 
 /**
  * Quick copy of baeldung MDC code for end-to-end logger demo

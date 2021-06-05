@@ -2,9 +2,9 @@ package com.github.frtu.logs;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.more.appenders.marker.MapMarker;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.slf4j.*;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.util.Map;
 public class LogbackAppenderTest {
     private static final Logger LOG = LoggerFactory.getLogger(LogbackAppenderTest.class);
 
-    @Before
+    @BeforeAll
     public void before() {
         LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
         if (!lc.isStarted()) {
@@ -23,7 +23,7 @@ public class LogbackAppenderTest {
         }
     }
 
-    @After
+    @AfterAll
     public void after() {
         LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
         lc.stop();
