@@ -249,7 +249,7 @@ public class RpcLogger extends StructuredLogger {
      * Log the request body
      *
      * @param <T>         Ability to specify the Type of request
-     * @param requestBody request payload (if NOT JSON please pass false {@link #requestBody(T, boolean)})
+     * @param requestBody request payload (if NOT JSON please pass false to {link #requestBody(T, boolean)})
      * @return log entry pair
      * @since 1.1.0
      */
@@ -287,7 +287,7 @@ public class RpcLogger extends StructuredLogger {
      * Log the response body
      *
      * @param <T>          Ability to specify the Type of request
-     * @param responseBody response payload (if NOT JSON please pass false {@link #responseBody(T, boolean)})
+     * @param responseBody response payload (if NOT JSON please pass false to {link #responseBody(T, boolean)})
      * @return log entry pair
      * @since 1.1.0
      */

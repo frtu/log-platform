@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Central place to build and manage {@link ObjectMapper} instance. Can return the same instance to all usage or use other strategy like ThreadLocal.
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  * @author Frédéric TU
  * @since 1.1.1
  */
+@Slf4j
 public class ObjectMapperLifecycleManager {
     public static final String SYSTEM_PROPERTY_OBJECTMAPPER_LIFECYCLE_STRATEGY = "OBJECTMAPPER_LIFECYCLE_STRATEGY";
     public static final String LIFECYCLE_STRATEGY_SINGLETON = "SINGLETON";
@@ -34,6 +36,7 @@ public class ObjectMapperLifecycleManager {
             objectMapperLifecycleStrategy = LIFECYCLE_STRATEGY_SINGLETON;
         }
 
+        LOGGER.info("Starting using MODE:[{}]", objectMapperLifecycleStrategy);
         switch (objectMapperLifecycleStrategy) {
             case LIFECYCLE_STRATEGY_THREAD_LOCAL:
                 // Allow to create one ObjectMapper per Thread (stored in ThreadLocal)
@@ -52,8 +55,10 @@ public class ObjectMapperLifecycleManager {
 
     public ObjectMapperHolder getObjectMapperHolder() {
         if (HOLDER != null) {
+            LOGGER.info("getObjectMapperHolder in Singleton mode");
             return HOLDER;
         } else {
+            LOGGER.info("getObjectMapperHolder in per call mode");
             return new BaseObjectMapperHolder(buildObjectMapper());
         }
     }
