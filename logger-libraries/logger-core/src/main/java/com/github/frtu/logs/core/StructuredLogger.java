@@ -4,7 +4,6 @@ import ch.qos.logback.more.appenders.marker.MapMarker;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.frtu.logs.utils.jackson.ObjectMapperLifecycleManager;
 import com.github.frtu.logs.utils.jackson.ObjectMapperHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
@@ -14,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.github.frtu.logs.utils.jackson.ObjectMapperLifecycleManager.objectMapperLifecycleManager;
 
 /**
  * Highly inspired from {@link net.logstash.logback.argument.StructuredArguments}.
@@ -286,7 +287,7 @@ public class StructuredLogger {
     private String getJson(Map map) {
         String data;
         try {
-            data = HOLDER.getObjectMapper().writeValueAsString(map);
+            data = holderForLogCalls.getObjectMapper().writeValueAsString(map);
         } catch (JsonProcessingException e) {
             data = map.toString();
         }
@@ -305,7 +306,7 @@ public class StructuredLogger {
     // Following https://github.com/FasterXML/jackson-docs/wiki/Presentation:-Jackson-Performance
     public static <V> Map.Entry<String, Object> entryJsonNode(String key, V value) {
         try {
-            JsonNode jsonNode = HOLDER.getObjectMapper().convertValue(value, JsonNode.class);
+            JsonNode jsonNode = HOLDER_FOR_JSON_PARAMETER.getObjectMapper().convertValue(value, JsonNode.class);
             return entry(key, jsonNode);
         } catch (IllegalArgumentException e) {
             // purpose is to generate a log, so should only log at a DEBUG level if need to troubleshoot
@@ -319,7 +320,14 @@ public class StructuredLogger {
      *
      * @since 1.1.1
      */
-    private static ObjectMapperHolder HOLDER = new ObjectMapperLifecycleManager().getObjectMapperHolder();
+    private static ObjectMapperHolder HOLDER_FOR_JSON_PARAMETER = objectMapperLifecycleManager().getObjectMapperHolder();
+
+    /**
+     * Holder to access {@link ObjectMapper}
+     *
+     * @since 1.1.1
+     */
+    private ObjectMapperHolder holderForLogCalls = objectMapperLifecycleManager().getObjectMapperHolder();
 
     protected Logger logger;
     protected String prefix;

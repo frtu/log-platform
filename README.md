@@ -227,6 +227,17 @@ Also configure RollingFileAppender using :
 <property name="LOG_FILE_MAX_TOTAL_SIZE" value="${LOG_FILE_MAX_SIZE:-100MB}"/>
 ```
 
+#### Internal running mode for ObjectMapper
+
+By default, ObjectMapper is using a single instance for all Logger. To allow to run on different mode, use the System
+property 'OBJECTMAPPER_LIFECYCLE_STRATEGY' :
+
+* SINGLETON (default one)
+* THREAD_LOCAL
+* PER_CALL
+
+Ex : run your JVM with system property ```-DOBJECTMAPPER_LIFECYCLE_STRATEGY=THREAD_LOCAL```
+
 ### Log forwarder
 
 #### Enablement
