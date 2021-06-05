@@ -22,9 +22,66 @@ import java.util.stream.Stream;
 public class StructuredLogger {
     public static final String BASE_FORMAT = "{}";
 
-    private ObjectMapper mapper = new ObjectMapper();
-    protected Logger logger;
-    protected String prefix;
+    /**
+     * Generic key for message
+     *
+     * @since 1.1.1
+     */
+    public static final String KEY_MESSAGE = "message";
+
+    /**
+     * Generic key for any unique ID that characterize the current execution (order ID)
+     *
+     * @since 1.1.1
+     */
+    public static final String KEY_FLOW_ID = "flow_id";
+
+    /**
+     * Generic key for which execution flow it is relevant (order pizza)
+     *
+     * @since 1.1.1
+     */
+    public static final String KEY_FLOW = "flow";
+
+    /**
+     * Indicate the current phase the RPC call is at (init, sending, sent, ..)
+     *
+     * @since 1.1.1
+     */
+    public static final String KEY_PHASE = "phase";
+
+    /**
+     * A specific message
+     *
+     * @param message any human readable text
+     * @return log entry pair
+     * @since 1.1.1
+     */
+    public static Map.Entry<String, String> message(String message) {
+        return entry(KEY_MESSAGE, message);
+    }
+
+    /**
+     * Any unique ID that characterize the current execution (order ID)
+     *
+     * @param flowId any unique ID that characterize the current execution (order ID)
+     * @return log entry pair
+     * @since 1.1.1
+     */
+    public static Map.Entry<String, String> flowId(String flowId) {
+        return entry(KEY_FLOW_ID, flowId);
+    }
+
+    /**
+     * Current flow the execution is relevant. Means to be always the same during a phase
+     *
+     * @param flow current execution flow (init, sending, sent, ..)
+     * @return log entry pair
+     * @since 1.1.1
+     */
+    public static Map.Entry<String, String> flow(String flow) {
+        return entry(KEY_FLOW, flow);
+    }
 
     /**
      * Create a KV {@link Map.Entry} using parameters.
@@ -48,7 +105,7 @@ public class StructuredLogger {
     /**
      * Create a {@link Map} from the
      *
-     * @param <V> Ability to specify the Type for all the log entries
+     * @param <V>     Ability to specify the Type for all the log entries
      * @param entries All the log entry pair
      * @return return null if entries is null
      */
@@ -221,4 +278,8 @@ public class StructuredLogger {
             this.logger.error(new MapMarker("", map), format, getJson(map));
         }
     }
+
+    private ObjectMapper mapper = new ObjectMapper();
+    protected Logger logger;
+    protected String prefix;
 }

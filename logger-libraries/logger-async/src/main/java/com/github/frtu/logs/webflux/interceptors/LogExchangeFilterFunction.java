@@ -57,7 +57,7 @@ public class LogExchangeFilterFunction implements ExchangeFilterFunction {
         }
         Map<String, List<String>> multiValueMap = headers.entrySet().stream()
                 .filter(entry -> authorizedHeaderFilter.contains(entry.getKey()))
-                .collect(Collectors.toMap(entry -> entry.getKey(), x -> x.getValue()));
+                .collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
         return multiValueMap;
     }
 }
