@@ -14,6 +14,7 @@ import static com.github.frtu.logs.core.RpcLogger.requestBody;
 import static com.github.frtu.logs.core.RpcLogger.uri;
 
 @Slf4j
+@Fork(value = 2, jvmArgs = {"-Xms100M", "-Xmx100M"})
 @State(Scope.Benchmark)
 public class StructuredLoggerBenchmark {
     private StructuredLogger structuredLogger;
