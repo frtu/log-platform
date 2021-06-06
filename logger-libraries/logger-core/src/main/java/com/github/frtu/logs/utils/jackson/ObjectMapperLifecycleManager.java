@@ -55,10 +55,10 @@ public class ObjectMapperLifecycleManager {
 
     public ObjectMapperHolder getObjectMapperHolder() {
         if (HOLDER != null) {
-            LOGGER.info("getObjectMapperHolder in Singleton mode");
+            LOGGER.trace("getObjectMapperHolder in Singleton mode");
             return HOLDER;
         } else {
-            LOGGER.info("getObjectMapperHolder in per call mode");
+            LOGGER.trace("getObjectMapperHolder in per call mode");
             return new BaseObjectMapperHolder(buildObjectMapper());
         }
     }
