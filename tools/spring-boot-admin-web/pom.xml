@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -10,7 +9,7 @@
 
     <groupId>com.github.frtu.tools</groupId>
     <artifactId>spring-boot-admin-web</artifactId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.1.1</version>
 
     <properties>
         <start-class>com.github.frtu.spring.admin.AdminApplication</start-class>
@@ -19,7 +18,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!--===========================-->
         <java.version>1.8</java.version>
-        <frtu.logger.version>1.1.1-SNAPSHOT</frtu.logger.version>
+        <frtu.logger.version>1.1.1</frtu.logger.version>
         <!--===========================-->
         <spring-boot-admin.version>2.4.1</spring-boot-admin.version>
         <dockerfile-maven-version>1.4.13</dockerfile-maven-version> <!-- 2019-10-15 -->
@@ -148,7 +147,7 @@
         <connection>scm:git:git@github.com:frtu/log-platform.git</connection>
         <developerConnection>scm:git:git@github.com:frtu/log-platform.git</developerConnection>
         <url>https://github.com/frtu/log-platform/tree/master</url>
-        <tag>HEAD</tag>
+        <tag>v1.1.1</tag>
     </scm>
     <developers>
         <developer>
