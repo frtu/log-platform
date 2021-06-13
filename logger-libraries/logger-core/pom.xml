@@ -84,6 +84,7 @@
             <groupId>org.openjdk.jmh</groupId>
             <artifactId>jmh-core</artifactId>
             <version>${jmh.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.openjdk.jmh</groupId>
@@ -120,6 +121,7 @@
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- Making sure PostConstruct annotation is recognized -->
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>javax.annotation-api</artifactId>

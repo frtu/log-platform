@@ -81,7 +81,7 @@
         <!--<powermock.version>1.6.2</powermock.version>-->
         <!--<easymock.version>3.6</easymock.version>-->
         <!--===========================-->
-        <base-pom.version>1.1.4</base-pom.version>
+        <base-pom.version>1.1.6</base-pom.version>
         <governance-libraries.version>1.1.0</governance-libraries.version>
     </properties>
 
@@ -171,6 +171,31 @@
             <!--UNCOMMENT to remove parent-->
             <!--===========================-->
             <!-- Internal domain dependencies -->
+            <dependency>
+                <groupId>com.github.frtu.logs</groupId>
+                <artifactId>logger-async</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.frtu.logs</groupId>
+                <artifactId>logger-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.frtu.logs</groupId>
+                <artifactId>logger-opentracing-fluentd</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.frtu.logs</groupId>
+                <artifactId>logger-metrics</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.frtu.logs</groupId>
+                <artifactId>logger-security</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.github.frtu.archetype</groupId>
                 <artifactId>base-pom</artifactId>

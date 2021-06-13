@@ -45,17 +45,7 @@
             <artifactId>log4j-slf4j-impl</artifactId>
             <scope>provided</scope>
         </dependency>
-        <!-- Bridge of the logs of the library you import : https://www.slf4j.org/legacy.html -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
+        <!-- Don't forget to bridge to slf4j depending to the impl you import : https://www.slf4j.org/legacy.html -->
 
         <!--===========================-->
         <!-- Internal domain dependencies & lombok -->
