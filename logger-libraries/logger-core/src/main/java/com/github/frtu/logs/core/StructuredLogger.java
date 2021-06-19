@@ -48,11 +48,25 @@ public class StructuredLogger {
     public static final String KEY_FLOW = "flow";
 
     /**
-     * Indicate the current phase the RPC call is at (init, sending, sent, ..)
+     * Indicate the order number for a particular flow (1, 2, 3A, 3B, ..)
+     *
+     * @since 1.1.2
+     */
+    public static final String KEY_ORDER = "order";
+
+    /**
+     * Indicate the current phase the flow is at (init, sending, sent, ..)
      *
      * @since 1.1.1
      */
     public static final String KEY_PHASE = "phase";
+
+    /**
+     * An unique key associated of the current flow (key-order-id, key-case-id, ..)
+     *
+     * @since 1.1.2
+     */
+    public static final String KEY_JOIN_KEY_PREFIX = "key-";
 
     /**
      * A specific message
@@ -63,6 +77,17 @@ public class StructuredLogger {
      */
     public static Map.Entry<String, String> message(String message) {
         return entry(KEY_MESSAGE, message);
+    }
+
+    /**
+     * Any unique ID that characterize the current execution (order ID)
+     *
+     * @param flowId any unique ID that characterize the current execution (order ID)
+     * @return log entry pair
+     * @since 1.1.2
+     */
+    public static Map.Entry<String, String> flowId(UUID flowId) {
+        return flowId(flowId.toString());
     }
 
     /**
@@ -88,6 +113,28 @@ public class StructuredLogger {
     }
 
     /**
+     * Current order of the execution.
+     *
+     * @param order current execution flow (1, 2, 3A, 3B, ..)
+     * @return log entry pair
+     * @since 1.1.2
+     */
+    public static Map.Entry<String, String> order(Integer order) {
+        return order(order.toString());
+    }
+
+    /**
+     * Current order of the execution.
+     *
+     * @param order current execution flow (1, 2, 3A, 3B, ..)
+     * @return log entry pair
+     * @since 1.1.2
+     */
+    public static Map.Entry<String, String> order(String order) {
+        return entry(KEY_ORDER, order);
+    }
+
+    /**
      * Mark the current phase
      *
      * @param phase Phase on which the current execution is at (init, sending, sent, ..)
@@ -96,6 +143,30 @@ public class StructuredLogger {
      */
     public static Map.Entry<String, String> phase(String phase) {
         return entry(KEY_PHASE, phase);
+    }
+
+    /**
+     * An associated key from Database or from REST query, ...
+     *
+     * @param keyName  key name (key-order-id, key-case-id, ..)
+     * @param keyValue key value (UUID, Long, ...)
+     * @return log entry pair
+     * @since 1.1.2
+     */
+    public static Map.Entry<String, String> key(String keyName, UUID keyValue) {
+        return key(keyName, keyValue.toString());
+    }
+
+    /**
+     * An associated key from Database or from REST query, ...
+     *
+     * @param keyName  key name (key-order-id, key-case-id, ..)
+     * @param keyValue key value (UUID, Long, ...)
+     * @return log entry pair
+     * @since 1.1.2
+     */
+    public static Map.Entry<String, String> key(String keyName, String keyValue) {
+        return entry(KEY_JOIN_KEY_PREFIX + keyName, keyValue);
     }
 
     /**

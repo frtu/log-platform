@@ -59,7 +59,7 @@ public class RpcLoggerTest {
 
         String uri = "/HeroNameAndFriends";
         String query = "Query";
-        String requestId = UUID.randomUUID().toString();
+        UUID requestId = UUID.randomUUID();
 
         // Debugging steps
         rpcLogger.debug(client(),
@@ -80,6 +80,24 @@ public class RpcLoggerTest {
                 requestId(requestId),
                 phase("SENT"),
                 statusCode("123"),
+                errorMessage("The invitation has expired, please request a new one")
+        );
+    }
+
+    @Test
+    public void nullStatusCode() {
+        final RpcLogger rpcLogger = RpcLogger.create("graphQL");
+        assertNotNull(rpcLogger);
+
+        Integer emptyStatusCode = null;
+
+        // Info success or Warn or Error result
+        rpcLogger.warn(client(),
+                method("Query"),
+                uri("/HeroNameAndFriends"),
+                requestId(UUID.randomUUID()),
+                phase("SENT"),
+                statusCode(emptyStatusCode),
                 errorMessage("The invitation has expired, please request a new one")
         );
     }

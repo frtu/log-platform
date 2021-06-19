@@ -5,9 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Specialized version of {@link StructuredLogger} to normalize RPC calls.
@@ -167,6 +169,18 @@ public class RpcLogger extends StructuredLogger {
      *
      * @param requestId unique id for this request (especially for post)
      * @return log entry pair
+     * @since 1.1.2
+     */
+    public static Map.Entry<String, String> requestId(UUID requestId) {
+        return requestId(requestId.toString());
+    }
+
+
+    /**
+     * Business operation name
+     *
+     * @param requestId unique id for this request (especially for post)
+     * @return log entry pair
      * @since 1.1.0
      */
     public static Map.Entry<String, String> requestId(String requestId) {
@@ -190,7 +204,7 @@ public class RpcLogger extends StructuredLogger {
      * @return log entry pair
      */
     public static Map.Entry<String, String> uri(URI uri) {
-        return entry(KEY_URI, uri.toString());
+        return uri(uri.toString());
     }
 
     /**
@@ -326,8 +340,13 @@ public class RpcLogger extends StructuredLogger {
      *
      * @param statusCode Status code returned from the response
      * @return log entry pair
+     * @since 1.1.2
      */
-    public static Map.Entry<String, String> statusCode(int statusCode) {
+    public static Map.Entry<String, String> statusCode(@Nullable Integer statusCode) {
+        if (statusCode == null) {
+            // No null check needed for statusCode, as it will be just skipped here
+            return null;
+        }
         return statusCode(Integer.toString(statusCode));
     }
 
