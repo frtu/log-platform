@@ -10,6 +10,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -46,6 +48,13 @@ public class StructuredLogger {
      * @since 1.1.1
      */
     public static final String KEY_FLOW = "flow";
+
+    /**
+     * Indicate the generic endpoint
+     *
+     * @since 1.1.3
+     */
+    public static final String KEY_ENDPOINT = "endpoint";
 
     /**
      * Indicate the order number for a particular flow (1, 2, 3A, 3B, ..)
@@ -117,6 +126,39 @@ public class StructuredLogger {
      */
     public static Map.Entry<String, String> flow(String flow) {
         return entry(KEY_FLOW, flow);
+    }
+
+    /**
+     * Any endpoint : topic / queue name, URL, ...
+     *
+     * @param endpoint any endpoint
+     * @return log entry pair
+     * @since 1.1.3
+     */
+    public static Map.Entry<String, String> endpoint(URI endpoint) {
+        return endpoint(endpoint.toString());
+    }
+
+    /**
+     * Any endpoint : topic / queue name, URL, ...
+     *
+     * @param endpoint any endpoint
+     * @return log entry pair
+     * @since 1.1.3
+     */
+    public static Map.Entry<String, String> endpoint(URL endpoint) {
+        return endpoint(endpoint.toString());
+    }
+
+    /**
+     * Any endpoint : topic / queue name, URL, ...
+     *
+     * @param endpoint any endpoint
+     * @return log entry pair
+     * @since 1.1.3
+     */
+    public static Map.Entry<String, String> endpoint(String endpoint) {
+        return entry(KEY_ENDPOINT, endpoint);
     }
 
     /**
