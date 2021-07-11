@@ -66,11 +66,6 @@ public class RpcLogger extends StructuredLogger {
     public static final String KEY_STATUS_CODE = "response_code";
 
     /**
-     * Generic key equivalent to Fields#MESSAGE for response message.
-     */
-    public static final String KEY_ERROR_MESSAGE = "error_message";
-
-    /**
      * A constant for setting the span kind to indicate that it represents a server span.
      */
     public static final String SPAN_KIND_SERVER = "server";
@@ -174,7 +169,6 @@ public class RpcLogger extends StructuredLogger {
     public static Map.Entry<String, String> requestId(UUID requestId) {
         return requestId(requestId.toString());
     }
-
 
     /**
      * Business operation name
@@ -358,15 +352,5 @@ public class RpcLogger extends StructuredLogger {
      */
     public static Map.Entry<String, String> statusCode(String statusCode) {
         return entry(KEY_STATUS_CODE, statusCode);
-    }
-
-    /**
-     * Log the error message
-     *
-     * @param errorMessage Error message returned
-     * @return log entry pair
-     */
-    public static Map.Entry<String, String> errorMessage(String errorMessage) {
-        return entry(KEY_ERROR_MESSAGE, errorMessage);
     }
 }

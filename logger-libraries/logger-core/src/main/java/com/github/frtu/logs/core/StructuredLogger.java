@@ -69,6 +69,13 @@ public class StructuredLogger {
     public static final String KEY_JOIN_KEY_PREFIX = "key-";
 
     /**
+     * Generic key equivalent to Fields#MESSAGE for response message.
+     *
+     * @since 1.1.3
+     */
+    public static final String KEY_ERROR_MESSAGE = "error_message";
+
+    /**
      * A specific message
      *
      * @param message any human readable text
@@ -167,6 +174,16 @@ public class StructuredLogger {
      */
     public static Map.Entry<String, String> key(String keyName, String keyValue) {
         return entry(KEY_JOIN_KEY_PREFIX + keyName, keyValue);
+    }
+
+    /**
+     * Log the error message
+     *
+     * @param errorMessage Error message returned
+     * @return log entry pair
+     */
+    public static Map.Entry<String, String> errorMessage(String errorMessage) {
+        return entry(KEY_ERROR_MESSAGE, errorMessage);
     }
 
     /**
@@ -327,15 +344,28 @@ public class StructuredLogger {
         warn(BASE_FORMAT, entries);
     }
 
+    public void warn(Throwable t, Map.Entry... entries) {
+        warn(t, BASE_FORMAT, entries);
+    }
+
     public void warn(Map.Entry[] entryArray, Map.Entry... entries) {
         final Map.Entry[] allEntries = ArrayUtils.addAll(entryArray, entries);
         warn(BASE_FORMAT, allEntries);
     }
 
+    public void warn(Throwable t, Map.Entry[] entryArray, Map.Entry... entries) {
+        final Map.Entry[] allEntries = ArrayUtils.addAll(entryArray, entries);
+        warn(t, BASE_FORMAT, allEntries);
+    }
+
     public void warn(String format, Map.Entry... entries) {
+        warn(null, format, entries);
+    }
+
+    public void warn(Throwable t, String format, Map.Entry... entries) {
         if (this.logger.isWarnEnabled()) {
             final Map map = unmodifiableMap(this.prefix, entries);
-            this.logger.warn(new MapMarker("", map), format, getJson(map));
+            this.logger.warn(new MapMarker("", map), format, getJson(map), t);
         }
     }
 
@@ -343,15 +373,27 @@ public class StructuredLogger {
         error(BASE_FORMAT, entries);
     }
 
+    public void error(Throwable t, Map.Entry... entries) {
+        error(t, BASE_FORMAT, entries);
+    }
+
     public void error(Map.Entry[] entryArray, Map.Entry... entries) {
+        error(entryArray, entries);
+    }
+
+    public void error(Throwable t, Map.Entry[] entryArray, Map.Entry... entries) {
         final Map.Entry[] allEntries = ArrayUtils.addAll(entryArray, entries);
-        error(BASE_FORMAT, allEntries);
+        error(t, BASE_FORMAT, allEntries);
     }
 
     public void error(String format, Map.Entry... entries) {
+        error(null, format, entries);
+    }
+
+    public void error(Throwable t, String format, Map.Entry... entries) {
         if (this.logger.isErrorEnabled()) {
             final Map map = unmodifiableMap(this.prefix, entries);
-            this.logger.error(new MapMarker("", map), format, getJson(map));
+            this.logger.error(new MapMarker("", map), format, getJson(map), t);
         }
     }
 
