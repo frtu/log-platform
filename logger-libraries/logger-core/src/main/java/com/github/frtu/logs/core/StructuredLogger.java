@@ -247,6 +247,17 @@ public class StructuredLogger {
         return entries;
     }
 
+    public static Map.Entry[] entries(Map.Entry[] previousEntries, Map.Entry... newEntries) {
+        return join(newEntries, previousEntries);
+    }
+
+    public static Map.Entry[] join(Map.Entry[] entries, Map.Entry[] followingEntries) {
+        Map.Entry[] joinedEntries = new Map.Entry[entries.length + followingEntries.length];
+        System.arraycopy(entries, 0, joinedEntries, 0, entries.length);
+        System.arraycopy(followingEntries, 0, joinedEntries, entries.length, followingEntries.length);
+        return entries(joinedEntries);
+    }
+
     /**
      * Create a {@link Map} from the
      *
