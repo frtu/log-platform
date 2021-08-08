@@ -4,7 +4,7 @@ import ch.qos.logback.more.appenders.marker.MapMarker;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.frtu.logs.utils.jackson.ObjectMapperHolder;
+import com.github.frtu.serdes.jackson.lifecycle.ObjectMapperHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.github.frtu.logs.utils.jackson.ObjectMapperLifecycleManager.objectMapperLifecycleManager;
+import static com.github.frtu.serdes.jackson.lifecycle.ObjectMapperLifecycleManager.objectMapperLifecycleManager;
 
 /**
  * Highly inspired from {@link net.logstash.logback.argument.StructuredArguments}.

@@ -80,21 +80,12 @@
         <!--<powermock.version>1.6.2</powermock.version>-->
         <!--<easymock.version>3.6</easymock.version>-->
         <!--===========================-->
-        <base-pom.version>1.2.0</base-pom.version>
-        <governance-libraries.version>1.1.0</governance-libraries.version>
+        <base-pom.version>1.2.1</base-pom.version>
+        <frtu-libs-java.version>1.1.2</frtu-libs-java.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <!--===========================-->
-            <!-- Internal domain dependencies -->
-            <!--===========================-->
-            <dependency>
-                <groupId>com.github.frtu.governance</groupId>
-                <artifactId>library-spring-reflection</artifactId>
-                <version>${governance-libraries.version}</version>
-            </dependency>
-
             <!-- Logging - JSON encoder -->
             <dependency>
                 <groupId>net.logstash.logback</groupId>
@@ -199,6 +190,13 @@
                 <groupId>com.github.frtu.archetype</groupId>
                 <artifactId>base-pom</artifactId>
                 <version>${base-pom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.github.frtu.libs</groupId>
+                <artifactId>lib-java-bom</artifactId>
+                <version>${frtu-libs-java.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
