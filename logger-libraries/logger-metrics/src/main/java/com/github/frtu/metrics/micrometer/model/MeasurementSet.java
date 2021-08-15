@@ -38,7 +38,6 @@ public class MeasurementSet {
 
     private final MeterRegistry registry;
     private final Counter totalExecutionCounter;
-    private Timer.Sample timerSample;
 
     public MeasurementSet(MeterRegistry registry, String operationName) {
         this(registry, operationName, null);
@@ -76,21 +75,21 @@ public class MeasurementSet {
         return metricNameBuilder.toString();
     }
 
-    public void startExecution() {
-        this.timerSample = Timer.start(registry);
+    public Timer.Sample startExecution() {
+        return Timer.start(registry);
     }
 
-    public void stopExecution() {
-        stopExecution(null);
+    public void stopExecution(Timer.Sample timerSample) {
+        stopExecution(null, timerSample);
     }
 
-    public void stopExecution(String exceptionName) {
+    public void stopExecution(String exceptionName, Timer.Sample timerSample) {
         try {
             LOGGER.trace("Stop Timer for {} with exception:{}", operationName, exceptionName);
             calculateRatio(exceptionName);
 
             if (timerSample != null) {
-                final long durationInNS = this.timerSample.stop(timer(exceptionName, tags));
+                final long durationInNS = timerSample.stop(timer(exceptionName, tags));
                 LOGGER.trace("Added duration:{}", durationInNS);
             }
         } catch (Exception e) {

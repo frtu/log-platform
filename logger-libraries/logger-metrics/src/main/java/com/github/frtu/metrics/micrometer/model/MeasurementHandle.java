@@ -1,5 +1,6 @@
 package com.github.frtu.metrics.micrometer.model;
 
+import io.micrometer.core.instrument.Timer;
 import org.slf4j.MDC;
 
 import static io.micrometer.core.aop.TimedAspect.EXCEPTION_TAG;
@@ -12,27 +13,32 @@ import static io.micrometer.core.aop.TimedAspect.EXCEPTION_TAG;
  */
 public class MeasurementHandle implements AutoCloseable {
     private MeasurementSet measurement;
+    private Timer.Sample timerSample;
+    private String exceptionName;
 
     // start
     public MeasurementHandle(MeasurementSet measurement) {
         this.measurement = measurement;
-        measurement.startExecution();
+        this.timerSample = measurement.startExecution();
     }
 
-    public static Throwable flagError(Throwable ex) {
+    public Throwable flagError(Throwable ex) {
         flagError(ex.getClass().getSimpleName());
         return ex;
     }
 
-    public static void flagError(String exceptionName) {
-        // Flag an error into MCD so that close would know
-        MDC.put(EXCEPTION_TAG, exceptionName);
+    public void flagError(String exceptionName) {
+        this.exceptionName = exceptionName;
     }
 
     @Override
     // stop
     public void close() {
-        final String exceptionName = MDC.get(EXCEPTION_TAG);
-        measurement.stopExecution(exceptionName);
+        final String exceptionName = (this.exceptionName != null) ? this.exceptionName : readError();
+        measurement.stopExecution(exceptionName, this.timerSample);
+    }
+
+    public static String readError() {
+        return MDC.get(EXCEPTION_TAG);
     }
 }

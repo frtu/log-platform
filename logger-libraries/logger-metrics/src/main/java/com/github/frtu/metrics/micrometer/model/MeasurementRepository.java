@@ -45,6 +45,16 @@ public class MeasurementRepository {
     /**
      * Create a measurement from operationName.
      *
+     * @param operationName Unique identifier for a particular measurement
+     * @return Specific measurement
+     */
+    public MeasurementSet getMeasurement(String operationName) {
+        return getMeasurement(operationName, null, null);
+    }
+
+    /**
+     * Create a measurement from operationName.
+     *
      * @param operationName        Unique identifier for a particular measurement
      * @param operationDescription Optional description for this measurement
      * @param tags                 Optional static tags for this measurement
@@ -54,13 +64,21 @@ public class MeasurementRepository {
         MeasurementSet measurement = repository.get(operationName);
         if (measurement == null) {
             measurement = new MeasurementSet(registry, operationName);
-            measurement.setOperationDescription(operationDescription);
-            measurement.setTags(tags);
+            if (operationDescription != null) {
+                measurement.setOperationDescription(operationDescription);
+            }
+            if (tags != null) {
+                measurement.setTags(tags);
+            }
             if (repository.size() <= maxCacheSize) {
                 repository.put(operationName, measurement);
             }
         }
         return measurement;
+    }
+
+    public MeasurementHandle getMeasurementHandle(String operationName) {
+        return getMeasurementHandle(operationName, null, null);
     }
 
     public MeasurementHandle getMeasurementHandle(String operationName, String operationDescription, Iterable<Tag> tags) {
