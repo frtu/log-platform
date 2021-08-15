@@ -50,8 +50,8 @@ public class Measurement {
     /**
      * Creating metric name based on Data Model [a-zA-Z_:][a-zA-Z0-9_:]*.
      *
-     * @param suffixes
-     * @return
+     * @param suffixes List of suffixes for this metric
+     * @return Built metric name
      * @see <a href="https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels">Prometheus data_model</a>
      * @see <a href="https://prometheus.io/docs/practices/naming/">Prometheus naming</a>
      */

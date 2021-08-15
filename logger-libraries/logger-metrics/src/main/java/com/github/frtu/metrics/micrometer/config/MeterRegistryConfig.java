@@ -73,7 +73,7 @@ public class MeterRegistryConfig {
     }
 
     /**
-     * Creating AOP aspect watching for {@link com.github.frtu.logs.tracing.annotation.ExecutionSpan}
+     * Creating AOP aspect watching for {@link com.github.frtu.logs.core.metadata.ExecutionSpan}
      *
      * @param registry {@link MeterRegistry}
      * @return TimerSpanAspect

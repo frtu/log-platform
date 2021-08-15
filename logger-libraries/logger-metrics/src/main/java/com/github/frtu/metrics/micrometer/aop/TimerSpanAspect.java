@@ -73,7 +73,6 @@ public class TimerSpanAspect {
      * @param joinPointSignature AOP method {@link Signature}
      * @param isFullClassName    if should return class canonical name or short name
      * @return String signature name
-     * @since 0.9.5
      */
     public static String getName(Signature joinPointSignature, boolean isFullClassName) {
         return executionHelper.getName(joinPointSignature.getDeclaringType(), joinPointSignature.getName(), isFullClassName);
