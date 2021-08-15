@@ -3,20 +3,26 @@ package com.github.frtu.metrics.micrometer.config;
 import com.github.frtu.logs.core.metadata.ApplicationMetadata;
 import com.github.frtu.metrics.micrometer.aop.TimerSpanAspect;
 import com.github.frtu.metrics.micrometer.model.MeasurementHandle;
+import com.github.frtu.metrics.micrometer.model.MeasurementRepository;
 import com.github.frtu.spring.conditional.commons.AopConditionalOnClass;
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Metrics;
 import io.micrometer.core.instrument.config.MeterFilter;
 import io.micrometer.core.instrument.distribution.DistributionStatisticConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
 import java.time.Duration;
+
+import static com.github.frtu.metrics.micrometer.model.Measurement.MEASUREMENT_PREFIX;
 
 /**
  * Micrometer registry configuration
@@ -28,6 +34,9 @@ import java.time.Duration;
 @Configuration
 public class MeterRegistryConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(MeterRegistryConfig.class);
+
+    @Autowired(required = false)
+    private MeterRegistry registry;
 
     @Bean
     MeterRegistryCustomizer<MeterRegistry> metricsCommonTags(ApplicationMetadata applicationMetadata) {
@@ -62,14 +71,19 @@ public class MeterRegistryConfig {
     /**
      * Creating AOP aspect watching for {@link com.github.frtu.logs.core.metadata.ExecutionSpan}
      *
-     * @param registry {@link MeterRegistry}
      * @return TimerSpanAspect
      * @since 0.9.6
      */
     @Bean
     @Conditional(AopConditionalOnClass.class)
-    TimerSpanAspect timerSpanAspect(MeterRegistry registry) {
+    TimerSpanAspect timerSpanAspect() {
         LOGGER.debug("Activate @Annotation com.github.frtu.logs.tracing.annotation.ExecutionSpan using TimerSpanAspect");
-        return new TimerSpanAspect(registry);
+        final MeasurementRepository measurementRepository;
+        if (registry == null) {
+            measurementRepository = new MeasurementRepository(Metrics.globalRegistry);
+        } else {
+            measurementRepository = new MeasurementRepository(registry);
+        }
+        return new TimerSpanAspect(measurementRepository);
     }
 }

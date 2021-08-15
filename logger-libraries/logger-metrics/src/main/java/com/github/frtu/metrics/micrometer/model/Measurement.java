@@ -15,8 +15,8 @@ import static io.micrometer.core.aop.TimedAspect.EXCEPTION_TAG;
 public class Measurement {
     public static final String MEASUREMENT_PREFIX = "span";
 
-    public static final String COUNTER_SUFFIX_FAILURE = "failure";
     public static final String COUNTER_SUFFIX_EXEC = "count";
+    public static final String COUNTER_SUFFIX_FAILURE = "failure";
 
     @Getter
     private final String metricName;
@@ -58,7 +58,7 @@ public class Measurement {
     public String buildMetricName(String... suffixes) {
         StringBuilder metricNameBuilder = new StringBuilder();
         metricNameBuilder.append(MEASUREMENT_PREFIX).append(".");
-        if (!StringUtils.isEmpty(metricName)) {
+        if (StringUtils.hasText(metricName)) {
             metricNameBuilder.append(metricName);
         } else {
             metricNameBuilder.append(operationName);
@@ -107,7 +107,7 @@ public class Measurement {
 
     protected Timer timer(String exceptionName, Iterable<Tag> tags) {
         final Timer.Builder builder = Timer.builder(buildMetricName()).description(operationDescription);
-        if (!StringUtils.isEmpty(metricName)) {
+        if (StringUtils.hasText(metricName)) {
             builder.tag("operation", operationName);
         }
         return builder

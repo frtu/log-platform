@@ -2,11 +2,9 @@ package com.github.frtu.metrics.micrometer.aop;
 
 import com.github.frtu.logs.core.metadata.ExecutionHelper;
 import com.github.frtu.logs.core.metadata.ExecutionSpan;
-import com.github.frtu.metrics.micrometer.model.Measurement;
 import com.github.frtu.metrics.micrometer.model.MeasurementHandle;
+import com.github.frtu.metrics.micrometer.model.MeasurementRepository;
 import io.micrometer.core.aop.TimedAspect;
-import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.Metrics;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
 import lombok.extern.slf4j.Slf4j;
@@ -23,15 +21,15 @@ import java.lang.reflect.Method;
 import java.util.function.Function;
 
 /**
- * Same as {@link TimedAspect} but allow to run metrics based on {@link ExecutionSpan}.
+ * Allow to integrate with AOP and capture execution steps. Delegate couting to {@link MeasurementHandle}
+ * <p>
+ * Similar with {@link TimedAspect} but allow to run metrics based on {@link ExecutionSpan}.
  *
  * @since 0.9.6
  */
 @Aspect
 @Slf4j
 public class TimerSpanAspect {
-    private static ExecutionHelper executionHelper = new ExecutionHelper();
-
     /**
      * Configure using proprty : metric.full.classname
      * <p>
@@ -39,47 +37,34 @@ public class TimerSpanAspect {
      */
     @Value("${metric.full.classname:#{environment.TRACE_FULL_CLASSNAME ?: false}}")
     boolean isFullClassName;
-
-    private MeterRegistry registry;
+    private ExecutionHelper executionHelper;
     private final Function<ProceedingJoinPoint, Iterable<Tag>> tagsBasedOnJoinPoint;
 
-    /**
-     * Create a {@code TimerSpanAspect} instance with {@link Metrics#globalRegistry}.
-     */
-    public TimerSpanAspect() {
-        this(Metrics.globalRegistry);
-    }
+    private MeasurementRepository measurementRepository;
 
-    public TimerSpanAspect(MeterRegistry registry) {
-        this(registry, pjp ->
+    public TimerSpanAspect(MeasurementRepository measurementRepository) {
+        this(measurementRepository, pjp ->
                 Tags.of("class", pjp.getStaticPart().getSignature().getDeclaringTypeName(),
                         "method", pjp.getStaticPart().getSignature().getName())
         );
     }
 
-    public TimerSpanAspect(MeterRegistry registry, Function<ProceedingJoinPoint, Iterable<Tag>> tagsBasedOnJoinPoint) {
-        this.registry = registry;
+    public TimerSpanAspect(MeasurementRepository measurementRepository, Function<ProceedingJoinPoint, Iterable<Tag>> tagsBasedOnJoinPoint) {
+        this.measurementRepository = measurementRepository;
         this.tagsBasedOnJoinPoint = tagsBasedOnJoinPoint;
     }
 
     @PostConstruct
     public void init() {
         LOGGER.debug("Init {} with TimerSpanAspect:{}", TimerSpanAspect.class, isFullClassName);
-    }
-
-    /**
-     * Get span name based on joinPointSignature
-     *
-     * @param joinPointSignature AOP method {@link Signature}
-     * @param isFullClassName    if should return class canonical name or short name
-     * @return String signature name
-     */
-    public static String getName(Signature joinPointSignature, boolean isFullClassName) {
-        return executionHelper.getName(joinPointSignature.getDeclaringType(), joinPointSignature.getName(), isFullClassName);
+        executionHelper = new ExecutionHelper(isFullClassName);
     }
 
     @Around("@annotation(com.github.frtu.logs.tracing.annotation.ExecutionSpan)")
     public Object timedExecutionSpan(ProceedingJoinPoint joinPoint) throws Throwable {
+        //-------------------------------
+        // Fetch all metadata
+        //-------------------------------
         final Signature joinPointSignature = joinPoint.getSignature();
 
         String operationName = null;
@@ -92,22 +77,23 @@ public class TimerSpanAspect {
             operationDescription = methodAnnotation.description();
         }
         // Get Name & Description from method name
-        if (StringUtils.isEmpty(operationName)) {
-            operationDescription = getName(joinPointSignature, true);
-            if (isFullClassName) {
-                operationName = operationDescription;
-            } else {
-                operationName = getName(joinPointSignature, false);
-            }
+        if (!StringUtils.hasText(operationName)) {
+            operationName = executionHelper.getName(joinPointSignature.getDeclaringType(), joinPointSignature.getName());
         }
-        final Measurement measurement = new Measurement(registry, operationName);
-        measurement.setOperationDescription(operationDescription);
-        measurement.setTags(tagsBasedOnJoinPoint.apply(joinPoint));
+        // Get Tags
+        Iterable<Tag> tags = tagsBasedOnJoinPoint.apply(joinPoint);
 
-        try (MeasurementHandle handle = new MeasurementHandle(measurement)) {
+        //-------------------------------
+        // Execution
+        //-------------------------------
+        MeasurementHandle handle = measurementRepository.getMeasurementHandle(operationName, operationDescription, tags);
+        try {
             return joinPoint.proceed();
         } catch (Throwable ex) {
-            throw MeasurementHandle.flagError(ex);
+            throw handle.flagError(ex);
+        } finally {
+            handle.close();
         }
+        //-------------------------------
     }
 }

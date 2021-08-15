@@ -7,6 +7,27 @@ package com.github.frtu.logs.core.metadata;
  * @since 1.1.3 : Refactored to remove outside dependencies
  */
 public class ExecutionHelper {
+    private boolean isFullClassName;
+
+    public ExecutionHelper() {
+        this(false);
+    }
+
+    public ExecutionHelper(boolean isFullClassName) {
+        this.isFullClassName = isFullClassName;
+    }
+
+    /**
+     * Get span name based on declaringType and methodName
+     *
+     * @param declaringType   Classname based on isFullClassName will use long or short name
+     * @param methodName      method name
+     * @return String signature name
+     */
+    public String getName(Class declaringType, String methodName) {
+        return getName(declaringType, methodName, this.isFullClassName);
+    }
+
     /**
      * Get span name based on declaringType and methodName
      *

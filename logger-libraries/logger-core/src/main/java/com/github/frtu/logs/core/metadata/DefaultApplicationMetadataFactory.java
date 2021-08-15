@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Default {@link ApplicationMetadata} factory.
+ * Default {@link ApplicationMetadata} factory. Configure application name for logs & metrics.
  * <p>
  * Allow override by creating another bean using name {@link #BEAN_NAME}
  *

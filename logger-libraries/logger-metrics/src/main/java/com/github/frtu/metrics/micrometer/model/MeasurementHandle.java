@@ -9,14 +9,28 @@ import static io.micrometer.core.aop.TimedAspect.EXCEPTION_TAG;
 public class MeasurementHandle implements AutoCloseable {
     private Measurement measurement;
 
+    /**
+     * Check if the current Meter Id is a timer
+     *
+     * @param id A specific {@link Meter} ID
+     * @return If is a Measurement
+     */
+    public static boolean isMeasurement(Meter.Id id) {
+        return id.getType() == Meter.Type.TIMER
+                && id.getName().matches("^(" + MEASUREMENT_PREFIX + "){1}.*");
+    }
+
+    // start
     public MeasurementHandle(Measurement measurement) {
         this.measurement = measurement;
         measurement.startExecution();
     }
 
-    public static boolean isMeasurement(Meter.Id id) {
-        return id.getType() == Meter.Type.TIMER
-                && id.getName().matches("^(" + MEASUREMENT_PREFIX + "){1}.*");
+    @Override
+    // stop
+    public void close() {
+        final String exceptionName = MDC.get(EXCEPTION_TAG);
+        measurement.stopExecution(exceptionName);
     }
 
     public static Throwable flagError(Throwable ex) {
@@ -26,11 +40,5 @@ public class MeasurementHandle implements AutoCloseable {
 
     public static void flagError(String exceptionName) {
         MDC.put(EXCEPTION_TAG, exceptionName);
-    }
-
-    @Override
-    public void close() {
-        final String exceptionName = MDC.get(EXCEPTION_TAG);
-        measurement.stopExecution(exceptionName);
     }
 }
