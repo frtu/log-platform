@@ -60,19 +60,6 @@ public class MeterRegistryConfig {
     }
 
     /**
-     * Creating AOP aspect watching for {@link io.micrometer.core.annotation.Timed}
-     *
-     * @param registry {@link MeterRegistry}
-     * @return TimedAspect
-     */
-    @Bean
-    @Conditional(AopConditionalOnClass.class)
-    TimedAspect timedAspect(MeterRegistry registry) {
-        LOGGER.debug("Activate @Annotation io.micrometer.core.annotation.Timed using TimedAspect");
-        return new TimedAspect(registry);
-    }
-
-    /**
      * Creating AOP aspect watching for {@link com.github.frtu.logs.core.metadata.ExecutionSpan}
      *
      * @param registry {@link MeterRegistry}
