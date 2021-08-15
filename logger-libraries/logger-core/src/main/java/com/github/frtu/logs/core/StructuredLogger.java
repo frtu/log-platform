@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.frtu.serdes.jackson.lifecycle.ObjectMapperHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,6 +84,13 @@ public class StructuredLogger {
      * @since 1.1.3
      */
     public static final String KEY_ERROR_MESSAGE = "error_message";
+
+    /**
+     * Stacktrace for any Throwable found
+     *
+     * @since 1.1.3
+     */
+    public static final String KEY_ERROR_STACKTRACE = "error_stacktrace";
 
     /**
      * A specific message
@@ -229,6 +237,39 @@ public class StructuredLogger {
     }
 
     /**
+     * Log throwable as the error message
+     *
+     * @param throwable throwable returned
+     * @return log entry pair
+     * @since 1.1.3
+     */
+    public static Map.Entry<String, String> errorMessage(final Throwable throwable) {
+        return (throwable != null) ? entry(KEY_ERROR_MESSAGE, ExceptionUtils.getMessage(throwable)) : null;
+    }
+
+    /**
+     * Log throwable as the error message
+     *
+     * @param throwable throwable returned
+     * @return log entry pair
+     * @since 1.1.3
+     */
+    public static Map.Entry<String, String> errorRootMessage(final Throwable throwable) {
+        return (throwable != null) ? entry(KEY_ERROR_MESSAGE, ExceptionUtils.getRootCauseMessage(throwable)) : null;
+    }
+
+    /**
+     * Log throwable as the error message
+     *
+     * @param throwable throwable returned
+     * @return log entry pair
+     * @since 1.1.3
+     */
+    public static Map.Entry<String, String> errorStackTrace(final Throwable throwable) {
+        return (throwable != null) ? entry(KEY_ERROR_STACKTRACE, ExceptionUtils.getStackTrace(throwable)) : null;
+    }
+
+    /**
      * Create a KV {@link Map.Entry} using parameters.
      *
      * @param key   Key for this entry (support null)
@@ -274,7 +315,6 @@ public class StructuredLogger {
             LOGGER.trace("entries is null");
             return null;
         }
-        LOGGER.trace("Adding entries size:{}", entries.length);
 
         Set<String> nullValues = new HashSet<>();
         final Map<String, V> result = Stream.of(entries)
@@ -386,10 +426,23 @@ public class StructuredLogger {
         info(BASE_FORMAT, allEntries);
     }
 
+    public void info(Throwable t, Map.Entry... entries) {
+        info(t, BASE_FORMAT, entries);
+    }
+
+    public void info(Throwable t, Map.Entry[] entryArray, Map.Entry... entries) {
+        final Map.Entry[] allEntries = ArrayUtils.addAll(entryArray, entries);
+        info(t, BASE_FORMAT, allEntries);
+    }
+
     public void info(String format, Map.Entry... entries) {
+        info(null, format, entries);
+    }
+
+    public void info(Throwable t, String format, Map.Entry... entries) {
         if (this.logger.isInfoEnabled()) {
-            final Map map = unmodifiableMap(this.prefix, entries);
-            this.logger.info(new MapMarker("", map), format, getJson(map));
+            final Map map = unmodifiableMap(this.prefix, entries(entries, errorStackTrace(t)));
+            this.logger.error(new MapMarker("", map), format, getJson(map), t);
         }
     }
 
@@ -397,13 +450,13 @@ public class StructuredLogger {
         warn(BASE_FORMAT, entries);
     }
 
-    public void warn(Throwable t, Map.Entry... entries) {
-        warn(t, BASE_FORMAT, entries);
-    }
-
     public void warn(Map.Entry[] entryArray, Map.Entry... entries) {
         final Map.Entry[] allEntries = ArrayUtils.addAll(entryArray, entries);
         warn(BASE_FORMAT, allEntries);
+    }
+
+    public void warn(Throwable t, Map.Entry... entries) {
+        warn(t, BASE_FORMAT, entries);
     }
 
     public void warn(Throwable t, Map.Entry[] entryArray, Map.Entry... entries) {
@@ -417,7 +470,7 @@ public class StructuredLogger {
 
     public void warn(Throwable t, String format, Map.Entry... entries) {
         if (this.logger.isWarnEnabled()) {
-            final Map map = unmodifiableMap(this.prefix, entries);
+            final Map map = unmodifiableMap(this.prefix, entries(entries, errorStackTrace(t)));
             this.logger.warn(new MapMarker("", map), format, getJson(map), t);
         }
     }
@@ -426,12 +479,12 @@ public class StructuredLogger {
         error(BASE_FORMAT, entries);
     }
 
-    public void error(Throwable t, Map.Entry... entries) {
-        error(t, BASE_FORMAT, entries);
-    }
-
     public void error(Map.Entry[] entryArray, Map.Entry... entries) {
         error(entryArray, entries);
+    }
+
+    public void error(Throwable t, Map.Entry... entries) {
+        error(t, BASE_FORMAT, entries);
     }
 
     public void error(Throwable t, Map.Entry[] entryArray, Map.Entry... entries) {
@@ -445,7 +498,7 @@ public class StructuredLogger {
 
     public void error(Throwable t, String format, Map.Entry... entries) {
         if (this.logger.isErrorEnabled()) {
-            final Map map = unmodifiableMap(this.prefix, entries);
+            final Map map = unmodifiableMap(this.prefix, entries(entries, errorStackTrace(t)));
             this.logger.error(new MapMarker("", map), format, getJson(map), t);
         }
     }
