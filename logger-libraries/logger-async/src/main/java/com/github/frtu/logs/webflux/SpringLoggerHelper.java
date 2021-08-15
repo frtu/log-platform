@@ -12,6 +12,12 @@ import static com.github.frtu.logs.core.RpcLogger.uri;
 import static com.github.frtu.logs.core.StructuredLogger.entries;
 import static com.github.frtu.logs.core.StructuredLogger.join;
 
+/**
+ * Helper to extract Log entries from {@link ServerRequest}
+ *
+ * @author Frédéric TU
+ * @since 1.1.2
+ */
 public class SpringLoggerHelper {
     public static Map.Entry[] serverRequest(ServerRequest serverRequest) {
         return serverRequest(serverRequest, null);

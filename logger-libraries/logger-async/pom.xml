@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.github.frtu.logs</groupId>
@@ -23,6 +24,20 @@
     </properties>
 
     <dependencies>
+        <!--===========================-->
+        <!-- Internal domain dependencies -->
+        <!--===========================-->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>logger-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>logger-metrics</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- Platform -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -35,6 +50,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <!--===========================-->
         <!-- SLF4J Logs imports -->
@@ -45,20 +65,6 @@
             <scope>provided</scope>
         </dependency>
         <!-- Don't forget to bridge to slf4j depending to the impl you import : https://www.slf4j.org/legacy.html -->
-
-        <!--===========================-->
-        <!-- Internal domain dependencies & lombok -->
-        <!--===========================-->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>logger-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
 
         <!--===========================-->
         <!-- TEST -->
@@ -100,6 +106,15 @@
             <artifactId>mockwebserver</artifactId>
             <version>${okhttp.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!--===========================-->
+        <!-- Platform -->
+        <!--===========================-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

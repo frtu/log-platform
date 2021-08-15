@@ -8,6 +8,7 @@ import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.ExchangeFunction;
+import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -17,6 +18,12 @@ import java.util.stream.Collectors;
 
 import static com.github.frtu.logs.core.RpcLogger.*;
 
+/**
+ * For webflux, a {@link ExchangeFilterFunction} that logs all requests calls.
+ *
+ * @author Frédéric TU
+ * @since 1.1.2
+ */
 public class LogExchangeFilterFunction implements ExchangeFilterFunction {
     private RpcLogger rpcLogger;
     private Set<String> authorizedHeaderFilter;
