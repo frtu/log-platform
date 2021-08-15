@@ -1,4 +1,4 @@
-package com.github.frtu.logs.tracing.annotation;
+package com.github.frtu.logs.core.metadata;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,12 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Tag the span using {@link io.opentracing.Span#setTag(String, String)}.
+ * Generic Method Tag the span with static metadata
  * <p>
  * MUST BE used in conjunction with {@link ExecutionSpan}
  *
- * @author fred
- * @since 0.9.1
+ * @author Frédéric TU
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

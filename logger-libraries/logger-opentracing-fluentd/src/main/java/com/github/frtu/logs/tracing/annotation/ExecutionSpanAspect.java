@@ -1,5 +1,6 @@
 package com.github.frtu.logs.tracing.annotation;
 
+import com.github.frtu.logs.core.metadata.*;
 import com.github.frtu.logs.tracing.core.TraceHelper;
 import com.github.frtu.logs.tracing.core.TraceUtil;
 import com.github.frtu.spring.annotation.AnnotationMethodScan;
@@ -14,7 +15,6 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,10 +22,8 @@ import org.springframework.stereotype.Component;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import static com.github.frtu.logs.tracing.core.TraceHelper.MDC_KEY_TRACE_ID;
-
 /**
- * Aspect that create a {@link io.opentracing.Span} around the annotated method using {@link ExecutionSpan}.
+ * Aspect that create a {@link io.opentracing.Span} around the annotated method using ExecutionSpan.
  *
  * @author fred
  * @since 0.9.0
@@ -34,6 +32,8 @@ import static com.github.frtu.logs.tracing.core.TraceHelper.MDC_KEY_TRACE_ID;
 @Aspect
 @Component
 public class ExecutionSpanAspect {
+    private static ExecutionHelper executionHelper = new ExecutionHelper();
+
     @Value("${trace.full.classname:#{environment.TRACE_FULL_CLASSNAME ?: false}}")
     boolean isFullClassName;
 
@@ -79,8 +79,8 @@ public class ExecutionSpanAspect {
     }
 
     /**
-     * Enrich span using annotation {@link ToLog} from {@link Method}.
-     * For {@link ToLog} also use method runtime argument.
+     * Enrich span using annotation ToLog from {@link Method}.
+     * For ToLog also use method runtime argument.
      *
      * @param span   the current span
      * @param method the run method
@@ -111,8 +111,8 @@ public class ExecutionSpanAspect {
     }
 
     /**
-     * Enrich span using annotation {@link Tag} or {@link ToTag} from {@link Method}.
-     * For {@link ToTag} also use method runtime argument.
+     * Enrich span using annotation Tag or ToTag from {@link Method}.
+     * For ToTag also use method runtime argument.
      *
      * @param span   the current span
      * @param method the run method
@@ -159,25 +159,6 @@ public class ExecutionSpanAspect {
      * @since 0.9.5
      */
     public static String getName(Signature joinPointSignature, boolean isFullClassName) {
-        return getName(joinPointSignature.getDeclaringType(), joinPointSignature.getName(), isFullClassName);
-    }
-
-    /**
-     * Get span name based on declaringType and methodName
-     *
-     * @param declaringType   Classname
-     * @param methodName      method name
-     * @param isFullClassName if should return class canonical name or short name
-     * @return String signature name
-     * @since 0.9.5
-     */
-    public static String getName(Class declaringType, String methodName, boolean isFullClassName) {
-        final StringBuilder stringBuilder = new StringBuilder();
-        if (isFullClassName) {
-            stringBuilder.append(declaringType.getCanonicalName());
-        } else {
-            stringBuilder.append(declaringType.getSimpleName());
-        }
-        return stringBuilder.append('.').append(methodName).toString();
+        return executionHelper.getName(joinPointSignature.getDeclaringType(), joinPointSignature.getName(), isFullClassName);
     }
 }

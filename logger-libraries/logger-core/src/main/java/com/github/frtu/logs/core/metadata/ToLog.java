@@ -1,24 +1,22 @@
-package com.github.frtu.logs.tracing.annotation;
+package com.github.frtu.logs.core.metadata;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 /**
- * Flag for method parameter to append to {@link io.opentracing.Span#setTag(String, String)}.
+ * Generic Method parameter annotation to flag as Log
  * <p>
  * MUST BE used in conjunction with {@link ExecutionSpan}
  *
- * @author fred
- * @since 1.0.2
+ * @author Frédéric TU
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ToTag {
+public @interface ToLog {
     /**
-     * @return Name for this Tag
+     * @return Name for this Log
      */
     String value();
 }

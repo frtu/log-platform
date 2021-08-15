@@ -1,6 +1,11 @@
 package com.github.frtu.logs.tracing.annotation;
 
-public class ExecutionSpanConfiguration {
+import com.github.frtu.logs.core.metadata.ExecutionSpan;
+import com.github.frtu.logs.core.metadata.Tag;
+import com.github.frtu.logs.core.metadata.ToLog;
+import com.github.frtu.logs.core.metadata.ToTag;
+
+public class ExecutionSpanSample {
     @ExecutionSpan
     public void simpleSpan(String param1, String param2) {
     }

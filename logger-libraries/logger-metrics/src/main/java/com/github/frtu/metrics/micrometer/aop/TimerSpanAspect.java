@@ -1,7 +1,7 @@
 package com.github.frtu.metrics.micrometer.aop;
 
-import com.github.frtu.logs.tracing.annotation.ExecutionSpan;
-import com.github.frtu.logs.tracing.annotation.ExecutionSpanAspect;
+import com.github.frtu.logs.core.metadata.ExecutionHelper;
+import com.github.frtu.logs.core.metadata.ExecutionSpan;
 import com.github.frtu.metrics.micrometer.model.Measurement;
 import com.github.frtu.metrics.micrometer.model.MeasurementHandle;
 import io.micrometer.core.aop.TimedAspect;
@@ -9,13 +9,12 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Metrics;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 
@@ -29,8 +28,9 @@ import java.util.function.Function;
  * @since 0.9.6
  */
 @Aspect
+@Slf4j
 public class TimerSpanAspect {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TimerSpanAspect.class);
+    private static ExecutionHelper executionHelper = new ExecutionHelper();
 
     /**
      * Configure using proprty : metric.full.classname
@@ -67,6 +67,18 @@ public class TimerSpanAspect {
         LOGGER.debug("Init {} with TimerSpanAspect:{}", TimerSpanAspect.class, isFullClassName);
     }
 
+    /**
+     * Get span name based on joinPointSignature
+     *
+     * @param joinPointSignature AOP method {@link Signature}
+     * @param isFullClassName    if should return class canonical name or short name
+     * @return String signature name
+     * @since 0.9.5
+     */
+    public static String getName(Signature joinPointSignature, boolean isFullClassName) {
+        return executionHelper.getName(joinPointSignature.getDeclaringType(), joinPointSignature.getName(), isFullClassName);
+    }
+
     @Around("@annotation(com.github.frtu.logs.tracing.annotation.ExecutionSpan)")
     public Object timedExecutionSpan(ProceedingJoinPoint joinPoint) throws Throwable {
         final Signature joinPointSignature = joinPoint.getSignature();
@@ -82,11 +94,11 @@ public class TimerSpanAspect {
         }
         // Get Name & Description from method name
         if (StringUtils.isEmpty(operationName)) {
-            operationDescription = ExecutionSpanAspect.getName(joinPointSignature, true);
+            operationDescription = getName(joinPointSignature, true);
             if (isFullClassName) {
                 operationName = operationDescription;
             } else {
-                operationName = ExecutionSpanAspect.getName(joinPointSignature, false);
+                operationName = getName(joinPointSignature, false);
             }
         }
         final Measurement measurement = new Measurement(registry, operationName);
