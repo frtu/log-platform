@@ -9,10 +9,14 @@ import org.springframework.util.StringUtils;
 import static io.micrometer.core.aop.TimedAspect.EXCEPTION_TAG;
 
 /**
+ * A set of measurement for success, failure ratio, latency
+ *
+ * @author Frédéric TU
  * @see <a href="https://ordina-jworks.github.io/microservices/2017/09/17/monitoring-your-microservices-with-micrometer.html">Micrometer API</a>
+ * @since 1.1.3
  */
 @Slf4j
-public class Measurement {
+public class MeasurementSet {
     public static final String MEASUREMENT_PREFIX = "span";
 
     public static final String COUNTER_SUFFIX_EXEC = "count";
@@ -36,11 +40,11 @@ public class Measurement {
     private final Counter totalExecutionCounter;
     private Timer.Sample timerSample;
 
-    public Measurement(MeterRegistry registry, String operationName) {
+    public MeasurementSet(MeterRegistry registry, String operationName) {
         this(registry, operationName, null);
     }
 
-    public Measurement(MeterRegistry registry, String operationName, String metricName) {
+    public MeasurementSet(MeterRegistry registry, String operationName, String metricName) {
         this.registry = registry;
         this.metricName = metricName;
         this.operationName = operationName;

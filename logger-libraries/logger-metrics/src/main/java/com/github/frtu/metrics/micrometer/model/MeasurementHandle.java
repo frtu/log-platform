@@ -11,10 +11,10 @@ import static io.micrometer.core.aop.TimedAspect.EXCEPTION_TAG;
  * @since 1.1.3
  */
 public class MeasurementHandle implements AutoCloseable {
-    private Measurement measurement;
+    private MeasurementSet measurement;
 
     // start
-    public MeasurementHandle(Measurement measurement) {
+    public MeasurementHandle(MeasurementSet measurement) {
         this.measurement = measurement;
         measurement.startExecution();
     }

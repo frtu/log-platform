@@ -7,7 +7,7 @@ import io.micrometer.core.instrument.Tag;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.github.frtu.metrics.micrometer.model.Measurement.MEASUREMENT_PREFIX;
+import static com.github.frtu.metrics.micrometer.model.MeasurementSet.MEASUREMENT_PREFIX;
 
 /**
  * Entrypoint for all Measurement classes for micrometer
@@ -18,7 +18,7 @@ import static com.github.frtu.metrics.micrometer.model.Measurement.MEASUREMENT_P
 public class MeasurementRepository {
     public static final int DEFAULT_MAX_CACHE_SIZE = 100;
     private Integer maxCacheSize;
-    private Map<String, Measurement> repository = new ConcurrentHashMap();
+    private Map<String, MeasurementSet> repository = new ConcurrentHashMap();
 
     private MeterRegistry registry;
 
@@ -50,10 +50,10 @@ public class MeasurementRepository {
      * @param tags                 Optional static tags for this measurement
      * @return Specific measurement
      */
-    public Measurement getMeasurement(String operationName, String operationDescription, Iterable<Tag> tags) {
-        Measurement measurement = repository.get(operationName);
+    public MeasurementSet getMeasurement(String operationName, String operationDescription, Iterable<Tag> tags) {
+        MeasurementSet measurement = repository.get(operationName);
         if (measurement == null) {
-            measurement = new Measurement(registry, operationName);
+            measurement = new MeasurementSet(registry, operationName);
             measurement.setOperationDescription(operationDescription);
             measurement.setTags(tags);
             if (repository.size() <= maxCacheSize) {
@@ -64,7 +64,7 @@ public class MeasurementRepository {
     }
 
     public MeasurementHandle getMeasurementHandle(String operationName, String operationDescription, Iterable<Tag> tags) {
-        Measurement measurement = getMeasurement(operationName, operationDescription, tags);
+        MeasurementSet measurement = getMeasurement(operationName, operationDescription, tags);
         return new MeasurementHandle(measurement);
     }
 }
