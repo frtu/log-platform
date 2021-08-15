@@ -449,19 +449,16 @@ management.metrics.export.prometheus.enabled=true
 
 This library provide a class to abtract from direct Counter & Timer :
 
-* *com.github.frtu.metrics.micrometer.model.Measurement*
+* *com.github.frtu.metrics.micrometer.model.MeasurementSet*
 
 ```java
-final Iterable<Tag> tags=...;
-
-final Measurement measurement = new Measurement(registry, operationName);
-measurement.setOperationDescription(operationDescription);
-measurement.setTags(tags);
-
-try (MeasurementHandle handle = new MeasurementHandle(measurement)) {
+MeasurementHandle handle = measurementRepository.getMeasurementHandle(operationName, operationDescription, tags);
+try {
     return joinPoint.proceed();
 } catch (Throwable ex) {
-    throw MeasurementHandle.flagError(ex);
+    throw handle.flagError(ex);
+} finally {
+    handle.close();
 }
 ```
 
