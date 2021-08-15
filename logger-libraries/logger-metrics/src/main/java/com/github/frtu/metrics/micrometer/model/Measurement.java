@@ -33,7 +33,7 @@ public class Measurement {
     private Iterable<Tag> tags;
 
     private final MeterRegistry registry;
-    private final Counter executionCounter;
+    private final Counter totalExecutionCounter;
     private Timer.Sample timerSample;
 
     public Measurement(MeterRegistry registry, String operationName) {
@@ -44,7 +44,8 @@ public class Measurement {
         this.registry = registry;
         this.metricName = metricName;
         this.operationName = operationName;
-        executionCounter = registry.counter(buildMetricName(COUNTER_SUFFIX_EXEC));
+        // Build total number counter
+        totalExecutionCounter = registry.counter(buildMetricName(COUNTER_SUFFIX_EXEC));
     }
 
     /**
@@ -75,7 +76,6 @@ public class Measurement {
         this.timerSample = Timer.start(registry);
     }
 
-
     public void stopExecution() {
         stopExecution(null);
     }
@@ -83,7 +83,7 @@ public class Measurement {
     public void stopExecution(String exceptionName) {
         try {
             LOGGER.trace("Stop Timer for {} with exception:{}", operationName, exceptionName);
-            counter(exceptionName).increment();
+            calculateRatio(exceptionName);
 
             if (timerSample != null) {
                 final long durationInNS = this.timerSample.stop(timer(exceptionName, tags));
@@ -95,25 +95,23 @@ public class Measurement {
         }
     }
 
-    protected Counter counter(String exceptionName) {
-        if (StringUtils.isEmpty(exceptionName)) {
-            return this.executionCounter;
-        } else {
-            return registry.counter(
-                    buildMetricName(COUNTER_SUFFIX_FAILURE),
-                    Tags.of("type", exceptionName));
+    protected void calculateRatio(String exceptionName) {
+        // Increment total. Ex : span_<operation_name>_count_total
+        this.totalExecutionCounter.increment();
+
+        if (StringUtils.hasText(exceptionName)) {
+            // Increment failure. Ex : span_<operation_name>_failure_total
+            registry.counter(buildMetricName(COUNTER_SUFFIX_FAILURE),
+                    Tags.of(EXCEPTION_TAG, exceptionName))
+                    .increment();
         }
     }
 
     protected Timer timer(String exceptionName, Iterable<Tag> tags) {
-        final Timer.Builder builder = Timer.builder(buildMetricName()).description(operationDescription);
-        if (StringUtils.hasText(metricName)) {
-            builder.tag("operation", operationName);
-        }
-        return builder
+        return Timer.builder(buildMetricName())
+                .description(operationDescription)
                 .tags(tags)
-//                .tags(EXCEPTION_TAG, (exceptionName != null) ? exceptionName : "none")
-//                .publishPercentiles(0.5, 0.95, 0.99)
+                .tags(EXCEPTION_TAG, (exceptionName != null) ? exceptionName : "success")
                 .register(registry);
     }
 }

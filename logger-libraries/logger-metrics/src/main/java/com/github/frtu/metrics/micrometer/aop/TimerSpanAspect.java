@@ -86,13 +86,10 @@ public class TimerSpanAspect {
         //-------------------------------
         // Execution
         //-------------------------------
-        MeasurementHandle handle = measurementRepository.getMeasurementHandle(operationName, operationDescription, tags);
-        try {
+        try (MeasurementHandle handle = measurementRepository.getMeasurementHandle(operationName, operationDescription, tags)) {
             return joinPoint.proceed();
         } catch (Throwable ex) {
-            throw handle.flagError(ex);
-        } finally {
-            handle.close();
+            throw MeasurementHandle.flagError(ex);
         }
         //-------------------------------
     }
