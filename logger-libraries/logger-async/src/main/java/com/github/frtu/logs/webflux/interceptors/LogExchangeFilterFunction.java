@@ -50,7 +50,7 @@ public class LogExchangeFilterFunction implements ExchangeFilterFunction {
         Map<String, List<String>> filteredHeaders = filteredHeaders(request.headers());
         val entries = entries(
                 client(),
-                method(request.method().toString()),
+                method(request.method().name()),
                 uri(request.url()),
                 requestHeaders(filteredHeaders)
         );

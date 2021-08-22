@@ -39,9 +39,7 @@ public class MetricsExchangeFilterFunction implements ExchangeFilterFunction {
         MeasurementHandle measurementHandle = measurementRepository.getMeasurementHandle(buildMetricName(request));
         return next.exchange(request)
                 .as((responseMono) -> instrumentResponse(request, responseMono))
-                .contextWrite(context -> {
-                    return putStartTime(context, measurementHandle);
-                });
+                .contextWrite(context -> putStartTime(context, measurementHandle));
     }
 
     private MeasurementHandle getMeasurementHandle(ContextView context) {
