@@ -17,7 +17,6 @@
         <module>logger-core</module>
         <module>logger-metrics</module>
         <module>logger-opentelemetry</module>
-        <module>logger-opentracing-fluentd</module>
         <module>logger-security</module>
         <module>logger-bom</module>
     </modules>
