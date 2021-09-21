@@ -1,13 +1,11 @@
 package com.github.frtu.logs.tracing.annotation;
 
 import com.github.frtu.logs.core.metadata.*;
-import com.github.frtu.logs.tracing.core.TraceHelper;
-import com.github.frtu.logs.tracing.core.TraceUtil;
+import com.github.frtu.logs.tracing.core.OpenTelemetryHelper;
 import com.github.frtu.spring.annotation.AnnotationMethodScan;
 import com.github.frtu.spring.annotation.AnnotationMethodScanner;
-import com.google.common.collect.ImmutableMap;
-import io.opentracing.Scope;
-import io.opentracing.Span;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.context.Scope;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -23,7 +21,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
- * Aspect that create a {@link io.opentracing.Span} around the annotated method using ExecutionSpan.
+ * Aspect that create a {@link Span} around the annotated method using ExecutionSpan.
  *
  * @author fred
  * @since 0.9.0
@@ -38,10 +36,10 @@ public class ExecutionSpanAspect {
     boolean isFullClassName;
 
     @Autowired
-    private TraceHelper traceHelper;
+    private OpenTelemetryHelper traceHelper;
 
-    @Autowired
-    private TraceUtil traceUtil;
+//    @Autowired
+//    private TraceUtil traceUtil;
 
     private final AnnotationMethodScanner<Class<ExecutionSpan>, Class<ToLog>> scannerToLog = AnnotationMethodScanner.of(ExecutionSpan.class, ToLog.class);
     private final AnnotationMethodScanner<Class<ExecutionSpan>, Class<ToTag>> scannerToTag = AnnotationMethodScanner.of(ExecutionSpan.class, ToTag.class);
@@ -51,17 +49,19 @@ public class ExecutionSpanAspect {
         final Signature joinPointSignature = joinPoint.getSignature();
         String signatureName = getName(joinPointSignature, isFullClassName);
 
-        try (Scope scope = traceHelper.getTracer().buildSpan(signatureName).startActive(true)) {
-            final String traceId = traceUtil.getTraceId(scope.span());
-            traceHelper.setTraceId(traceId);
+        final Span span = traceHelper.startSpan(signatureName);
+        // https://opentelemetry.io/docs/java/manual_instrumentation/
+        try (Scope scope = span.makeCurrent()) {
+//            final String traceId = traceUtil.getTraceId(span);
+//            traceHelper.setTraceId(traceId);
 //            try (var ignored = MDC.putCloseable(MDC_KEY_TRACE_ID, traceId)) {
-            LOGGER.trace("Creating span around signature={} and traceId={}", signatureName, traceId);
+            LOGGER.trace("Creating span around signature={}", signatureName);
             if (joinPointSignature instanceof MethodSignature) {
                 final Method method = ((MethodSignature) joinPointSignature).getMethod();
                 final Object[] args = joinPoint.getArgs();
 
-                enrichSpanWithLogs(scope.span(), method, args);
-                enrichSpanWithTags(scope.span(), method, args);
+                enrichSpanWithLogs(span, method, args);
+                enrichSpanWithTags(span, method, args);
             }
 
             try {
@@ -74,7 +74,8 @@ public class ExecutionSpanAspect {
                 // TODO : Clean up MDC when Root Trace
 //                MDC.remove(MDC_KEY_TRACE_ID);
             }
-//            }
+        } finally {
+            span.end();
         }
     }
 
@@ -100,7 +101,10 @@ public class ExecutionSpanAspect {
                             final String logName = scanParamAnnotation.value();
                             final Object logValue = args[i];
                             LOGGER.trace("Add logs name={} and value={}", logName, logValue);
-                            span.log(ImmutableMap.of(logName, logValue));
+                            traceHelper.addEvent(span,
+                                    annotationMethodScan.getMethod().getName(),
+                                    logName, logValue.toString()
+                            );
                         }
                     }
                 } else {
@@ -129,7 +133,7 @@ public class ExecutionSpanAspect {
                 final String tagName = tag.tagName();
                 final String tagValue = tag.tagValue();
                 LOGGER.debug("Add static tags name={} and value={}", tagName, tagValue);
-                span.setTag(tagName, tagValue);
+                traceHelper.setAttribute(span, tagName, tagValue);
             }
             if (ArrayUtils.isNotEmpty(args)) {
                 if (args.length >= scanParamAnnotations.length) {
@@ -140,7 +144,7 @@ public class ExecutionSpanAspect {
                             final String tagName = scanParamAnnotation.value();
                             final String tagValue = args[i].toString();
                             LOGGER.debug("Add tags name={} and parameter value={}", tagName, tagValue);
-                            span.setTag(tagName, tagValue);
+                            traceHelper.setAttribute(span, tagName, tagValue);
                         }
                     }
                 } else {
