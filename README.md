@@ -391,7 +391,7 @@ When starting an standalone Main class, also add the following to VM options :
 
 Also add Jaeger Configuration for :
 
-* HTTP : ```-DJAEGER_ENDPOINT=http://localhost:14268/api/traces```
+* HTTP : ```-DJAEGER_ENDPOINT=http://localhost:16686/api/traces```
 * Agent : ```-DJAEGER_AGENT_HOST=localhost -DJAEGER_AGENT_PORT=6831```
 
 ### Inside container & docker-compose
