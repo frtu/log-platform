@@ -1,7 +1,7 @@
 package com.github.frtu.logs.example.demo.biz;
 
-import com.github.frtu.logs.tracing.annotation.ExecutionSpan;
-import com.github.frtu.logs.tracing.annotation.ToLog;
+import com.github.frtu.logs.core.metadata.ExecutionSpan;
+import com.github.frtu.logs.core.metadata.ToLog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

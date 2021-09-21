@@ -1,10 +1,10 @@
 package com.github.frtu.logs.example.demo.biz;
 
 import com.github.frtu.logs.core.RpcLogger;
-import com.github.frtu.logs.tracing.annotation.ExecutionSpan;
-import com.github.frtu.logs.tracing.annotation.Tag;
-import com.github.frtu.logs.tracing.annotation.ToLog;
-import com.github.frtu.logs.tracing.annotation.ToTag;
+import com.github.frtu.logs.core.metadata.ExecutionSpan;
+import com.github.frtu.logs.core.metadata.Tag;
+import com.github.frtu.logs.core.metadata.ToLog;
+import com.github.frtu.logs.core.metadata.ToTag;
 import com.github.frtu.logs.tracing.core.TraceHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,10 +40,10 @@ public class PrinterUtil {
                 requestBody(helloTo, false));
         try {
             final String response = chaosGenerator.raiseException("Randomly generate exception to demonstrate exception flag!");
-            RPC_LOGGER.info(traceHelper, entries, responseBody(response, false), statusCode(200));
+            RPC_LOGGER.info(entries, responseBody(response, false), statusCode(200));
         } catch (IllegalStateException e) {
             // Just to demonstrate exception calling issue
-            RPC_LOGGER.warn(traceHelper, entries, statusCode(500));
+            RPC_LOGGER.warn(entries, statusCode(500));
         }
         LOGGER.debug("Flow should continue");
 

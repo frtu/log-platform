@@ -3,12 +3,10 @@ package com.github.frtu.logs.example.demo;
 import com.github.frtu.logs.example.level.sub1.Sub1;
 import com.github.frtu.logs.example.level.sub1.sub2.Sub2;
 import com.github.frtu.logs.example.level.sub1.sub2.sub3.Sub3;
-import com.github.frtu.logs.tracing.core.TraceHelper;
-import com.google.common.collect.ImmutableMap;
+import com.github.frtu.logs.tracing.core.OpenTelemetryHelper;
 import io.micrometer.core.annotation.Timed;
-import io.opentracing.Scope;
-import io.opentracing.Span;
-import io.opentracing.Tracer;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.context.Scope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,48 +24,65 @@ public class ResourceController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceController.class);
 
     @Autowired
-    private TraceHelper traceHelper;
+    private OpenTelemetryHelper traceHelper;
 
     @RequestMapping("/")
     @ResponseBody
     @Timed("home")
     String home(@RequestParam(value = "service", defaultValue = "ServiceA", required = false) String name) {
-        Tracer tracer = traceHelper.getTracer();
-
-        Span span = tracer.buildSpan("say-hello1").start();
+        Span firstSpan = traceHelper.startSpan("single-level");
         LOGGER.info("service={}", name);
-        span.finish();
+        firstSpan.end();
 
-        try (Scope scope = tracer.buildSpan("say-hello2").startActive(true)) {
-            scope.span().log(ImmutableMap.of("event", "string-format", "value", name));
-            scope.span().setTag("hello-to", name);
+        // https://opentelemetry.io/docs/java/manual_instrumentation/
+        final Span secondSpan = traceHelper.startSpan("nested-span");
+        try (Scope scope = secondSpan.makeCurrent()) {
+            traceHelper.setAttribute("home", name);
+            traceHelper.addEvent( "home-event1", "service", name);
 
             String formatString = formatString(name);
-            traceHelper.addLog("log1", "value1");
+            traceHelper.addEvent("home-event2", "log1", "value1");
             printHello(formatString);
 
             return formatString;
+        } catch (Throwable t) {
+            traceHelper.flagError(t.getMessage());
+            throw t;
+        } finally {
+            secondSpan.end();
         }
     }
 
     private String formatString(String helloTo) {
-        traceHelper.addLog("log2", "value2");
-        try (Scope scope = traceHelper.getTracer().buildSpan("formatString").startActive(true)) {
-            traceHelper.addLog("log3", "value3");
+        traceHelper.addEvent("formatString-pre-scope", "log2", "value2");
+        final Span span = traceHelper.startSpan("formatString");
+        try (Scope scope = span.makeCurrent()) {
+            traceHelper.addEvent("formatString-event1", "log3", "value3");
             String helloStr = String.format("Hello, %s!", helloTo);
             printHello(helloStr);
 
-            scope.span().log(ImmutableMap.of("event", "string-format", "value", helloStr));
+            traceHelper.addEvent("formatString-event2", "value", helloStr);
             return helloStr;
+        } catch (Throwable t) {
+            traceHelper.flagError(t.getMessage());
+            throw t;
+        } finally {
+            span.end();
         }
     }
 
     private void printHello(String helloStr) {
-        try (Scope scope = traceHelper.getTracer().buildSpan("printHello").startActive(true)) {
-            traceHelper.addLog("log4", "value4");
+        final Span span = traceHelper.startSpan("printHello");
+        try (Scope scope = span.makeCurrent()) {
+            traceHelper.addEvent("printHello-event1","log4", "value4");
             LOGGER.info(helloStr);
-            scope.span().log(ImmutableMap.of("event", "println"));
+            traceHelper.addEvent("printHello-event2","event", "println");
             traceHelper.flagError("error msg!!");
+        } catch (Throwable t) {
+            traceHelper.flagError(t.getMessage());
+            throw t;
+        } finally {
+            span.end();
         }
     }
 

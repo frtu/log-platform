@@ -22,9 +22,7 @@
     <!--Use for Production-->
     <springProfile name="prod">
         <!--ONLY current application logs goes to FLUENT appender-->
-        <logger name="com.github.frtu" level="INFO" additivity="true">
-            <appender-ref ref="FLUENT"/>
-        </logger>
+        <logger name="com.github.frtu" level="INFO" additivity="true"/>
         <!--Remove the Span System.out-->
         <logger name="io.jaegertracing.internal.reporters" level="WARN" additivity="true"/>
 
