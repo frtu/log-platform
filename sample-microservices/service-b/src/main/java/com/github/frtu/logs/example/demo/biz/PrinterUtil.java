@@ -5,7 +5,7 @@ import com.github.frtu.logs.core.metadata.ExecutionSpan;
 import com.github.frtu.logs.core.metadata.Tag;
 import com.github.frtu.logs.core.metadata.ToLog;
 import com.github.frtu.logs.core.metadata.ToTag;
-import com.github.frtu.logs.tracing.core.TraceHelper;
+import com.github.frtu.logs.tracing.core.OpenTelemetryHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,10 @@ public class PrinterUtil {
     private static final RpcLogger RPC_LOGGER = RpcLogger.create(LOGGER, "frtu");
 
     @Autowired
-    private TraceHelper traceHelper;
+    private OpenTelemetryHelper traceHelper;
 
     @Autowired
-    private ChaosGenerator chaosGenerator;
+    private ChaosGeneratorController chaosGeneratorController;
 
     @ExecutionSpan(name = "tagDemo", value = {
             @Tag(tagName = "static-tag1", tagValue = "value1"),
@@ -32,14 +32,14 @@ public class PrinterUtil {
     })
     public String tagDemo(@ToTag("parameter-tag") String helloTo) {
         String helloStr = String.format("Hello, %s!", helloTo);
-        traceHelper.addTag("tag-block", helloTo);
+        traceHelper.setAttribute("tag-block", helloTo);
 
         final Map.Entry[] entries = entries(client(),
                 method("GET"),
-                uri(ChaosGenerator.OPERATION_NAME_RAISE_EXCEPTION),
+                uri(ChaosGeneratorController.OPERATION_NAME_RAISE_EXCEPTION),
                 requestBody(helloTo, false));
         try {
-            final String response = chaosGenerator.raiseException("Randomly generate exception to demonstrate exception flag!");
+            final String response = chaosGeneratorController.raiseException("Randomly generate exception to demonstrate exception flag!");
             RPC_LOGGER.info(entries, responseBody(response, false), statusCode(200));
         } catch (IllegalStateException e) {
             // Just to demonstrate exception calling issue
@@ -52,6 +52,6 @@ public class PrinterUtil {
 
     @ExecutionSpan(name = "logDemo")
     public void logDemo(@ToLog("parameter-log") String helloStr) {
-        traceHelper.addLog("log-block", "log = " + helloStr);
+        traceHelper.addEvent("logDemo-event1", "log-block", "log = " + helloStr);
     }
 }
