@@ -44,7 +44,7 @@ public class ExecutionSpanAspect {
     private final AnnotationMethodScanner<Class<ExecutionSpan>, Class<ToLog>> scannerToLog = AnnotationMethodScanner.of(ExecutionSpan.class, ToLog.class);
     private final AnnotationMethodScanner<Class<ExecutionSpan>, Class<ToTag>> scannerToTag = AnnotationMethodScanner.of(ExecutionSpan.class, ToTag.class);
 
-    @Around("@annotation(ExecutionSpan)")
+    @Around("@annotation(com.github.frtu.logs.core.metadata.ExecutionSpan)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         final Signature joinPointSignature = joinPoint.getSignature();
         String signatureName = getName(joinPointSignature, isFullClassName);
