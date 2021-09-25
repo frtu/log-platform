@@ -30,6 +30,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>com.github.frtu.libs</groupId>
+            <artifactId>lib-test-utils</artifactId>
+            <version>${frtu-libs-java.version}</version>
+        </dependency>
 
 		<dependency>
 			<groupId>de.codecentric</groupId>

@@ -3,7 +3,7 @@ package com.github.frtu.logs.example.demo;
 import com.github.frtu.logs.core.StructuredLogger;
 import com.github.frtu.logs.core.metadata.ExecutionSpan;
 import com.github.frtu.logs.core.metadata.ToLog;
-import com.github.frtu.logs.example.demo.biz.ChaosGenerator;
+import com.github.frtu.logs.example.demo.biz.ChaosGeneratorController;
 import com.github.frtu.logs.example.demo.biz.PrinterUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,7 +26,7 @@ public class ResourceController {
     PrinterUtil printerUtil;
 
     @Autowired
-    private ChaosGenerator chaosGenerator;
+    private ChaosGeneratorController chaosGeneratorController;
 
     @ExecutionSpan
     @RequestMapping("/")
@@ -46,7 +46,7 @@ public class ResourceController {
     @RequestMapping("/memoryleak")
     @ResponseBody
     String memoryleak() {
-        chaosGenerator.memoryleak();
+        chaosGeneratorController.memoryleak();
         return "No issue";
     }
 }

@@ -23,6 +23,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<dockerfile-maven-version>1.4.13</dockerfile-maven-version>
+        <frtu-libs-java.version>1.1.3-SNAPSHOT</frtu-libs-java.version>
 
 		<docker.registry>localhost:5000</docker.registry>
 		<image.name>${project.artifactId}</image.name>
@@ -76,4 +77,16 @@
 			</plugin>
 		</plugins>
 	</build>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.frtu.libs</groupId>
+                <artifactId>lib-java-bom</artifactId>
+                <version>${frtu-libs-java.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
