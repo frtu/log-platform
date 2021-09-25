@@ -556,8 +556,9 @@ through [SLF4J](http://www.slf4j.org/) it is recommended to use an adapter to [l
 
 ## See also
 
-* Get familiar with the concepts
-  with [Observability 3 ways: Logging, Metrics & Tracing](https://www.dotconferences.com/2017/04/adrian-cole-observability-3-ways-logging-metrics-tracing)
-  by Adrian Cole
+* Get familiar with the concepts with [Observability 3 ways: Logging, Metrics & Tracing](https://www.dotconferences.com/2017/04/adrian-cole-observability-3-ways-logging-metrics-tracing) by Adrian Cole
+* [The Three Pillars of Observability](https://www.oreilly.com/library/view/distributed-systems-observability/9781492033431/ch04.html)
+* [Microservice Observability patterns](https://microservices.io/patterns/microservices.html)
 * [opentelemetry-beyond-getting-started](https://medium.com/opentelemetry/opentelemetry-beyond-getting-started-5ac43cd0fe26)
+* [Tools](https://github.com/adriannovegil/awesome-observability) 
 
