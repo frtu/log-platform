@@ -9,7 +9,7 @@
 
     <groupId>com.github.frtu.tools</groupId>
     <artifactId>spring-boot-admin-web</artifactId>
-    <version>1.1.4</version>
+    <version>1.1.5-SNAPSHOT</version>
 
     <properties>
         <start-class>com.github.frtu.spring.admin.AdminApplication</start-class>
@@ -18,7 +18,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!--===========================-->
         <java.version>1.8</java.version>
-        <frtu.logger.version>1.1.4</frtu.logger.version>
+        <frtu.logger.version>1.1.5-SNAPSHOT</frtu.logger.version>
         <!--===========================-->
         <spring-boot-admin.version>2.4.1</spring-boot-admin.version>
         <dockerfile-maven-version>1.4.13</dockerfile-maven-version> <!-- 2019-10-15 -->
@@ -280,7 +280,7 @@
         <connection>scm:git:git@github.com:frtu/log-platform.git</connection>
         <developerConnection>scm:git:git@github.com:frtu/log-platform.git</developerConnection>
         <url>https://github.com/frtu/log-platform/tree/master</url>
-        <tag>v1.1.4</tag>
+        <tag>HEAD</tag>
     </scm>
     <developers>
         <developer>
