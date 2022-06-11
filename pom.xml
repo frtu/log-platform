@@ -233,7 +233,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.0-M1</version>
+                <version>3.4.0</version>
                 <configuration>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <show>private</show>
