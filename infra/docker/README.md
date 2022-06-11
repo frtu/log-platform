@@ -2,13 +2,17 @@
 
 Provide a full log-platform startup using docker-compose.
 
-## fluentd
-
-Log into fluentd using : ```localhost:24224```
-
 ## Jaeger
 
 Access Jaeger interface using : [http://localhost:16686/](http://localhost:16686/)
+
+## Prometheus
+
+Access Prometheus interface using : [http://localhost:9090/](http://localhost:9090/)
+
+## fluentd
+
+Log into fluentd using : ```localhost:24224```
 
 ## Kibana
 
