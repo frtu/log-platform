@@ -8,7 +8,7 @@ plugins {
     application
     kotlin("jvm")
     kotlin("plugin.spring") version "1.5.32" apply false
-    id("org.springframework.boot") version "2.7.0"
+    id("org.springframework.boot") version Versions.spring_boot
     jacoco
     pmd
     id("com.github.sherter.google-java-format") version Versions.plugin_google_format
@@ -65,6 +65,8 @@ repositories {
 }
 
 dependencies {
+    implementation(Libs.logger_opentelemetry)
+
     // Spring Reactive
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springdoc:springdoc-openapi-webflux-ui:${Versions.springdoc}")
@@ -83,9 +85,18 @@ dependencies {
 //    runtimeOnly("org.springframework.boot:spring-boot-starter-jdbc")
 //    runtimeOnly("org.flywaydb:flyway-core")
 
+    implementation("org.springframework.boot:spring-boot-autoconfigure")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    // DevTools and Monitoring
+    implementation("org.springframework.boot:spring-boot-devtools")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+
     // Serialization
     implementation(Libs.jackson_databind)
     implementation(Libs.jackson_module_kotlin)
+    implementation(Libs.jackson_datatype_jsr310)
 
     // Platform - Coroutine
     implementation(Libs.coroutines_reactor)
