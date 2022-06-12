@@ -1,8 +1,8 @@
 version: "3.5"
 services:
-  otel_collector.observability:
+  otel-collector.observability:
     image: ${OTEL_COLLECTOR_IMAGE}
-    command: ["--config=/etc/otel-collector-config.yaml", "${OTELCOL_ARGS}"]
+    command: [ "--config=/etc/otel-collector-config.yaml", "${OTELCOL_ARGS}" ]
     volumes:
       - ./otel/otel-collector-config.yaml:/etc/otel-collector-config.yaml
     ports:
@@ -26,14 +26,14 @@ services:
       - 14268:14268
       - 16686:16686 # Web UI
     networks:
-      - observability
+      - bridge
     environment:
       SPAN_STORAGE_TYPE: elasticsearch
       ES_SERVER_URLS: http://elasticsearch.observability:9200
       ES_TAGS_AS_FIELDS_ALL: "true"
     healthcheck:
       # https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-health.html
-      test: ["CMD", "curl", "--fail", "http://elasticsearch.observability:9200/_cluster/health"]
+      test: [ "CMD", "curl", "--fail", "http://elasticsearch.observability:9200/_cluster/health" ]
       interval: 30s
       timeout: 40s
       retries: 5
@@ -44,14 +44,14 @@ services:
     environment:
       - node.name=LOGGING
       - discovery.type=single-node
-#      - bootstrap.memory_lock=true
-#      - ES_JAVA_OPTS=-Xms256m -Xmx256m
+    #      - bootstrap.memory_lock=true
+    #      - ES_JAVA_OPTS=-Xms256m -Xmx256m
     expose:
       - 9200
     ports:
       - 9200:9200
     networks:
-      - observability
+      - bridge
     volumes:
       - ~/data/elasticsearch:/usr/share/elasticsearch/data
 
@@ -63,81 +63,81 @@ services:
     ports:
       - 5601:5601
     networks:
-      - observability
+      - bridge
     environment:
       # https://www.elastic.co/guide/en/kibana/current/docker.html
       ELASTICSEARCH_HOSTS: http://elasticsearch.observability:9200
 
-   fluentbit:
-     image: ${FLUENT_BIT_IMAGE}
-     expose:
-       - 24224
-     ports:
-       - 24224:24224
-       - 24224:24224/udp
-     volumes:
-       - ./fluent-bit:/fluent-bit/etc/
-     command: /fluent-bit/bin/fluent-bit -c /fluent-bit/etc/fluent-bit.conf
- #   UNCOMMENT FOR PULLING ./log folder
- #    volumes:
- #      - ./log:/var/log
- #    command: |
- #      /fluent-bit/bin/fluent-bit
- #        -i tail
- #        -p Refresh_Interval=10
- #        -p path=/var/log/*.log
- #        -o es
- #        -p Host=elasticsearch.observability
- #        -p Port=9200
- #        -p Index=fluent_bit
- #        -p Type=logs
-     networks:
-       - observability
-
-  fluentd.observability:
-    image: ${FLUENTD_IMAGE}
-    volumes:
-      - ./fluentd/conf:/etc/fluent
-#    build: ./fluentd
-#    volumes:
-#      - ./fluentd/conf:/fluentd/etc
-    links:
-      - elasticsearch.observability
+  fluentbit.observability:
+    image: ${FLUENT_BIT_IMAGE}
+    expose:
+      - 24224
     ports:
-      - 24220:24220
       - 24224:24224
       - 24224:24224/udp
-      - 9880:9880
+    volumes:
+      - ./fluent-bit:/fluent-bit/etc/
+    command: /fluent-bit/bin/fluent-bit -c /fluent-bit/etc/fluent-bit.conf
+    #   UNCOMMENT FOR PULLING ./log folder
+    #    volumes:
+    #      - ./log:/var/log
+    #    command: |
+    #      /fluent-bit/bin/fluent-bit
+    #        -i tail
+    #        -p Refresh_Interval=10
+    #        -p path=/var/log/*.log
+    #        -o es
+    #        -p Host=elasticsearch.observability
+    #        -p Port=9200
+    #        -p Index=fluent_bit
+    #        -p Type=logs
     networks:
-      - observability
-    environment:
-      ES_PORT_9200_TCP_ADDR: elasticsearch.observability
-    observability:
-      driver: "json-file"
-      options:
-        max-size: "1G"
-        max-file: "2"
+      - bridge
 
-   prometheus:
-     image: ${PROMETHEUS_IMAGE}
-     hostname: prometheus
-     volumes:
-       - ./prometheus:/etc/prometheus
- #      - ~/data/prometheus:/prometheus
-     command:
-       - '--config.file=/etc/prometheus/prometheus.yml'
-       - '--storage.tsdb.path=/prometheus'
-     ports:
-       - 9090:9090
-     networks:
-       - observability
+#  fluentd.observability:
+#    image: ${FLUENTD_IMAGE}
+#    volumes:
+#      - ./fluentd/conf:/etc/fluent
+#    #    build: ./fluentd
+#    #    volumes:
+#    #      - ./fluentd/conf:/fluentd/etc
+#    links:
+#      - elasticsearch.observability
+#    ports:
+#      - 24220:24220
+#      - 24224:24224
+#      - 24224:24224/udp
+#      - 9880:9880
+#    networks:
+#      - bridge
+#    environment:
+#      ES_PORT_9200_TCP_ADDR: elasticsearch.observability
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "1G"
+#        max-file: "2"
+
+  prometheus:
+    image: ${PROMETHEUS_IMAGE}
+    hostname: prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+    #      - ~/data/prometheus:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    ports:
+      - 9090:9090
+    networks:
+      - bridge
   # https://blog.pvincent.io/2017/12/prometheus-blog-series-part-3-exposing-and-collecting-metrics/
-   node-exporter:
-     image: ${NODE_EXPORTER_IMAGE}
-     ports:
-       - 9100:9100
-     networks:
-       - observability
+  node-exporter:
+    image: ${NODE_EXPORTER_IMAGE}
+    ports:
+      - 9100:9100
+    networks:
+      - bridge
   alertmanager:
     image: ${ALERTMANAGER_IMAGE}
     restart: unless-stopped
@@ -149,25 +149,26 @@ services:
     expose:
       - 9093
     networks:
-      - observability
-   grafana:
-     image: ${GRAFANA_IMAGE}
-     hostname: grafana
-     depends_on:
-       - prometheus
- #    environment:
- #      - 'GF_SECURITY_ADMIN_PASSWORD=YourPassword'
- #    volumes:
- #      - ./grafana.ini:/etc/grafana/grafana.ini
- #      - ~/data/grafana:/var/lib/grafana
-     ports:
-       - 3000:3000
-     networks:
-       - observability
+      - bridge
+
+  grafana:
+    image: ${GRAFANA_IMAGE}
+    hostname: grafana
+    depends_on:
+      - prometheus
+    #    environment:
+    #      - 'GF_SECURITY_ADMIN_PASSWORD=YourPassword'
+    #    volumes:
+    #      - ./grafana.ini:/etc/grafana/grafana.ini
+    #      - ~/data/grafana:/var/lib/grafana
+    ports:
+      - 3000:3000
+    networks:
+      - bridge
 
 # https://docs.docker.com/compose/networking/
 networks:
-  observability:
+  bridge:
     driver: bridge
     # To enable IPv6 uncomment below lines
 #    driver_opts:
