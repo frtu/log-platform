@@ -3,8 +3,6 @@
     <springProperty scope="context" name="SERVICE_NAME" source="application.name"/>
     <springProperty scope="context" name="REGION" source="logging.region"/>
     <springProperty scope="context" name="ZONE" source="logging.zone"/>
-    <springProperty scope="context" name="FLUENTD_TAG" source="fluentd.tag"/>
-    <springProperty scope="context" name="FLUENTD_LABEL" source="fluentd.label"/>
     <springProperty scope="context" name="LOG_PATH" source="logging.path"/>
 
     <include resource="logback-web.xml"/>
@@ -15,18 +13,18 @@
         <!--Current application-->
         <logger name="com.github.frtu" level="TRACE" additivity="true"/>
 
+        <logger name="com.github.frtu.metrics" level="TRACE" additivity="true">
+            <appender-ref ref="JSON_FILE"/>
+        </logger>
+
         <root level="INFO">
             <appender-ref ref="STDOUT"/>
-            <appender-ref ref="JSON_FILE"/>
         </root>
     </springProfile>
 
     <!--Use for Production-->
     <springProfile name="prod">
-        <!--ONLY current application logs goes to FLUENT appender-->
-        <logger name="com.github.frtu" level="INFO" additivity="true">
-            <appender-ref ref="FLUENT"/>
-        </logger>
+        <logger name="com.github.frtu" level="INFO" additivity="true"/>
         <!-- Deactivate 'Span reported' logs-->
         <logger name="io.jaegertracing.internal.reporters" level="WARN" additivity="true"/>
 
