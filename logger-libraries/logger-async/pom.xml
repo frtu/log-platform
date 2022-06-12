@@ -15,10 +15,10 @@
 
     <properties>
         <!--=========================== -->
-        <log4j2.version>2.17.0</log4j2.version> <!-- 2021-12-18 -->
+        <log4j2.version>2.17.2</log4j2.version> <!-- 2022-02-24 -->
         <slf4j.version>1.7.25</slf4j.version>
         <!--=========================== -->
-        <spring-boot.version>2.4.1</spring-boot.version>
+        <spring-boot.version>2.7.0</spring-boot.version>
         <okhttp.version>4.0.1</okhttp.version> <!-- This version auto flush logs -->
     </properties>
 

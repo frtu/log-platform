@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.4</version>
+        <version>2.7.0</version>
     </parent>
 
     <groupId>com.github.frtu.logs.example</groupId>
@@ -24,7 +24,8 @@
     <properties>
         <java.version>1.8</java.version>
         <dockerfile-maven-version>1.4.13</dockerfile-maven-version>
-        <frtu-libs-java.version>1.1.5</frtu-libs-java.version>
+        <frtu-libs-java.version>1.2.1</frtu-libs-java.version>
+        <spring-boot.version>2.7.0</spring-boot.version>
 
 		<docker.registry>localhost:5000</docker.registry>
 		<image.name>${project.artifactId}</image.name>
