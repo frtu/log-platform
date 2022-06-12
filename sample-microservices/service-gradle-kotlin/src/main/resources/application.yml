@@ -1,0 +1,32 @@
+# ======================================
+# TOPOLOGY and EXTERNAL DEPENDENCIES
+# ======================================
+application:
+  name: service-gradle-kotlin
+
+prefix:
+  key1: value1
+
+# ======================================
+# Spring Boot
+# ======================================
+spring:
+  application:
+    name: ${application.name}
+
+# ======================================
+# Management
+# ======================================
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - info
+          - health
+info:
+  app:
+    name: ${application.name}
