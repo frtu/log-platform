@@ -23,9 +23,10 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <dockerfile-maven-version>1.4.13</dockerfile-maven-version>
-        <frtu-libs-java.version>1.2.1</frtu-libs-java.version>
         <spring-boot.version>2.7.0</spring-boot.version>
+
+        <frtu-libs-java.version>1.2.1</frtu-libs-java.version>
+        <dockerfile-maven-version>1.4.13</dockerfile-maven-version>
 
 		<docker.registry>localhost:5000</docker.registry>
 		<image.name>${project.artifactId}</image.name>
@@ -92,6 +93,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>com.github.frtu.libs</groupId>
                 <artifactId>lib-java-bom</artifactId>
