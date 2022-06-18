@@ -6,19 +6,28 @@ Provide a full log-platform startup using docker-compose.
 
 Access Jaeger interface using : [http://localhost:16686/](http://localhost:16686/)
 
+Data should be pushed to 
+
+* gRPC : `localhost:14250`
+
 ## Grafana
 
 Access Grafana interface using : [http://localhost:3000/](http://localhost:3000/) admin/admin
 
 Configuration :
 
-* Go to Confiugration > Data sources
-* Add prometheus
+* Go to Configuration > Data sources
+* Add `Prometheus`
 * Configure URL : `http://prometheus.observability:9090`
+* Click `Save & test` and then `Expore`
 
 ## Prometheus
 
 Access Prometheus interface using : [http://localhost:9090/](http://localhost:9090/)
+
+## OTEL
+
+Please configure OTEL scraper in `otel-collector-config.yaml`
 
 ## fluentd
 
