@@ -22,8 +22,9 @@
     </modules>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <spring-boot.version>2.7.0</spring-boot.version>
+        <spring-framework.version>5.3.20</spring-framework.version>
 
         <frtu-libs-java.version>1.2.1</frtu-libs-java.version>
         <dockerfile-maven-version>1.4.13</dockerfile-maven-version>
@@ -93,6 +94,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${spring-framework.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
