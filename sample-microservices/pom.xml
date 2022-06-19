@@ -29,10 +29,11 @@
         <frtu-libs-java.version>1.2.1</frtu-libs-java.version>
         <dockerfile-maven-version>1.4.13</dockerfile-maven-version>
 
-		<docker.registry>localhost:5000</docker.registry>
-		<image.name>${project.artifactId}</image.name>
-		<docker.tag>${project.version}</docker.tag>
-	</properties>
+        <docker.registry>localhost:5000</docker.registry>
+        <image.name>${project.artifactId}</image.name>
+        <docker.tag>${project.version}</docker.tag>
+        <docker.name>${docker.registry}/${image.name}:${docker.tag}</docker.name>
+    </properties>
 
     <dependencies>
         <!--===========================-->
@@ -91,6 +92,52 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.google.cloud.tools</groupId>
+                        <artifactId>jib-maven-plugin</artifactId>
+                        <version>1.8.0</version>
+                        <configuration>
+                            <allowInsecureRegistries>true</allowInsecureRegistries>
+                            <from>
+                                <image>openjdk:8-jre</image>
+                            </from>
+                            <to>
+                                <image>${docker.name}</image>
+                            </to>
+                            <container>
+                                <environment>
+                                    <_JAVA_OPTIONS>
+                                        '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005'
+                                    </_JAVA_OPTIONS>
+                                    <swarm.http.port>8080</swarm.http.port>
+                                </environment>
+                                <ports>
+                                    <port>8080</port>
+                                    <port>5005</port>
+                                </ports>
+                                <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                            </container>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>dockerBuild</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 
     <dependencyManagement>
         <dependencies>
