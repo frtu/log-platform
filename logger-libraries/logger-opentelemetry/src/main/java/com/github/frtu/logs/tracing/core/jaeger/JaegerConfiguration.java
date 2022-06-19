@@ -3,16 +3,15 @@ package com.github.frtu.logs.tracing.core.jaeger;
 import com.github.frtu.logs.core.metadata.ApplicationMetadata;
 import com.github.frtu.logs.tracing.core.TraceUtil;
 import io.grpc.ClientInterceptor;
-import io.grpc.ManagedChannel;
 import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
+import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.exporter.jaeger.JaegerGrpcSpanExporter;
+import io.opentelemetry.extension.trace.propagation.JaegerPropagator;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
-import io.opentelemetry.semconv.resource.attributes.ResourceAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,9 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 import java.util.concurrent.TimeUnit;
+
+import static com.github.frtu.logs.tracing.core.opentelemetry.OpenTelemetryBuilder.buildOpenTelemetrySdk;
+import static com.github.frtu.logs.tracing.core.opentelemetry.OpenTelemetryBuilder.buildSdkTracerProvider;
 
 @Configuration
 public class JaegerConfiguration implements TraceUtil {
@@ -84,24 +86,16 @@ public class JaegerConfiguration implements TraceUtil {
 
     public static OpenTelemetry init(String applicationName, String jaegerAgentHost, Integer jaegerAgentPort, Integer jaegerChannelTimeout, ClientInterceptor[] interceptors) {
         LOGGER.info("TRACING - Creating Tracer using applicationName={} samplingTrace={}", applicationName, jaegerAgentHost, jaegerAgentPort);
-        ManagedChannel jaegerChannel = managedChannelFactory.managedChannel(jaegerAgentHost, jaegerAgentPort, interceptors);
+        JaegerGrpcSpanExporter jaegerExporter = JaegerGrpcSpanExporter.builder()
+                .setEndpoint("http://" + jaegerAgentHost + ":" + jaegerAgentPort)
+                .setTimeout(jaegerChannelTimeout, TimeUnit.SECONDS)
+                .build();
 
-        JaegerGrpcSpanExporter jaegerExporter =
-                JaegerGrpcSpanExporter.builder()
-                        .setChannel(jaegerChannel)
-                        .setTimeout(jaegerChannelTimeout, TimeUnit.MILLISECONDS)
-                        .build();
+        SdkTracerProvider tracerProvider = buildSdkTracerProvider(applicationName, SimpleSpanProcessor.create(jaegerExporter));
 
-        Resource serviceNameResource =
-                Resource.create(Attributes.of(ResourceAttributes.SERVICE_NAME, applicationName));
-
-        SdkTracerProvider tracerProvider =
-                SdkTracerProvider.builder()
-                        .addSpanProcessor(SimpleSpanProcessor.create(jaegerExporter))
-                        .setResource(Resource.getDefault().merge(serviceNameResource))
-                        .build();
-        OpenTelemetrySdk openTelemetry =
-                OpenTelemetrySdk.builder().setTracerProvider(tracerProvider).build();
+        OpenTelemetrySdk openTelemetry = buildOpenTelemetrySdk(TextMapPropagator.composite(
+                W3CTraceContextPropagator.getInstance(), JaegerPropagator.getInstance()
+        ), tracerProvider);
 
         Runtime.getRuntime().addShutdownHook(new Thread(tracerProvider::close));
 
