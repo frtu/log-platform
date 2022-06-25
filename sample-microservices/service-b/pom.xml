@@ -89,13 +89,10 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- Internal domain dependencies -->
             <dependency>
-                <groupId>com.github.frtu.logs</groupId>
-                <artifactId>tools-bom</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring-boot.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
