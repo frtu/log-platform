@@ -3,6 +3,8 @@ global:
   # scrape_timeout is set to the global default (10s).
   scrape_interval:     5s # Set the scrape interval to every 5 seconds. Default is every 1 minute.
   evaluation_interval: 5s # Evaluate rules every 5 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
   # Attach these labels to any time series or alerts when communicating with
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
@@ -14,29 +16,38 @@ global:
 
 # A scrape configuration containing exactly endpoints to scrape
 scrape_configs:
+  # https://stackabuse.com/monitoring-spring-boot-apps-with-micrometer-prometheus-and-grafana/
+  - job_name: 'spring-actuator-metrics'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'HOST_IP:8080' ]
+
+  #------------------------
+  # Metrics for Prometheus
+  #------------------------
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['localhost:9090'] # the address of an application that exposes metrics for prometheus
+      - targets: ['prometheus:9090'] # the address of an application that exposes metrics for prometheus
       # metrics_path defaults to '/metrics'
       # scheme defaults to 'http'.
 
+  #------------------------
+  # Metrics for OTEL
+  #------------------------
   - job_name: 'otel-collector'
     scrape_interval: 3s
     static_configs:
       - targets: ['otel-collector:8889']
       - targets: ['otel-collector:8888']
 
+  #--------------------------------------------
+  # Metrics for Node exporter (current instance)
+  #--------------------------------------------
   - job_name: 'node-exporter'
     static_configs:
       - targets: ['node-exporter:9100']
-
-  # https://stackabuse.com/monitoring-spring-boot-apps-with-micrometer-prometheus-and-grafana/
-  - job_name: 'spring-actuator'
-    metrics_path: '/actuator/prometheus'
-    scrape_interval: 5s
-    static_configs:
-    - targets: ['10.0.0.11:8080']
 
 #alerting:
 #  alertmanagers:

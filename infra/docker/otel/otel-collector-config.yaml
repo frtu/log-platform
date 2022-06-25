@@ -7,29 +7,64 @@ receivers:
   otlp:
     protocols:
       grpc:
+        endpoint: 0.0.0.0:4317
       http:
-  # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/prometheusreceiver#getting-started
-  prometheus:
-    config:
-      scrape_configs:
-        - job_name: "otel-collector-metrics"
-          scrape_interval: 5s
-          static_configs:
-            - targets: [ "localhost:8888" ]
-        # https://stackabuse.com/monitoring-spring-boot-apps-with-micrometer-prometheus-and-grafana/
-#        - job_name: 'spring-actuator-metrics'
-#          metrics_path: '/prometheus'
-#          scrape_interval: 5s
-#          static_configs:
-#            - targets: [ '10.0.0.13:8080' ]
+        endpoint: 0.0.0.0:4318
+
+  #------------------------
+  # for Tracing
+  #------------------------
   # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/jaegerreceiver
   jaeger:
     protocols:
       grpc:
-        endpoint: 0.0.0.0:5775
+        endpoint: 0.0.0.0:14250
+
+  #------------------------
+  # for Metrics
+  #------------------------
+  # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/prometheusreceiver#getting-started
+  prometheus:
+    config:
+      scrape_configs:
+        # https://stackabuse.com/monitoring-spring-boot-apps-with-micrometer-prometheus-and-grafana/
+        - job_name: 'spring-actuator-metrics'
+          metrics_path: '/actuator/prometheus'
+          scrape_interval: 10s
+          static_configs:
+            - targets: ['HOST_IP:8080']
+
+# ENABLE TO COLLECT INFRA METRICS
+#
+#        #------------------------
+#        # Metrics for Prometheus
+#        #------------------------
+#        # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+#        - job_name: 'prometheus-metrics'
+#          static_configs:
+#            - targets: ['prometheus:9090'] # the address of an application that exposes metrics for prometheus
+#            # metrics_path defaults to '/metrics'
+#            # scheme defaults to 'http'.
+#
+#        #--------------------------------------------
+#        # Metrics for OTEL (current instance)
+#        #--------------------------------------------
+#        - job_name: 'otel-collector-metrics'
+#          scrape_interval: 5s
+#          static_configs:
+#            - targets: ['otel-collector:8889']
+#            - targets: ['otel-collector:8888']
+#
+#        #--------------------------------------------
+#        # Metrics for Node exporter
+#        #--------------------------------------------
+#        - job_name: 'node-exporter-metrics'
+#          static_configs:
+#            - targets: ['node-exporter:9100']
 
 processors:
   batch:
+    timeout: 1s
 
 exporters:
   # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter/prometheusexporter
@@ -39,7 +74,7 @@ exporters:
       source: logplatform
   # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter/jaegerexporter
   jaeger:
-    endpoint: "jaeger.observability:14250"
+    endpoint: jaeger:14250
     tls:
       insecure: true
 
@@ -62,8 +97,8 @@ service:
     metrics:
       receivers: [prometheus]
       processors: [batch]
-      exporters: [prometheus]
+      exporters: [logging, prometheus]
     traces:
-      receivers: [jaeger]
+      receivers: [otlp,jaeger]
       processors: [batch]
       exporters: [logging, jaeger]
