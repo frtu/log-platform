@@ -60,7 +60,7 @@ public class TimerSpanAspect {
         executionHelper = new ExecutionHelper(isFullClassName);
     }
 
-    @Around("@annotation(com.github.frtu.logs.tracing.annotation.ExecutionSpan)")
+    @Around("@annotation(com.github.frtu.logs.core.metadata.ExecutionSpan)")
     public Object timedExecutionSpan(ProceedingJoinPoint joinPoint) throws Throwable {
         //-------------------------------
         // Fetch all metadata
