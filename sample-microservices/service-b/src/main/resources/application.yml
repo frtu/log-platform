@@ -1,0 +1,66 @@
+# ======================================
+# TOPOLOGY and EXTERNAL DEPENDENCIES
+# ======================================
+application:
+  name: service-b
+
+# ======================================
+# Spring Boot
+# ======================================
+spring:
+  application:
+    name: ${application.name}
+  main:
+    # SERVLET | REACTIVE | NONE
+    web-application-type: SERVLET
+    allow-circular-references: true
+
+  boot.admin.client.url: http://localhost:8888
+#  profiles:
+#    active: prod
+
+# ======================================
+# Management
+# ======================================
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - info
+          - health
+          - metrics
+          - prometheus
+  endpoint:
+    # https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.metrics
+    metrics:
+      enabled: true
+
+    health:
+      # ALWAYS | NEVER
+      show-details: ALWAYS
+
+info:
+  app:
+    name: ${application.name}
+    description: @project.description@
+    version: @project.version@
+    encoding: @project.build.sourceEncoding@
+  java:
+    version: @java.version@
+
+# ======================================
+# Observability
+# ======================================
+fluentd:
+  tag: tag
+  label: label
+logging:
+  region: localhost
+  zone: zone
+  path: target/
+trace:
+  full.classname: true

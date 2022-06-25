@@ -17,6 +17,11 @@
         <!--===========================-->
         <dependency>
             <groupId>com.github.frtu.logs</groupId>
+            <artifactId>logger-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.frtu.logs</groupId>
             <artifactId>logger-opentelemetry</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -25,6 +30,12 @@
             <artifactId>logger-metrics</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- Micrometer Prometheus registry  -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
         <!-- Needed to activate @ExecutionSpan annotation-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -33,7 +44,6 @@
         <dependency>
             <groupId>com.github.frtu.libs</groupId>
             <artifactId>lib-test-utils</artifactId>
-            <version>${frtu-libs-java.version}</version>
         </dependency>
 
 		<dependency>
