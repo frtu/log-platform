@@ -25,15 +25,19 @@ Configuration :
 
 Access Prometheus interface using : [http://localhost:9090/](http://localhost:9090/)
 
-## OTEL
-
-Please configure OTEL scraper in `otel-collector-config.yaml`
-
-## fluentd
-
-Log into fluentd using : ```localhost:24224```
-
 ## Kibana
 
 Access Jaeger interface using : [http://localhost:5601/](http://localhost:5601/)
 
+## OTEL
+
+Please configure OTEL scraper in [otel-collector-config.yaml](otel/otel-collector-config.yaml) :
+
+* Replace `HOST_IP` with your local IP (force to use bridge instead of internal docker localhost)
+* Add tags using `processors.batch.resource.attributes`
+* In `service` enable/disable OTEL `logging`
+* Enable infra own metrics
+
+## fluentd
+
+Log into fluentd using : ```localhost:24224```

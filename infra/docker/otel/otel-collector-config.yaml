@@ -65,6 +65,11 @@ receivers:
 processors:
   batch:
     timeout: 1s
+#  resource:
+#    attributes:
+#      - key: test.key
+#        value: "test-value"
+#        action: insert
 
 exporters:
   # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter/prometheusexporter
