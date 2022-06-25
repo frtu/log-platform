@@ -18,7 +18,7 @@ Configuration :
 
 * Go to Configuration > Data sources
 * Add `Prometheus`
-* Configure URL : `http://prometheus.observability:9090`
+* Configure URL : `http://prometheus:9090`
 * Click `Save & test` and then `Expore`
 
 ## Prometheus
