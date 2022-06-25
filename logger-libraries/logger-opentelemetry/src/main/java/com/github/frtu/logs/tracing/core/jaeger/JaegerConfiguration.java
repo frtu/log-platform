@@ -29,29 +29,18 @@ import static com.github.frtu.logs.tracing.core.opentelemetry.OpenTelemetryBuild
 public class JaegerConfiguration implements TraceUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(JaegerConfiguration.class);
 
-    @Value("#{environment.SAMPLING ?: false}")
-    private boolean samplingTrace = false;
-
-    @Value("#{environment.JAEGER_ENDPOINT ?: 'UNKNOWN'}")
-    private String jaegerEndpoint;
-
-    @Value("#{environment.JAEGER_AGENT_HOST ?: 'localhost'}")
-    private String jaegerAgentHost;
-
-    @Value("#{environment.JAEGER_AGENT_PORT ?: 14250}")
-    private Integer jaegerAgentPort;
-
-    @Value("#{environment.JAEGER_CHANNEL_TIMEOUT ?: 30000}")
-    private Integer jaegerChannelTimeout;
-
-    static final ManagedChannelFactory managedChannelFactory = new ManagedChannelFactory();
-    @Autowired(required = false)
+    private ApplicationMetadata applicationMetadata;
     protected ClientInterceptor[] clientInterceptors;
 
-    @Autowired
-    private ApplicationMetadata applicationMetadata;
+    private String jaegerEndpoint;
+    private String jaegerAgentHost;
+    private Integer jaegerAgentPort;
+    private Integer jaegerChannelTimeout;
+    private boolean samplingTrace = false;
 
     private OpenTelemetry openTelemetry;
+
+    static final ManagedChannelFactory managedChannelFactory = new ManagedChannelFactory();
 
     Tracer tracer;
 
@@ -65,6 +54,31 @@ public class JaegerConfiguration implements TraceUtil {
 
     Integer getJaegerAgentPort() {
         return jaegerAgentPort;
+    }
+
+    public JaegerConfiguration(
+            @Autowired
+            ApplicationMetadata applicationMetadata,
+            @Value("#{environment.JAEGER_AGENT_HOST ?: 'localhost'}")
+            String jaegerAgentHost,
+            @Value("#{environment.JAEGER_AGENT_PORT ?: 14250}")
+            Integer jaegerAgentPort,
+            @Value("#{environment.JAEGER_ENDPOINT ?: 'UNKNOWN'}")
+            String jaegerEndpoint,
+            @Value("#{environment.JAEGER_CHANNEL_TIMEOUT ?: 30000}")
+            Integer jaegerChannelTimeout,
+            @Value("#{environment.SAMPLING ?: false}")
+            boolean samplingTrace,
+            @Autowired(required = false)
+            ClientInterceptor[] clientInterceptors
+    ) {
+        this.samplingTrace = samplingTrace;
+        this.jaegerEndpoint = jaegerEndpoint;
+        this.jaegerAgentHost = jaegerAgentHost;
+        this.jaegerAgentPort = jaegerAgentPort;
+        this.jaegerChannelTimeout = jaegerChannelTimeout;
+        this.clientInterceptors = clientInterceptors;
+        this.applicationMetadata = applicationMetadata;
     }
 
     @PostConstruct

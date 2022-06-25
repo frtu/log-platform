@@ -19,6 +19,17 @@ public class OpenTelemetryHelper {
     @Autowired
     Tracer tracer;
 
+    public OpenTelemetryHelper() {
+    }
+
+    /**
+     * @since 1.1.5
+     */
+    public OpenTelemetryHelper(Tracer tracer) {
+        this();
+        this.tracer = tracer;
+    }
+
     /**
      * Allow to get {@link Tracer} when you already have {@link TraceHelper}
      *
@@ -37,6 +48,16 @@ public class OpenTelemetryHelper {
      */
     public Span startSpan(String spanName) {
         return getTracer().spanBuilder(spanName).startSpan();
+    }
+
+    /**
+     * End span
+     *
+     * @param span
+     * @since 1.1.5
+     */
+    public void end(Span span) {
+        span.end();
     }
 
     /**
@@ -61,6 +82,28 @@ public class OpenTelemetryHelper {
     public static void setAttribute(Span span, String key, String value) {
         LOGGER.debug("Adding tag to span: {}={}", key, value);
         span.setAttribute(key, value);
+    }
+
+    /**
+     * Add event to the current span
+     *
+     * @param eventName
+     * @since 1.1.5
+     */
+    public static void addEvent(String eventName) {
+        addEvent(Span.current(), eventName);
+    }
+
+
+    /**
+     * Add event to a span
+     *
+     * @param span
+     * @param eventName
+     * @since 1.1.5
+     */
+    public static void addEvent(Span span, String eventName) {
+        addEvent(Span.current(), eventName, null, null);
     }
 
     /**
