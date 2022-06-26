@@ -43,15 +43,6 @@ management:
       # ALWAYS | NEVER
       show-details: ALWAYS
 
-info:
-  app:
-    name: ${application.name}
-    description: @project.description@
-    version: @project.version@
-    encoding: @project.build.sourceEncoding@
-  java:
-    version: @java.version@
-
 # ======================================
 # Observability
 # ======================================

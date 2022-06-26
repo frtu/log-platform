@@ -37,29 +37,26 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <fork>true</fork>
-                    <skip>false</skip>
-                    <mainClass>io.opentelemetry.example.BootOtelTempoApiApplication</mainClass>
-                    <commandlineArguments>
-                        -javaagent:../boot-otel-tempo-docker/agent/opentelemetry-javaagent-all.jar
-                        -Dotel.trace.exporter=jaeger
-                        -Dotel.exporter.jaeger.endpoint=localhost:14250
-                        -Dotel.resource.attributes=service.name=${project.artifactId}
-                        -Dotel.javaagent.debug=false
-                        -Dotel.metrics.exporter=none
-                    </commandlineArguments>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>testCompile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
