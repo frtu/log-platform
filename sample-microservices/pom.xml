@@ -30,6 +30,8 @@
         <dockerfile-maven-version>1.4.13</dockerfile-maven-version>
 
         <docker.registry>localhost:5000</docker.registry>
+        <!-- GCP        <docker.registry>gcr.io</docker.registry>-->
+        <!-- DockerHub  <docker.registry>docker.io</docker.registry>-->
         <image.name>${project.artifactId}</image.name>
         <docker.tag>${project.version}</docker.tag>
         <docker.name>${docker.registry}/${image.name}:${docker.tag}</docker.name>
@@ -95,43 +97,84 @@
 
     <profiles>
         <profile>
-            <id>docker</id>
+            <id>docker-jib</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <build>
                 <plugins>
+                    <!-- https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin -->
                     <plugin>
                         <groupId>com.google.cloud.tools</groupId>
                         <artifactId>jib-maven-plugin</artifactId>
-                        <version>1.8.0</version>
+                        <version>3.2.1</version>
                         <configuration>
-                            <allowInsecureRegistries>true</allowInsecureRegistries>
                             <from>
-                                <image>openjdk:8-jre</image>
+                                <image>openjdk:8-jdk-alpine</image>
                             </from>
-                            <to>
-                                <image>${docker.name}</image>
-                            </to>
+                            <allowInsecureRegistries>true</allowInsecureRegistries>
                             <container>
-                                <environment>
-                                    <_JAVA_OPTIONS>
-                                        '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005'
-                                    </_JAVA_OPTIONS>
-                                    <swarm.http.port>8080</swarm.http.port>
-                                </environment>
                                 <ports>
                                     <port>8080</port>
                                     <port>5005</port>
                                 </ports>
-                                <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                                <format>OCI</format>
                             </container>
                         </configuration>
                         <executions>
                             <execution>
+                                <id>push-tag-version</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>dockerBuild</goal>
                                 </goals>
+                                <configuration>
+                                    <to>
+                                        <image>${docker.registry}/${image.name}:${docker.tag}</image>
+                                    </to>
+                                </configuration>
+                            </execution>
+                            <!--                            <execution>-->
+                            <!--                                <id>push-tag-latest</id>-->
+                            <!--                                <phase>package</phase>-->
+                            <!--                                <goals>-->
+                            <!--                                    <goal>dockerBuild</goal>-->
+                            <!--                                </goals>-->
+                            <!--                                <configuration>-->
+                            <!--                                    <to>-->
+                            <!--                                        <image>${docker.registry}/${image.name}:latest</image>-->
+                            <!--                                    </to>-->
+                            <!--                                </configuration>-->
+                            <!--                            </execution>-->
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>docker-spotify</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.spotify</groupId>
+                        <artifactId>dockerfile-maven-plugin</artifactId>
+                        <version>${dockerfile-maven-version}</version>
+                        <executions>
+                            <execution>
+                                <id>default</id>
+                                <goals>
+                                    <goal>build</goal>
+                                    <goal>push</goal>
+                                </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <repository>${docker.registry}/${image.name}</repository>
+                            <tag>${docker.tag}</tag>
+                            <buildArgs>
+                                <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                            </buildArgs>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
