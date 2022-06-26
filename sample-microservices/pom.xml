@@ -140,6 +140,9 @@
                                 </ports>
                                 <format>OCI</format>
                                 <entrypoint>java,-javaagent:/opt/otel/opentelemetry-javaagent-1.15.0.jar,-Dfile.encoding=UTF-8,-Xms512m,-jar,/app/${project.build.finalName}.jar</entrypoint>
+                                <jvmFlags>
+                                    <jvmFlag>-javaagent:/opt/otel/opentelemetry-javaagent-1.15.0.jar</jvmFlag>
+                                </jvmFlags>
                                 <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
                             </container>
                             <extraDirectories>
