@@ -139,10 +139,16 @@
                                     <port>5005</port>
                                 </ports>
                                 <format>OCI</format>
+                                <entrypoint>java,-javaagent:/opt/otel/opentelemetry-javaagent-1.15.0.jar,-Dfile.encoding=UTF-8,-Xms512m,-jar,/app/${project.build.finalName}.jar</entrypoint>
                                 <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
                             </container>
                             <extraDirectories>
                                 <paths>
+                                    <path>
+                                        <from>target/</from>
+                                        <includes>*.jar</includes>
+                                        <into>/app</into>
+                                    </path>
                                     <path>
                                         <from>opt</from>
                                         <into>/opt</into>
