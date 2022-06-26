@@ -11,6 +11,10 @@
 
     <artifactId>service-b</artifactId>
 
+    <properties>
+        <start-class>com.github.frtu.logs.example.demo.DemoApplication</start-class>
+    </properties>
+
 	<dependencies>
         <!--===========================-->
         <!-- Internal domain dependencies -->

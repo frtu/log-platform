@@ -77,11 +77,13 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
             <!-- JDK version -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -90,6 +92,15 @@
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+            <!-- Spring Boot -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                    <skip>false</skip>
                 </configuration>
             </plugin>
         </plugins>
@@ -104,14 +115,23 @@
             <build>
                 <plugins>
                     <!-- https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin -->
+                    <!-- https://github.com/GoogleContainerTools/jib/blob/master/docs/faq.md -->
                     <plugin>
                         <groupId>com.google.cloud.tools</groupId>
                         <artifactId>jib-maven-plugin</artifactId>
                         <version>3.2.1</version>
                         <configuration>
+                            <containerizingMode>packaged</containerizingMode>
                             <from>
-                                <image>openjdk:8-jdk-alpine</image>
+                                <image>adoptopenjdk/openjdk11:alpine</image>
                             </from>
+                            <to>
+                                <image>${docker.registry}/${image.name}</image>
+                                <tags>
+                                    <tag>${docker.tag}</tag>
+                                    <tag>latest</tag>
+                                </tags>
+                            </to>
                             <allowInsecureRegistries>true</allowInsecureRegistries>
                             <container>
                                 <ports>
@@ -119,33 +139,26 @@
                                     <port>5005</port>
                                 </ports>
                                 <format>OCI</format>
+                                <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
                             </container>
+                            <extraDirectories>
+                                <paths>
+                                    <path>
+                                        <from>opt</from>
+                                        <into>/opt</into>
+                                    </path>
+                                </paths>
+                            </extraDirectories>
                         </configuration>
                         <executions>
                             <execution>
-                                <id>push-tag-version</id>
+                                <id>build</id>
                                 <phase>package</phase>
                                 <goals>
-                                    <goal>dockerBuild</goal>
+                                    <goal>dockerBuild</goal> <!-- Use for local docker -->
+                                    <!-- <goal>build</goal> --> <!-- Use for CICD build -->
                                 </goals>
-                                <configuration>
-                                    <to>
-                                        <image>${docker.registry}/${image.name}:${docker.tag}</image>
-                                    </to>
-                                </configuration>
                             </execution>
-                            <!--                            <execution>-->
-                            <!--                                <id>push-tag-latest</id>-->
-                            <!--                                <phase>package</phase>-->
-                            <!--                                <goals>-->
-                            <!--                                    <goal>dockerBuild</goal>-->
-                            <!--                                </goals>-->
-                            <!--                                <configuration>-->
-                            <!--                                    <to>-->
-                            <!--                                        <image>${docker.registry}/${image.name}:latest</image>-->
-                            <!--                                    </to>-->
-                            <!--                                </configuration>-->
-                            <!--                            </execution>-->
                         </executions>
                     </plugin>
                 </plugins>
