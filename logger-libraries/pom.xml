@@ -18,6 +18,7 @@
         <module>logger-metrics</module>
         <module>logger-opentelemetry</module>
         <module>logger-security</module>
+        <module>logger-grpc</module>
         <module>logger-bom</module>
     </modules>
 </project>
