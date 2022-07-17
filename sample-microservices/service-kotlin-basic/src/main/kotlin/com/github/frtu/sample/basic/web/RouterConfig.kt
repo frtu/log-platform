@@ -5,8 +5,8 @@ import com.github.frtu.logs.core.RpcLogger.requestBody
 import com.github.frtu.logs.core.RpcLogger.responseBody
 import com.github.frtu.logs.core.RpcLogger.uri
 import com.github.frtu.logs.core.StructuredLogger.message
-import com.github.frtu.sample.basic.persistence.basic.EmailEntity
-import com.github.frtu.sample.basic.persistence.basic.IEmailRepository
+import com.github.frtu.sample.basic.persistence.basic.AccountSubscriptionEntity
+import com.github.frtu.sample.basic.persistence.basic.AccountSubscriptionRepository
 import java.net.URI
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
@@ -21,19 +21,19 @@ import org.springframework.web.reactive.function.server.json
 
 @Configuration
 class RouterConfig(
-    private val repository: IEmailRepository,
+    private val repository: AccountSubscriptionRepository,
 ) {
     internal val logger = LoggerFactory.getLogger(this::class.java)
     internal val rpcLogger = RpcLogger.create(logger)
 
     @Bean
     fun route(): RouterFunction<*> = coRouter {
-        val uriPath = "/v1/emails"
+        val uriPath = "/v1/subscriptions"
         GET(uriPath) {
             rpcLogger.info(uri(uriPath), message("find all"))
             ok().json().bodyAndAwait(repository.findAll())
         }
-        GET("/v1/emails/{id}") { serverRequest ->
+        GET("/v1/subscriptions/{id}") { serverRequest ->
             val id = serverRequest.pathVariable("id")
             val entity = repository.findById(id.toLong())
             when {
@@ -42,9 +42,9 @@ class RouterConfig(
             }
         }
         POST(uriPath) { serverRequest ->
-            val emailEntity = serverRequest.awaitBody<EmailEntity>()
-            val createdId = repository.save(emailEntity)
-            rpcLogger.info(uri(uriPath), requestBody(emailEntity), responseBody(createdId))
+            val accountSubscriptionEntity = serverRequest.awaitBody<AccountSubscriptionEntity>()
+            val createdId = repository.save(accountSubscriptionEntity)
+            rpcLogger.info(uri(uriPath), requestBody(accountSubscriptionEntity), responseBody(createdId))
             created(URI.create("$uriPath/$createdId")).buildAndAwait()
         }
     }

@@ -9,7 +9,7 @@ object Versions {
     const val jackson = "2.13.2.1" // 2022-03-30
     const val r2dbc = "Arabba-SR13"  // 2022-03-18
     const val spring_boot = "2.7.1"
-    const val springdoc = "1.5.4"
+    const val springdoc = "1.6.9" // 2022-05-27
     const val frtu_base = "1.2.5-SNAPSHOT"
     const val frtu_libs = "1.2.2"
     const val frtu_logs = "1.1.4"

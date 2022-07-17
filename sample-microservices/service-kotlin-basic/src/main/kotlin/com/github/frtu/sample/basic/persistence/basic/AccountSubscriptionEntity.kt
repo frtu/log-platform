@@ -8,16 +8,16 @@ import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
 import java.util.*
 
-@Table("email")
-data class EmailEntity(
-    @Column("receiver")
-    var receiver: String? = null,
+@Table("account_subscription")
+data class AccountSubscriptionEntity(
+    @Column("customer_name")
+    var customerName: String = "",
 
-    @Column("subject")
-    var subject: String = "",
+    @Column("email_address")
+    var emailAddress: String = "",
 
-    @Column("content")
-    var content: String = "",
+    @Column("phone")
+    var phone: String = "",
 
     @Column("status")
     var status: STATUS = STATUS.INIT,
@@ -33,12 +33,8 @@ data class EmailEntity(
     @LastModifiedDate
     @Column("update_time")
     var updateTime: LocalDateTime = creationTime
-) {
-    companion object {
-        const val TABLE_NAME = "email"
-    }
-}
+)
 
 enum class STATUS {
-    INIT, SENT, ERROR
+    INIT, ACTIVE, DEACTIVATED, CLOSED
 }
