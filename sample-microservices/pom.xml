@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.0</version>
+        <version>2.7.1</version>
     </parent>
 
     <groupId>com.github.frtu.logs.example</groupId>
@@ -19,14 +19,27 @@
     <modules>
         <module>service-a</module>
         <module>service-b</module>
+        <module>service-kotlin-basic</module>
+        <module>service-kotlin-complex</module>
     </modules>
 
     <properties>
+        <!--===========================-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
-        <spring-boot.version>2.7.0</spring-boot.version>
-        <spring-framework.version>5.3.20</spring-framework.version>
-
-        <frtu-libs-java.version>1.2.1</frtu-libs-java.version>
+        <!--===========================-->
+        <spring-boot.version>2.7.1</spring-boot.version>
+        <spring-framework.version>5.3.21</spring-framework.version>
+        <!-- https://search.maven.org/artifact/org.springdoc/springdoc-openapi-ui/1.5.4/jar -->
+        <springdoc.version>1.6.9</springdoc.version>
+        <!--===========================-->
+        <r2dbc.version>Borca-SR1</r2dbc.version> <!-- 2022-03-17 -->
+        <!--===========================-->
+        <frtu.base-pom.version>1.2.4</frtu.base-pom.version>
+        <frtu.libs.version>1.2.2</frtu.libs.version>
+        <frtu.logger.version>1.1.4</frtu.logger.version>
+        <!--===========================-->
         <dockerfile-maven-version>1.4.13</dockerfile-maven-version>
 
         <docker.registry>localhost:5000</docker.registry>

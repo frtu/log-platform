@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty scope="context" name="SERVICE_NAME" source="application.name"/>
+    <springProperty scope="context" name="REGION" source="logging.region"/>
+    <springProperty scope="context" name="ZONE" source="logging.zone"/>
+    <springProperty scope="context" name="FLUENTD_TAG" source="fluentd.tag"/>
+    <springProperty scope="context" name="FLUENTD_LABEL" source="fluentd.label"/>
+    <springProperty scope="context" name="LOG_PATH" source="logging.path"/>
+
+    <include resource="logback-web.xml"/>
+    <!-- OPTIONAL -->
+    <!--<include resource="logback-appender-file.xml"/>-->
+    <!--<include resource="logback-appender-file-json-encoder.xml"/>-->
+
+    <!-- IMPORT TO GET SPRING Context init, URLs & JPA -->
+    <!--<include resource="logback-spring-debug.xml"/>-->
+
+    <!--Local start up-->
+    <springProfile name="default">
+        <!--Current application-->
+        <logger name="com.github.frtu.sample.basic" level="TRACE" additivity="true"/>
+
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+    <!--Use for Staging env with fluentd -->
+    <springProfile name="stage">
+        <logger name="com.github.frtu.sample.basic" level="INFO" additivity="true"/>
+
+        <!-- Deactivate 'Span reported' logs-->
+        <logger name="io.jaegertracing.internal.reporters" level="WARN" additivity="true"/>
+
+        <root level="WARN">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="FLUENT"/>
+        </root>
+    </springProfile>
+
+    <!--Use for Production env -->
+    <springProfile name="prod">
+        <logger name="com.github.frtu.sample.basic" level="INFO" additivity="true"/>
+
+        <!-- Deactivate 'Span reported' logs-->
+        <logger name="io.jaegertracing.internal.reporters" level="WARN" additivity="true"/>
+
+        <root level="WARN">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="FILE_APPENDER"/>
+        </root>
+    </springProfile>
+
+    <!--Use this version when Spring doesn't start because of Bean inits -->
+    <springProfile name="debug">
+        <!--DevToolsPropertyDefaultsPostProcessor-->
+        <logger name="logging.level.web" level="DEBUG" additivity="true"/>
+        <!--Scanned properties-->
+        <logger name="org.springframework.boot.context.config" level="DEBUG" additivity="true"/>
+        <!--Scanned annotations-->
+        <logger name="org.springframework.context.annotation" level="DEBUG" additivity="true"/>
+        <!--Bean instanciation-->
+        <logger name="org.springframework.beans.factory.support" level="DEBUG" additivity="true"/>
+        <!--Spring Boot scan-->
+        <logger name="org.springframework.boot.autoconfigure.logging" level="DEBUG" additivity="true"/>
+
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+</configuration>

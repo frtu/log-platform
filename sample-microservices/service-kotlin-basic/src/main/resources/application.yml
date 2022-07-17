@@ -1,0 +1,66 @@
+# ======================================
+# TOPOLOGY and EXTERNAL DEPENDENCIES
+# ======================================
+application:
+  name: service-kotlin-basic
+  persistence:
+    host: localhost
+    port: 5432
+    database: postgres
+    username: postgres
+    password: postgres
+    #    url: postgresql://${application.persistence.host}:${application.persistence.port}/${application.persistence.database}
+    url: h2:mem:///test?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+
+prefix:
+  key1: value1
+
+# ======================================
+# Spring Boot
+# ======================================
+spring:
+  application:
+    name: ${application.name}
+
+  # Bootstrap DB
+  flyway:
+    url: jdbc:${application.persistence.url}
+    user: ${application.persistence.username}
+    password: ${application.persistence.password}
+    locations: "classpath:/db/migration"
+    enabled: true
+
+  # R2DBC
+  r2dbc:
+    url: r2dbc:${application.persistence.url}
+    username: ${application.persistence.username}
+    password: ${application.persistence.password}
+    initialization-mode: always
+
+logging:
+  level:
+    org.springframework.data.r2dbc: DEBUG
+    org.springframework.transaction: TRACE
+
+# ======================================
+# Management
+# ======================================
+server:
+  port: 8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - info
+          - health
+          - metrics
+          - prometheus
+  endpoint:
+    metrics.enabled: true
+    health.show-details: ALWAYS
+info:
+  app:
+    name: ${application.name}
+    port: ${server.port}
