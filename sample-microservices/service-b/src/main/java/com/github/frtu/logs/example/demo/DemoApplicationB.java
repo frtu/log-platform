@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
 @Import({LogConfigAll.class, MetricsConfig.class})
-public class DemoApplication {
+public class DemoApplicationB {
     public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
+        SpringApplication.run(DemoApplicationB.class, args);
     }
 }

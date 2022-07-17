@@ -12,7 +12,7 @@
     <artifactId>service-b</artifactId>
 
     <properties>
-        <start-class>com.github.frtu.logs.example.demo.DemoApplication</start-class>
+        <start-class>com.github.frtu.logs.example.demo.DemoApplicationA</start-class>
     </properties>
 
 	<dependencies>
