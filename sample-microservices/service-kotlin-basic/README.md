@@ -2,18 +2,14 @@
 
 ## About
 
-Project description
+Basic project 
 
-## API
-
-### Sync with WebMVC
-
-* Access Swagger API at [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
-* Access API Docs (JSON) at [http://localhost:8080/v3/api-docs/](http://localhost:8080/v3/api-docs/)
+* providing `subscriptions` with related R2DBC database.
+* exposing Subscription API at [http://localhost:8081/v1/subscriptions](http://localhost:8081/v1/subscriptions) 
 
 ### Async with WebFlux
 
-* Access Swagger API at [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+* Access Swagger API at [http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html)
 
 ## Integration with Docker
 

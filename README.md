@@ -1,21 +1,24 @@
 # log-platform
 
-Full EFK platform for logs and monitoring. EFK stands for :
+Platform for observability.
+
+On Tracing using :
+
+* [OpenTelemetry](https://opentelemetry.io/docs/)
+* [Jaeger implementation](https://www.jaegertracing.io/docs/1.15/)
+
+On Metrics using :
+
+* [Prometheus](https://prometheus.io/docs/introduction/overview/)
+* [Grafana](https://grafana.com/oss/grafana/)
+
+On Log using EFK platform. EFK stands for :
 
 * [ElasticSearch](https://www.elastic.co/products/elasticsearch)
 * [Fluentd](https://www.fluentd.org/architecture)
 * [Kibana](https://www.elastic.co/products/kibana)
 
 More on [logs unification](https://www.fluentd.org/blog/unified-logging-layer)
-
-On tracing using :
-
-* [OpenTracing for CNCF](https://opentracing.io/)
-* [Jaeger implementation](https://www.jaegertracing.io/docs/1.15/)
-
-Note : [OpenTelemetry](https://medium.com/jaegertracing/jaeger-and-opentelemetry-1846f701d9f2) will be replacing
-OpenTracing, nevertheless it is **not ready and stable as of now**. Expect also implementation to be fully stable before
-migrating to the latest version of Jaeger.
 
 ## Guidelines
 
@@ -59,15 +62,21 @@ Allow to tag every logs sent to EFK with following information :
 
 Allow to create new dimension in ElasticSearch. Initialize the logger similar with Slf4j LOGGER :
 
+```kotlin
+companion object {
+  private val structuredLogger = StructuredLogger.create(this::class.java)
+}
+```
+
 ```java
-final static StructuredLogger STRUCTURED_LOGGER=StructuredLogger.create("usage");
+final static StructuredLogger structuredLogger = StructuredLogger.create("usage");
 ```
 
 Then use it for logging String or Integer values :
 
 ```java
-STRUCTURED_LOGGER.info(entry("key1", "value1"), entry("key2", "value2"));
-STRUCTURED_LOGGER.info(entry("key1", 123), entry("key2", 456));
+structuredLogger.info(entry("key1", "value1"), entry("key2", "value2"));
+structuredLogger.info(entry("key1", 123), entry("key2", 456));
 ```
 
 Gives a JSON log :
@@ -88,7 +97,7 @@ import static com.github.frtu.logs.core.StructuredLogger.entries;
 val entries = entries(entry("key1", "value1"), entry("key2", "value2"));
 ...
 // Log later
-STRUCTURED_LOGGER.info(entries);
+structuredLogger.info(entries);
 ```
 
 ### RpcLogger
