@@ -1,0 +1,102 @@
+## https://opentelemetry.io/docs/collector/configuration/
+
+# https://github.com/open-telemetry/opentelemetry-collector/blob/main/receiver/README.md
+# https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver
+receivers:
+  # Data sources: traces, metrics, logs
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+  #------------------------
+  # for Tracing
+  #------------------------
+  # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/jaegerreceiver
+  jaeger:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:14250
+
+  #------------------------
+  # for Metrics
+  #------------------------
+  # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/prometheusreceiver#getting-started
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'spring-actuator-metrics'
+          metrics_path: '/actuator/prometheus'
+          scrape_interval: 10s
+          static_configs:
+            - targets: ['HOST_IP:8080']
+        # https://stackabuse.com/monitoring-spring-boot-apps-with-micrometer-prometheus-and-grafana/
+        # https://grafana.com/blog/2022/05/04/how-to-capture-spring-boot-metrics-with-the-opentelemetry-java-instrumentation-agent/
+
+# ENABLE TO COLLECT INFRA METRICS
+#
+#        #------------------------
+#        # Metrics for Prometheus
+#        #------------------------
+#        # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+#        - job_name: 'prometheus-metrics'
+#          static_configs:
+#            - targets: ['prometheus:9090'] # the address of an application that exposes metrics for prometheus
+#            # metrics_path defaults to '/metrics'
+#            # scheme defaults to 'http'.
+#
+#        #--------------------------------------------
+#        # Metrics for Node exporter
+#        #--------------------------------------------
+#        - job_name: 'node-exporter-metrics'
+#          static_configs:
+#            - targets: ['node-exporter:9100']
+
+processors:
+  batch:
+    timeout: 1s
+#  resource:
+#    attributes:
+#      - key: test.key
+#        value: "test-value"
+#        action: insert
+
+exporters:
+  # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter/prometheusexporter
+  prometheus:
+    # https://grafana.com/blog/2022/05/04/how-to-capture-spring-boot-metrics-with-the-opentelemetry-java-instrumentation-agent/
+    endpoint: "0.0.0.0:8889"
+    const_labels:
+      source: logplatform
+  # https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter/jaegerexporter
+  jaeger:
+    endpoint: jaeger:14250
+    tls:
+      insecure: true
+
+  # https://github.com/open-telemetry/opentelemetry-collector/blob/main/exporter/loggingexporter/README.md
+  logging:
+    logLevel: debug
+    sampling_initial: 5
+    sampling_thereafter: 200
+
+extensions:
+  health_check:
+  pprof:
+    endpoint: :1888
+  zpages:
+    endpoint: :55679
+
+service:
+  extensions: [pprof, zpages, health_check]
+  pipelines:
+    metrics:
+      receivers: [prometheus]
+      processors: [batch]
+      exporters: [logging, prometheus]
+    traces:
+      receivers: [otlp,jaeger]
+      processors: [batch]
+      exporters: [logging, jaeger]
