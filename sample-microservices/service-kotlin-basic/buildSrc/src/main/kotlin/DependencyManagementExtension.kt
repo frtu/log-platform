@@ -14,6 +14,8 @@ object Versions {
     const val frtu_libs = "1.2.2"
     const val frtu_logs = "1.1.4"
 
+    const val reactor_kafka = "1.3.10"
+
     const val opentelemetry = "1.16.0" // 2022-07-13
     const val jaeger = "1.8.0"
     const val spring_cloud_sleuth = "3.1.3"

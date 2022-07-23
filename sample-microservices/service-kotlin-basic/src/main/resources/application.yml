@@ -3,6 +3,10 @@
 # ======================================
 application:
   name: service-kotlin-basic
+  broker:
+    url: localhost:9092
+    topics:
+      subscriptions: app-subscriptions
   persistence:
     host: localhost
     port: 5432
@@ -21,6 +25,30 @@ prefix:
 spring:
   application:
     name: ${application.name}
+
+  # Broker
+  kafka:
+    bootstrap-servers: ${application.broker.url}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json:
+          add.type.headers: false
+    consumer:
+      group-id: consumer-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      properties:
+        spring.json:
+          use.type.headers: false
+          value.default.type: com.github.frtu.sample.basic.persistence.basic.AccountSubscriptionEntity
+          trusted.packages: "*"
+    properties:
+      delivery.timeout.ms: 600000
+      retry.backoff.ms: 3000
+      max.request.size: 2097176
 
   # Bootstrap DB
   flyway:

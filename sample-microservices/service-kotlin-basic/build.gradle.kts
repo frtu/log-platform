@@ -80,6 +80,10 @@ dependencies {
     runtimeOnly("org.springframework.boot:spring-boot-starter-jdbc")
     runtimeOnly("org.flywaydb:flyway-core")
 
+    // Broker
+    implementation("org.springframework.kafka:spring-kafka")
+    implementation("io.projectreactor.kafka:reactor-kafka:${Versions.reactor_kafka}")
+
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
