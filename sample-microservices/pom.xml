@@ -236,7 +236,7 @@
             <dependency>
                 <groupId>com.github.frtu.libs</groupId>
                 <artifactId>lib-java-bom</artifactId>
-                <version>${frtu-libs-java.version}</version>
+                <version>${frtu.libs.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
