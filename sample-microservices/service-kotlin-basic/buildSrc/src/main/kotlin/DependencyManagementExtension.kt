@@ -42,9 +42,10 @@ object Libs {
 
     //---------- OBSERVABILITY -----------
     const val opentelemetry_sdk = "io.opentelemetry:opentelemetry-sdk"
+    const val opentelemetry_annotations = "io.opentelemetry:opentelemetry-extension-annotations"
     const val opentelemetry_trace_propagators = "io.opentelemetry:opentelemetry-extension-trace-propagators"
-    const val opentelemetry_semconv = "io.opentelemetry:opentelemetry-semconv:${Versions.opentelemetry}-alpha"
-    const val opentelemetry_shim = "io.opentelemetry:opentelemetry-opentracing-shim:${Versions.opentelemetry}-alpha"
+    const val opentelemetry_semconv = "io.opentelemetry:opentelemetry-semconv"
+    const val opentelemetry_shim = "io.opentelemetry:opentelemetry-opentracing-shim"
 
     const val opentelemetry_exporter = "io.opentelemetry:opentelemetry-exporter-jaeger"
     const val trace_impl = "io.jaegertracing:jaeger-client:${Versions.jaeger}"
@@ -63,6 +64,8 @@ object Libs {
     const val bom_logger = "com.github.frtu.logs:logger-bom:${Versions.frtu_logs}"
     const val bom_opentelemetry = "io.opentelemetry:opentelemetry-bom:${Versions.opentelemetry}"
     const val bom_opentelemetry_alpha = "io.opentelemetry:opentelemetry-bom-alpha:${Versions.opentelemetry}-alpha"
+    const val bom_opentelemetry_instrumentation_alpha = "io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom-alpha:${Versions.opentelemetry}-alpha"
+
     const val bom_spring_cloud_sleuth = "org.springframework.cloud:spring-cloud-sleuth-dependencies:${Versions.spring_cloud_sleuth}"
     const val bom_spring_cloud_sleuth_otel = "org.springframework.cloud:spring-cloud-sleuth-otel-dependencies:${Versions.spring_cloud_sleuth_otel}"
 
