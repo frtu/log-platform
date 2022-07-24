@@ -569,5 +569,6 @@ through [SLF4J](http://www.slf4j.org/) it is recommended to use an adapter to [l
 * [The Three Pillars of Observability](https://www.oreilly.com/library/view/distributed-systems-observability/9781492033431/ch04.html)
 * [Microservice Observability patterns](https://microservices.io/patterns/microservices.html)
 * [opentelemetry-beyond-getting-started](https://medium.com/opentelemetry/opentelemetry-beyond-getting-started-5ac43cd0fe26)
+* [Distributed Tracing](https://ryanharrison.co.uk/2021/08/06/distributed-tracing-spring-boot-jaeger.html) 
 * [Tools](https://github.com/adriannovegil/awesome-observability) 
 

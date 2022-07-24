@@ -9,6 +9,7 @@
     <property name="LOG_FILE_MAX_HISTORY" value="${LOG_FILE_MAX_HISTORY:-15}"/>
     <property name="LOG_FILE_MAX_TOTAL_SIZE" value="${LOG_FILE_MAX_SIZE:-100MB}"/>
 
+    <!-- https://www.innoq.com/en/blog/structured-logging/ -->
     <!-- Send messages to a rolling file -->
     <appender name="JSON_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
