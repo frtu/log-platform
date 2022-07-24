@@ -13,7 +13,7 @@ import org.springframework.kafka.support.serializer.JsonDeserializer
 import reactor.kafka.receiver.ReceiverOptions
 
 @Configuration
-class EventSource(
+class EventSourceAsync(
     @Value(value = "\${application.broker.topics.subscriptions}")
     val topic: String,
     receiverOptions: ReceiverOptions<String, AccountSubscriptionEntity>,
@@ -45,10 +45,11 @@ class EventSource(
                 )
             }
             .map { it.value() }
-            .doOnNext { fakeConsumerDTO: Any? ->
+            .doOnNext { accountSubscriptionEntity ->
                 logger.info(
                     "successfully consumed {}={}",
-                    AccountSubscriptionEntity::class.java.simpleName, fakeConsumerDTO
+                    AccountSubscriptionEntity::class.java.simpleName,
+                    accountSubscriptionEntity
                 )
             }
             .doOnError { throwable: Throwable ->

@@ -6,7 +6,7 @@ application:
   broker:
     url: localhost:9092
     topics:
-      subscriptions: app-subscriptions
+      subscriptions: app-subscriptions-async
   persistence:
     host: localhost
     port: 5432
@@ -32,9 +32,9 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      properties:
-        spring.json:
-          add.type.headers: false
+#      properties:
+#        spring.json:
+#          add.type.headers: false
     consumer:
       group-id: consumer-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
