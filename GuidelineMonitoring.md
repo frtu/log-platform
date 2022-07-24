@@ -60,6 +60,10 @@ Go to Dashboard > Manage > Import button :
 
 Interesting dashboard :
 
+* [SpringBoot APM Dashboard - 12900](https://grafana.com/grafana/dashboards/12900)
+* [Spring Boot Application (including Chaos monkey) - 9845](https://grafana.com/grafana/dashboards/9845)
+* [Kafka Consumer - SYNC - 16088](https://grafana.com/grafana/dashboards/16088)
+
 * [JVM (Micrometer) - 4701](https://grafana.com/grafana/dashboards/4701)
 * [Spring Boot 2.1 Statistics - 10280](https://grafana.com/grafana/dashboards/10280)
 
