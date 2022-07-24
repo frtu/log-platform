@@ -65,6 +65,13 @@ spring:
     password: ${application.persistence.password}
     initialization-mode: always
 
+  sleuth:
+    otel:
+      config:
+        trace-id-ratio-based: 1.0
+      exporter:
+        otlp.endpoint: http://localhost:4317
+
 logging:
   level:
     org.springframework.data.r2dbc: DEBUG
