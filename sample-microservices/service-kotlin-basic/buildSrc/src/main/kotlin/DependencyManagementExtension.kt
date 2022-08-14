@@ -11,7 +11,7 @@ object Versions {
     const val spring_boot = "2.7.1"
     const val springdoc = "1.6.9" // 2022-05-27
     const val frtu_base = "1.2.5-SNAPSHOT"
-    const val frtu_libs = "1.2.2"
+    const val frtu_libs = "1.2.3"
     const val frtu_logs = "1.1.4"
 
     const val reactor_kafka = "1.3.10"

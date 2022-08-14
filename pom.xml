@@ -83,7 +83,7 @@
         <!--<easymock.version>3.6</easymock.version>-->
         <!--===========================-->
         <base-pom.version>1.2.4</base-pom.version>
-        <frtu-libs-java.version>1.2.1</frtu-libs-java.version>
+        <frtu-libs-java.version>1.2.3</frtu-libs-java.version>
     </properties>
 
     <dependencyManagement>
