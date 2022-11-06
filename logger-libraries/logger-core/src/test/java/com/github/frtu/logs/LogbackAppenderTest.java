@@ -16,7 +16,7 @@ public class LogbackAppenderTest {
     private static final Logger LOG = LoggerFactory.getLogger(LogbackAppenderTest.class);
 
     @BeforeAll
-    public void before() {
+    public static void before() {
         LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
         if (!lc.isStarted()) {
             lc.start();
@@ -24,7 +24,7 @@ public class LogbackAppenderTest {
     }
 
     @AfterAll
-    public void after() {
+    public static void after() {
         LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
         lc.stop();
     }
