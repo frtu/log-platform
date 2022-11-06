@@ -442,7 +442,7 @@ public class StructuredLogger {
     public void info(Throwable t, String format, Map.Entry... entries) {
         if (this.logger.isInfoEnabled()) {
             final Map map = unmodifiableMap(this.prefix, entries(entries, errorStackTrace(t)));
-            this.logger.error(new MapMarker("", map), format, getJson(map), t);
+            this.logger.info(new MapMarker("", map), format, getJson(map), t);
         }
     }
 
