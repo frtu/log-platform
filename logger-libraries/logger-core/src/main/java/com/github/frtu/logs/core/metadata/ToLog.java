@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Generic Method parameter annotation to flag as Log
  * <p>
- * MUST BE used in conjunction with {@link ExecutionSpan}
+ * SHOULD BE used in conjunction with {@link ExecutionSpan}
  *
  * @author Frédéric TU
  */
