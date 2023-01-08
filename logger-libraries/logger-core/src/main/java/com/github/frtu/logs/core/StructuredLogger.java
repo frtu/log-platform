@@ -218,8 +218,8 @@ public class StructuredLogger {
      * @return log entry pair
      * @since 1.2.0
      */
-    public static Map.Entry<String, String> delayInMs(Instant startTime) {
-        return delayInMs(Instant.now().toEpochMilli() - startTime.toEpochMilli());
+    public static Map.Entry<String, String> delayFrom(Instant startTime) {
+        return delayMs(Instant.now().toEpochMilli() - startTime.toEpochMilli());
     }
 
     /**
@@ -229,7 +229,7 @@ public class StructuredLogger {
      * @return log entry pair
      * @since 1.2.0
      */
-    public static Map.Entry<String, String> delayInMs(Long delayInMs) {
+    public static Map.Entry<String, String> delayMs(Long delayInMs) {
         return entry(EXECUTION_DELAY_MS, delayInMs.toString());
     }
 

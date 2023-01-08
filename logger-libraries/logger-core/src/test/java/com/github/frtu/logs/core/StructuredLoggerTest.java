@@ -203,4 +203,24 @@ public class StructuredLoggerTest {
         //--------------------------------------
         assertTrue(result.getValue().contains(errorMessage));
     }
+
+    @Test
+    public void testDelayMs() {
+        //--------------------------------------
+        // 1. Prepare data
+        //--------------------------------------
+        long delayInMs = 1000L;
+
+        //--------------------------------------
+        // 2. Execute
+        //--------------------------------------
+        Map.Entry<String, String> result = delayMs(delayInMs);
+        LOGGER.debug("found result:{}", result);
+        STRUCTURED_LOGGER.info(result);
+
+        //--------------------------------------
+        // 3. Validate
+        //--------------------------------------
+        assertTrue(result.getValue().equals("1000"));
+    }
 }
