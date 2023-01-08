@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.net.URL;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -91,6 +92,14 @@ public class StructuredLogger {
      * @since 1.1.3
      */
     public static final String KEY_ERROR_STACKTRACE = "error_stacktrace";
+
+
+    /**
+     * Capture the time spent
+     *
+     * @since 1.2.0
+     */
+    public static final String EXECUTION_DELAY_MS = "delay_ms";
 
     /**
      * A specific message
@@ -200,6 +209,28 @@ public class StructuredLogger {
      */
     public static Map.Entry<String, String> phase(String phase) {
         return entry(KEY_PHASE, phase);
+    }
+
+    /**
+     * Delay for the current execution.
+     *
+     * @param startTime Instant when execution started
+     * @return log entry pair
+     * @since 1.2.0
+     */
+    public static Map.Entry<String, String> delayInMs(Instant startTime) {
+        return delayInMs(Instant.now().toEpochMilli() - startTime.toEpochMilli());
+    }
+
+    /**
+     * Delay for the current execution.
+     *
+     * @param delayInMs current execution delay in ms
+     * @return log entry pair
+     * @since 1.2.0
+     */
+    public static Map.Entry<String, String> delayInMs(Long delayInMs) {
+        return entry(EXECUTION_DELAY_MS, delayInMs.toString());
     }
 
     /**
