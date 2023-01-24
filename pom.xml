@@ -82,7 +82,7 @@
         <!--<powermock.version>1.6.2</powermock.version>-->
         <!--<easymock.version>3.6</easymock.version>-->
         <!--===========================-->
-        <base-pom.version>1.2.4</base-pom.version>
+        <base-pom.version>1.2.5</base-pom.version>
         <frtu-libs-java.version>1.2.4</frtu-libs-java.version>
     </properties>
 
