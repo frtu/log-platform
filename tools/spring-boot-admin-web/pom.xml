@@ -20,7 +20,7 @@
         <java.version>11</java.version>
         <frtu.logger.version>1.1.6-SNAPSHOT</frtu.logger.version>
         <!--===========================-->
-        <spring-boot-admin.version>2.7.0</spring-boot-admin.version>
+        <spring-boot-admin.version>3.1.2</spring-boot-admin.version>
         <dockerfile-maven-version>1.4.13</dockerfile-maven-version> <!-- 2019-10-15 -->
     </properties>
 
